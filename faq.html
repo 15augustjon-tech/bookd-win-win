@@ -177,6 +177,96 @@
       box-shadow: none;
     }
 
+    /* Mobile Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 1000;
+      padding: 80px 24px 40px;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .mobile-menu.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .mobile-menu-links a {
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+      transition: color 0.2s ease;
+    }
+
+    .mobile-menu-links a:hover {
+      color: var(--green-dark);
+    }
+
+    .mobile-menu-contact {
+      margin-top: auto;
+    }
+
+    .mobile-menu-contact a {
+      display: block;
+      font-size: 18px;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+    }
+
+    .mobile-menu-contact .btn {
+      width: 100%;
+      margin-top: 16px;
+    }
+
     .btn-large {
       padding: 16px 32px;
       font-size: 16px;
@@ -354,11 +444,19 @@
     /* Mobile */
     @media (max-width: 600px) {
       .nav-right {
-        gap: 16px;
+        display: none;
       }
 
-      .phone-link {
-        display: none;
+      .hamburger {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: flex;
+      }
+
+      .logo {
+        font-size: 22px;
       }
 
       .hero {
@@ -459,8 +557,30 @@
         <a href="tel:+13025073791" class="phone-link">(302) 507-3791</a>
         <a href="apply.html" class="btn btn-primary">Apply Now</a>
       </div>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <div class="mobile-menu-contact">
+      <a href="tel:+13025073791">(302) 507-3791</a>
+      <a href="mailto:jonathan@bookdpay.com">jonathan@bookdpay.com</a>
+      <a href="apply.html" class="btn btn-primary">Apply Now</a>
+    </div>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -690,6 +810,25 @@
       } else {
         nav.classList.remove('scrolled');
       }
+    });
+
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
     });
 
     // FAQ Toggle
