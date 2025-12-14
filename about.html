@@ -813,6 +813,38 @@
         padding-top: 16px;
         font-size: 12px;
       }
+
+      /* About page specific mobile fixes */
+      .about-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+      }
+
+      .about-stats-grid > div {
+        padding: 20px 16px !important;
+      }
+
+      .about-stats-grid .stat-number {
+        font-size: 32px !important;
+      }
+
+      .about-comparison-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+
+      .about-comparison-grid > div {
+        padding: 28px !important;
+      }
+
+      .about-quote-box {
+        padding: 28px !important;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 12px;
+      }
     }
 
     /* Back to Top Button */
@@ -916,7 +948,7 @@
   <!-- Stats Section -->
   <section style="padding: 0 0 80px;">
     <div class="container">
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center;">
+      <div class="about-stats-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center;">
         <div style="background: var(--gray-50); padding: 32px 24px; border-radius: 20px;">
           <div style="font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; color: var(--green); margin-bottom: 8px;">48h</div>
           <div style="font-size: 14px; color: var(--gray-600);">Average Funding Time</div>
@@ -960,7 +992,7 @@
   <section style="padding: 80px 0; background: var(--black); color: var(--white);">
     <div class="container">
       <h2 style="text-align: center; font-size: clamp(28px, 4vw, 40px); margin-bottom: 48px; letter-spacing: -1px;">Bookd vs. Traditional Factoring</h2>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 900px; margin: 0 auto;">
+      <div class="about-comparison-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 900px; margin: 0 auto;">
         <div style="background: rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; border: 1px solid rgba(255,255,255,0.1);">
           <div style="margin-bottom: 32px;">
             <h3 style="font-size: 22px; font-weight: 700;">The Old Way</h3>
@@ -1022,7 +1054,7 @@
         <h2 style="font-size: clamp(28px, 4vw, 40px); margin-bottom: 16px; letter-spacing: -1px;">This Is Why We Built Bookd</h2>
         <p style="color: var(--gray-600); margin-bottom: 40px;">Real stories from truckers dealing with traditional factoring companies.</p>
 
-        <div style="background: var(--white); border-radius: 24px; padding: 40px; border-left: 4px solid #EF4444; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="about-quote-box" style="background: var(--white); border-radius: 24px; padding: 40px; border-left: 4px solid #EF4444; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
           <div style="margin-bottom: 20px;">
             <span style="font-size: 13px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px;">Real Story</span>
           </div>
@@ -1095,15 +1127,6 @@
           </div>
           <h3>No Contracts</h3>
           <p>Factor one invoice or a hundred—your choice. No minimums, no long-term commitments. You're free to leave anytime.</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-          <h3>Simple Process</h3>
-          <p>Upload your documents, we verify with the broker, you get paid. No complicated paperwork or bureaucratic hoops.</p>
         </div>
       </div>
     </div>
