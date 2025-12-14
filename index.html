@@ -27,8 +27,80 @@
       --green-dark: #00B85C;
     }
 
+    /* Text Selection */
+    ::selection {
+      background: rgba(0, 210, 106, 0.3);
+      color: var(--black);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--gray-100);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--green);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--green-dark);
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      background: var(--green);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0.6;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      mix-blend-mode: difference;
+    }
+
+    .custom-cursor.hover {
+      transform: scale(1.5);
+      opacity: 0.8;
+    }
+
+    /* Hero Glow Follow */
+    .hero-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,210,106,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.1s ease;
+      z-index: 0;
+    }
+
+    /* Typewriter Cursor */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.9em;
+      background: var(--green);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink-cursor 0.8s infinite;
+    }
+
+    @keyframes blink-cursor {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
     html {
       scroll-behavior: smooth;
+      cursor: none;
     }
 
     body {
@@ -111,6 +183,9 @@
     }
 
     nav.scrolled {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       border-color: transparent;
     }
@@ -278,6 +353,39 @@
       box-shadow: 0 40px 80px rgba(0,0,0,0.15);
       transform-style: preserve-3d;
       transition: transform 0.1s ease;
+      position: relative;
+      overflow: hidden;
+      animation: cardEntrance 0.8s ease-out;
+    }
+
+    .payment-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes cardEntrance {
+      0% {
+        opacity: 0;
+        transform: translateX(80px) rotate(3deg);
+      }
+      60% {
+        transform: translateX(-10px) rotate(-1deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0);
+      }
     }
 
     @keyframes float {
@@ -635,6 +743,21 @@
       font-weight: 500;
       margin-bottom: 16px;
       line-height: 1.4;
+      position: relative;
+    }
+
+    .testimonial-quote::before {
+      content: '"';
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 140px;
+      color: var(--green);
+      opacity: 0.15;
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
     }
 
     .testimonial-attribution {
@@ -1352,6 +1475,74 @@
         card.style.transition = 'transform 0.1s ease';
       });
     }
+
+    // Custom Cursor
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    document.body.appendChild(cursor);
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX - 10 + 'px';
+      cursor.style.top = e.clientY - 10 + 'px';
+    });
+
+    document.querySelectorAll('a, button, .btn, input').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Magnetic Buttons
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0)';
+      });
+    });
+
+    // Mouse Follow Glow in Hero
+    const hero = document.querySelector('.hero');
+    const heroGlow = document.createElement('div');
+    heroGlow.className = 'hero-glow';
+    hero.style.position = 'relative';
+    hero.style.overflow = 'hidden';
+    hero.insertBefore(heroGlow, hero.firstChild);
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left - 200;
+      const y = e.clientY - rect.top - 200;
+      heroGlow.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // Typewriter Effect
+    const headline = document.querySelector('.hero-content h1');
+    const text = headline.textContent;
+    headline.innerHTML = '';
+
+    const typewriterSpan = document.createElement('span');
+    const cursorSpan = document.createElement('span');
+    cursorSpan.className = 'typewriter-cursor';
+    headline.appendChild(typewriterSpan);
+    headline.appendChild(cursorSpan);
+
+    let i = 0;
+    const typeWriter = () => {
+      if (i < text.length) {
+        typewriterSpan.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 80);
+      } else {
+        setTimeout(() => {
+          cursorSpan.style.display = 'none';
+        }, 1500);
+      }
+    };
+    setTimeout(typeWriter, 500);
   </script>
 
   </body>
