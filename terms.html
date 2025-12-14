@@ -101,7 +101,7 @@
     }
 
     .nav-right {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 24px;
     }
@@ -142,7 +142,7 @@
 
     /* Mobile Menu */
     .hamburger {
-      display: none;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 5px;
@@ -174,7 +174,7 @@
     }
 
     .mobile-menu {
-      display: none;
+      display: flex;
       position: fixed;
       top: 0;
       left: 0;
@@ -228,6 +228,32 @@
     .mobile-menu-contact .btn {
       width: 100%;
       margin-top: 16px;
+    }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: var(--gray-100);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-menu-close:hover {
+      background: var(--gray-200);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      color: var(--black);
     }
 
     /* Hero */
@@ -297,59 +323,31 @@
       background: var(--black);
       color: var(--white);
       padding: 48px 0;
+      text-align: center;
     }
 
-    .footer-content {
+    .footer-brand {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 24px;
+      align-items: baseline;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .footer-logo {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px;
+      font-size: 32px;
       font-weight: 700;
     }
 
-    .footer-links {
-      display: flex;
-      gap: 32px;
-    }
-
-    .footer-links a {
+    .footer-tagline {
       color: var(--gray-400);
       font-size: 14px;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--green);
-    }
-
-    .footer-contact {
-      text-align: right;
-    }
-
-    .footer-contact a {
-      display: block;
-      color: var(--gray-400);
-      font-size: 14px;
-      transition: color 0.2s ease;
-    }
-
-    .footer-contact a:hover {
-      color: var(--green);
     }
 
     .footer-bottom {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid #333;
-      text-align: center;
       color: var(--gray-600);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     /* Mobile */
@@ -383,18 +381,25 @@
         font-size: 18px;
       }
 
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
+      footer {
+        padding: 32px 0;
       }
 
-      .footer-contact {
-        text-align: center;
+      .footer-brand {
+        gap: 8px;
+        margin-bottom: 16px;
       }
 
-      .footer-links {
-        flex-direction: column;
-        gap: 12px;
+      .footer-logo {
+        font-size: 24px;
+      }
+
+      .footer-tagline {
+        font-size: 12px;
+      }
+
+      .footer-bottom {
+        font-size: 11px;
       }
     }
 
@@ -473,6 +478,12 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
     <div class="mobile-menu-links">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -482,8 +493,6 @@
       <a href="privacy.html">Privacy</a>
     </div>
     <div class="mobile-menu-contact">
-      <a href="tel:+13025073791">(302) 507-3791</a>
-      <a href="mailto:jonathan@bookdpay.com">jonathan@bookdpay.com</a>
       <a href="apply.html" class="btn btn-primary">Apply Now</a>
     </div>
   </div>
@@ -578,24 +587,12 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">BOOK<span style="color: var(--green)">D</span></div>
-        <div class="footer-links">
-          <a href="apply.html">Apply</a>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="faq.html">FAQ</a>
-          <a href="contact.html">Contact</a>
-          <a href="terms.html">Terms</a>
-          <a href="privacy.html">Privacy</a>
-        </div>
-        <div class="footer-contact">
-          <a href="tel:+13025073791">(302) 507-3791</a>
-          <a href="mailto:jonathan@bookdpay.com">jonathan@bookdpay.com</a>
-        </div>
+      <div class="footer-brand">
+        <span class="footer-logo">BOOK<span style="color: var(--green)">D</span></span>
+        <span class="footer-tagline">Get paid faster.</span>
       </div>
       <div class="footer-bottom">
-        &copy; 2025 Bookd. All rights reserved.
+        &copy; 2025 Bookd Capital. All rights reserved.
       </div>
     </div>
   </footer>
@@ -618,6 +615,14 @@
         mobileMenu.classList.remove('active');
         document.body.style.overflow = '';
       });
+    });
+
+    // Close button inside menu
+    const mobileMenuClose = document.getElementById('mobileMenuClose');
+    mobileMenuClose.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
     });
 
     // Back to Top Button
