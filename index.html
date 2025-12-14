@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookd | Get Paid Today.</title>
+  <meta name="description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no contracts, no minimums.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bookdpay.com/">
+  <meta property="og:title" content="Bookd | Get Paid Today">
+  <meta property="og:description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no contracts, no minimums.">
+  <meta property="og:image" content="https://bookdpay.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://bookdpay.com/">
+  <meta name="twitter:title" content="Bookd | Get Paid Today">
+  <meta name="twitter:description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no contracts, no minimums.">
+  <meta name="twitter:image" content="https://bookdpay.com/og-image.png">
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,37 +67,6 @@
       background: var(--green-dark);
     }
 
-    /* Custom Cursor */
-    .custom-cursor {
-      width: 20px;
-      height: 20px;
-      background: var(--green);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 10000;
-      opacity: 0.6;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-      mix-blend-mode: difference;
-    }
-
-    .custom-cursor.hover {
-      transform: scale(1.5);
-      opacity: 0.8;
-    }
-
-    /* Hero Glow Follow */
-    .hero-glow {
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(0,210,106,0.2) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      transition: transform 0.1s ease;
-      z-index: 0;
-    }
-
     /* Typewriter Cursor */
     .typewriter-cursor {
       display: inline-block;
@@ -100,7 +85,6 @@
 
     html {
       scroll-behavior: smooth;
-      cursor: none;
     }
 
     body {
@@ -231,6 +215,96 @@
 
     .phone-link:hover {
       color: var(--green-dark);
+    }
+
+    /* Mobile Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 1000;
+      padding: 80px 24px 40px;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .mobile-menu.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .mobile-menu-links a {
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+      transition: color 0.2s ease;
+    }
+
+    .mobile-menu-links a:hover {
+      color: var(--green-dark);
+    }
+
+    .mobile-menu-contact {
+      margin-top: auto;
+    }
+
+    .mobile-menu-contact a {
+      display: block;
+      font-size: 18px;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+    }
+
+    .mobile-menu-contact .btn {
+      width: 100%;
+      margin-top: 16px;
     }
 
     .btn {
@@ -725,43 +799,99 @@
       width: 100%;
     }
 
-    /* Testimonial */
-    .testimonial {
+    /* Testimonials */
+    .testimonials {
       background: var(--white);
       padding: 80px 0;
-      text-align: center;
     }
 
-    .testimonial-content {
-      max-width: 500px;
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .testimonials-header h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
-    .testimonial-quote {
-      font-size: 24px;
-      color: var(--black);
-      font-weight: 500;
-      margin-bottom: 16px;
-      line-height: 1.4;
+    .testimonial-card {
+      background: var(--gray-50);
+      border-radius: 16px;
+      padding: 32px;
       position: relative;
+      transition: all 0.3s ease;
     }
 
-    .testimonial-quote::before {
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimonial-card::before {
       content: '"';
       position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 140px;
+      top: 16px;
+      left: 24px;
+      font-size: 60px;
       color: var(--green);
-      opacity: 0.15;
+      opacity: 0.3;
       font-family: Georgia, serif;
       line-height: 1;
       pointer-events: none;
     }
 
-    .testimonial-attribution {
+    .testimonial-quote {
+      font-size: 17px;
+      color: var(--black);
+      font-weight: 500;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--black);
+    }
+
+    .testimonial-info {
+      text-align: left;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
       font-size: 15px;
+      color: var(--black);
+    }
+
+    .testimonial-role {
+      font-size: 13px;
       color: var(--gray-600);
     }
 
@@ -964,7 +1094,7 @@
       /* Smaller nav - not fixed on mobile */
       nav {
         padding: 10px 0;
-        position: static;
+        position: fixed;
       }
 
       .logo {
@@ -972,16 +1102,15 @@
       }
 
       .nav-right {
-        gap: 10px;
-      }
-
-      .nav-right .btn {
-        padding: 8px 14px;
-        font-size: 12px;
-      }
-
-      .phone-link {
         display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: flex;
       }
 
       /* Compact hero */
@@ -1136,17 +1265,50 @@
         line-height: 1.5;
       }
 
-      /* Testimonial mobile */
-      .testimonial {
+      /* Testimonials mobile */
+      .testimonials {
         padding: 32px 0;
       }
 
-      .testimonial-quote {
-        font-size: 16px;
-        margin-bottom: 12px;
+      .testimonials-header {
+        margin-bottom: 24px;
       }
 
-      .testimonial-attribution {
+      .testimonials-header h2 {
+        font-size: 20px;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .testimonial-card {
+        padding: 24px;
+      }
+
+      .testimonial-card::before {
+        font-size: 40px;
+        top: 12px;
+        left: 18px;
+      }
+
+      .testimonial-quote {
+        font-size: 15px;
+        margin-bottom: 16px;
+      }
+
+      .testimonial-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+
+      .testimonial-name {
+        font-size: 14px;
+      }
+
+      .testimonial-role {
         font-size: 12px;
       }
 
@@ -1226,6 +1388,61 @@
         padding: 10px 0;
       }
     }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 99;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .back-to-top:hover {
+      background: var(--green);
+      color: var(--black);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 210, 106, 0.3);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+      }
+
+      .back-to-top svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1237,8 +1454,30 @@
         <a href="tel:+13025073791" class="phone-link">(302) 507-3791</a>
         <a href="apply.html" class="btn btn-primary">Apply Now</a>
       </div>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <div class="mobile-menu-contact">
+      <a href="tel:+13025073791">(302) 507-3791</a>
+      <a href="mailto:jonathan@bookdpay.com">jonathan@bookdpay.com</a>
+      <a href="apply.html" class="btn btn-primary">Apply Now</a>
+    </div>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -1328,12 +1567,43 @@
     </div>
   </section>
 
-  <!-- Testimonial -->
-  <section class="testimonial">
+  <!-- Testimonials -->
+  <section class="testimonials">
     <div class="container">
-      <div class="testimonial-content animate-on-scroll">
-        <p class="testimonial-quote">"Got my money in 36 hours. No hassle."</p>
-        <p class="testimonial-attribution">— Marcus T., Owner-Operator, Atlanta</p>
+      <div class="testimonials-header animate-on-scroll">
+        <h2>Trusted by Owner-Operators</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card animate-on-scroll">
+          <p class="testimonial-quote">Got my money in 36 hours. No hassle. I was skeptical at first but these guys are legit.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MT</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Marcus T.</div>
+              <div class="testimonial-role">Owner-Operator, Atlanta</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card animate-on-scroll">
+          <p class="testimonial-quote">Finally a factoring company that doesn't nickel and dime you. 3% flat, no surprises. Been with them 4 months now.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">RJ</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Robert J.</div>
+              <div class="testimonial-role">Fleet Owner, Dallas</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card animate-on-scroll">
+          <p class="testimonial-quote">I called them on a Friday, had my first invoice funded by Monday. Real people who actually pick up the phone.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">DW</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Dwayne W.</div>
+              <div class="testimonial-role">Owner-Operator, Memphis</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1362,6 +1632,13 @@
     </div>
   </section>
 
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -1369,7 +1646,11 @@
         <div class="footer-logo">BOOK<span style="color: var(--green)">D</span></div>
         <div class="footer-links">
           <a href="apply.html">Apply</a>
+          <a href="about.html">About</a>
           <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+          <a href="terms.html">Terms</a>
+          <a href="privacy.html">Privacy</a>
         </div>
         <div class="footer-contact">
           <a href="tel:+13025073791">(302) 507-3791</a>
@@ -1391,6 +1672,25 @@
       } else {
         nav.classList.remove('scrolled');
       }
+    });
+
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
     });
 
     // Interactive Payment Card Slider
@@ -1476,21 +1776,6 @@
       });
     }
 
-    // Custom Cursor
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX - 10 + 'px';
-      cursor.style.top = e.clientY - 10 + 'px';
-    });
-
-    document.querySelectorAll('a, button, .btn, input').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-
     // Magnetic Buttons
     document.querySelectorAll('.btn').forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
@@ -1502,21 +1787,6 @@
       btn.addEventListener('mouseleave', () => {
         btn.style.transform = 'translate(0, 0)';
       });
-    });
-
-    // Mouse Follow Glow in Hero
-    const hero = document.querySelector('.hero');
-    const heroGlow = document.createElement('div');
-    heroGlow.className = 'hero-glow';
-    hero.style.position = 'relative';
-    hero.style.overflow = 'hidden';
-    hero.insertBefore(heroGlow, hero.firstChild);
-
-    hero.addEventListener('mousemove', (e) => {
-      const rect = hero.getBoundingClientRect();
-      const x = e.clientX - rect.left - 200;
-      const y = e.clientY - rect.top - 200;
-      heroGlow.style.transform = `translate(${x}px, ${y}px)`;
     });
 
     // Typewriter Effect
@@ -1543,6 +1813,24 @@
       }
     };
     setTimeout(typeWriter, 500);
+
+    // Back to Top Button
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
   </script>
 
   </body>
