@@ -21,6 +21,7 @@
   <meta name="twitter:description" content="Apply for Bookd invoice factoring. Get paid in 48 hours. Takes 5 minutes to apply.">
   <meta name="twitter:image" content="https://bookdpay.com/og-image.png">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -1084,29 +1085,90 @@
       });
     }
 
+    // Supabase setup
+    const SUPABASE_URL = 'https://asnodzbvxjnegegelcpp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzbm9kemJ2eGpuZWdlZ2VsY3BwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDI1ODcsImV4cCI6MjA4MTE3ODU4N30.hkO0UOBkxtwThI7G0prNteGLGFRpbtHUGMuXitpHHCc';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     // Form submission
-    function submitForm() {
+    async function submitForm() {
       const formData = new FormData(form);
-      const data = {};
 
-      formData.forEach((value, key) => {
-        if (value instanceof File) {
-          data[key] = {
-            name: value.name,
-            size: value.size,
-            type: value.type
-          };
-        } else {
-          data[key] = value;
+      // Disable button and show loading
+      btnNext.disabled = true;
+      btnNext.textContent = 'Submitting...';
+
+      try {
+        // Generate unique ID for this application
+        const appId = crypto.randomUUID();
+        const timestamp = Date.now();
+
+        // Upload files to Supabase Storage
+        const licenseFile = form.querySelector('input[name="license"]').files[0];
+        const taxFile = form.querySelector('input[name="taxDocument"]').files[0];
+        const checkFile = form.querySelector('input[name="voidedCheck"]').files[0];
+
+        let licenseUrl = null;
+        let taxDocUrl = null;
+        let checkUrl = null;
+
+        if (licenseFile) {
+          const { data, error } = await supabase.storage
+            .from('documents')
+            .upload(`${appId}/license_${timestamp}.${licenseFile.name.split('.').pop()}`, licenseFile);
+          if (!error) licenseUrl = data.path;
         }
-      });
 
-      console.log('=== APPLICATION SUBMITTED ===');
-      console.log('Form Data:', data);
-      console.log('============================');
+        if (taxFile) {
+          const { data, error } = await supabase.storage
+            .from('documents')
+            .upload(`${appId}/tax_${timestamp}.${taxFile.name.split('.').pop()}`, taxFile);
+          if (!error) taxDocUrl = data.path;
+        }
 
-      // Redirect to thank you page
-      window.location.href = 'thank-you.html';
+        if (checkFile) {
+          const { data, error } = await supabase.storage
+            .from('documents')
+            .upload(`${appId}/check_${timestamp}.${checkFile.name.split('.').pop()}`, checkFile);
+          if (!error) checkUrl = data.path;
+        }
+
+        // Insert application data
+        const { error: insertError } = await supabase
+          .from('applications')
+          .insert({
+            id: appId,
+            full_name: formData.get('fullName'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            company_name: formData.get('companyName'),
+            mc_number: formData.get('mcNumber'),
+            dot_number: formData.get('dotNumber'),
+            address: formData.get('address'),
+            truck_count: formData.get('truckCount'),
+            current_service: formData.get('currentService'),
+            current_provider: formData.get('currentProvider'),
+            avg_invoice_size: parseInt(formData.get('avgInvoiceSize')) || null,
+            invoices_per_month: parseInt(formData.get('invoicesPerMonth')) || null,
+            main_clients: formData.get('mainClients'),
+            license_url: licenseUrl,
+            tax_document_url: taxDocUrl,
+            voided_check_url: checkUrl
+          });
+
+        if (insertError) {
+          throw insertError;
+        }
+
+        // Success - redirect to thank you page
+        window.location.href = 'thank-you.html';
+
+      } catch (error) {
+        console.error('Submission error:', error);
+        alert('There was an error submitting your application. Please try again or call us at (302) 507-3791.');
+        btnNext.disabled = false;
+        btnNext.textContent = 'Submit Application';
+      }
     }
   </script>
 </body>

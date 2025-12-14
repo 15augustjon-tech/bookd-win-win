@@ -21,6 +21,7 @@
   <meta name="twitter:image" content="https://bookdpay.com/og-image.png">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -1069,30 +1070,61 @@
       });
     });
 
+    // Supabase setup
+    const SUPABASE_URL = 'https://asnodzbvxjnegegelcpp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzbm9kemJ2eGpuZWdlZ2VsY3BwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDI1ODcsImV4cCI6MjA4MTE3ODU4N30.hkO0UOBkxtwThI7G0prNteGLGFRpbtHUGMuXitpHHCc';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     // Form Submission
     const contactForm = document.getElementById('contactForm');
     const formSuccess = document.getElementById('formSuccess');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Get form data
-      const formData = new FormData(contactForm);
-      const data = Object.fromEntries(formData);
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
 
-      // Here you would typically send to a backend
-      // For now, we'll just show the success message
-      console.log('Form submitted:', data);
+      try {
+        // Get form data
+        const formData = new FormData(contactForm);
 
-      // Show success state
-      contactForm.style.display = 'none';
-      formSuccess.classList.add('show');
+        // Insert into Supabase
+        const { error } = await supabase
+          .from('contact_messages')
+          .insert({
+            first_name: formData.get('firstName'),
+            last_name: formData.get('lastName'),
+            email: formData.get('email'),
+            phone: formData.get('phone') || null,
+            subject: formData.get('subject') || 'General Inquiry',
+            message: formData.get('message')
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        // Show success state
+        contactForm.style.display = 'none';
+        formSuccess.classList.add('show');
+
+      } catch (error) {
+        console.error('Submission error:', error);
+        alert('There was an error sending your message. Please try again or call us at (302) 507-3791.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
     });
 
     function resetForm() {
       contactForm.reset();
       contactForm.style.display = 'block';
       formSuccess.classList.remove('show');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
     }
 
     // Phone number formatting
