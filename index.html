@@ -396,7 +396,58 @@
       display: flex;
       align-items: center;
       padding: 120px 0 80px;
+      position: relative;
+      overflow: hidden;
     }
+
+    /* Rotating text */
+    .rotating-text {
+      display: inline-block;
+      color: #E53935;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .rotating-text.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    /* Parallax background */
+    .parallax-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -2;
+      will-change: transform;
+    }
+
+    /* Text reveal on scroll */
+    .reveal-text {
+      overflow: hidden;
+    }
+
+    .reveal-text .word {
+      display: inline-block;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    }
+
+    .reveal-text.visible .word {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .reveal-text .word:nth-child(1) { transition-delay: 0s; }
+    .reveal-text .word:nth-child(2) { transition-delay: 0.08s; }
+    .reveal-text .word:nth-child(3) { transition-delay: 0.16s; }
+    .reveal-text .word:nth-child(4) { transition-delay: 0.24s; }
+    .reveal-text .word:nth-child(5) { transition-delay: 0.32s; }
 
     .hero-grid {
       display: grid;
@@ -1455,7 +1506,7 @@
       <div class="hero-grid">
         <div class="hero-content">
           <h1>Get Paid Today.</h1>
-          <p>You hauled the load. The broker owes you money. Why wait six weeks to see it? We pay you now—then collect from the broker ourselves.</p>
+          <p>You hauled the load. Why wait <span class="rotating-text" data-texts='["45 days", "forever"]'>45 days</span>?</p>
           <div class="hero-buttons">
             <a href="apply.html" class="btn btn-primary btn-large">Apply Now</a>
             <a href="tel:+13025073791" class="btn btn-outline btn-large">Call (302) 507-3791</a>
@@ -1515,23 +1566,23 @@
     <div class="container">
       <div class="section-header animate-on-scroll">
         <h2>How It Works</h2>
-        <p>3% flat fee. No long-term contracts. No minimums.</p>
+        <p>No contracts. No minimums. 3% flat fee.</p>
       </div>
       <div class="steps">
         <div class="step animate-on-scroll">
           <div class="step-number">1</div>
           <h3>Send Your Invoice</h3>
-          <p>Upload your rate confirmation and proof of delivery. Takes 5 minutes.</p>
+          <p>Upload your rate confirmation and proof of delivery.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">2</div>
           <h3>We Verify</h3>
-          <p>We call the broker, confirm the load was delivered, and approve your invoice.</p>
+          <p>We confirm the load was delivered and approve your invoice.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">3</div>
           <h3>Get Paid</h3>
-          <p>Money hits your account within 48 hours. We collect from the broker later.</p>
+          <p>Money hits your account within 48 hours.</p>
         </div>
       </div>
     </div>
@@ -1797,6 +1848,76 @@
         top: 0,
         behavior: 'smooth'
       });
+    });
+    // Rotating text animation
+    const rotatingText = document.querySelector('.rotating-text');
+    if (rotatingText) {
+      const texts = JSON.parse(rotatingText.dataset.texts);
+      let index = 0;
+      setInterval(() => {
+        rotatingText.classList.add('fade-out');
+        setTimeout(() => {
+          index = (index + 1) % texts.length;
+          rotatingText.textContent = texts[index];
+          rotatingText.classList.remove('fade-out');
+        }, 300);
+      }, 3000);
+    }
+
+    // Number ticker on card hover
+    const cardAmount = document.getElementById('cardAmount');
+    const paymentCard = document.querySelector('.payment-card');
+    let tickerInterval;
+
+    paymentCard.addEventListener('mouseenter', () => {
+      const finalValue = parseInt(cardAmount.textContent.replace(/,/g, ''));
+      let ticks = 0;
+      tickerInterval = setInterval(() => {
+        const randomNum = Math.floor(Math.random() * 9000) + 1000;
+        cardAmount.textContent = randomNum.toLocaleString();
+        ticks++;
+        if (ticks > 15) {
+          clearInterval(tickerInterval);
+          cardAmount.textContent = finalValue.toLocaleString();
+        }
+      }, 50);
+    });
+
+    paymentCard.addEventListener('mouseleave', () => {
+      clearInterval(tickerInterval);
+      const sliderValue = parseInt(document.getElementById('invoiceSlider').value);
+      cardAmount.textContent = sliderValue.toLocaleString();
+    });
+
+    // Parallax scroll effect
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const heroGradient = document.querySelector('.hero::before');
+      if (heroGradient) {
+        heroGradient.style.transform = `translateY(${scrolled * 0.3}px)`;
+      }
+    });
+
+    // Text reveal on scroll - wrap section headers in spans
+    document.querySelectorAll('.section-header h2').forEach(header => {
+      const text = header.textContent;
+      header.innerHTML = text.split(' ').map(word =>
+        `<span class="word">${word}</span>`
+      ).join(' ');
+      header.classList.add('reveal-text');
+    });
+
+    // Observe reveal-text elements
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.reveal-text').forEach(el => {
+      revealObserver.observe(el);
     });
   </script>
 
