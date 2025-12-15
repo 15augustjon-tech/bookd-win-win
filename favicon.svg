@@ -1,10 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <g transform="translate(5, 6) scale(0.7)">
-    <g transform="translate(32, 0) scale(-1, 1)">
-      <rect x="1" y="8" width="22" height="14" rx="2" fill="#00D26A"/>
-      <path d="M23 10 L23 22 L31 22 L31 16 L27 10 Z" fill="#00D26A"/>
-      <circle cx="8" cy="22" r="4" fill="#00D26A"/>
-      <circle cx="27" cy="22" r="4" fill="#00D26A"/>
-    </g>
+  <g transform="translate(32, 0) scale(-1, 1)">
+    <rect x="1" y="8" width="22" height="14" rx="2" fill="#00D26A"/>
+    <path d="M23 10 L23 22 L31 22 L31 16 L27 10 Z" fill="#00D26A"/>
+    <circle cx="8" cy="22" r="4" fill="#00D26A"/>
+    <circle cx="27" cy="22" r="4" fill="#00D26A"/>
   </g>
 </svg>
