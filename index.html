@@ -1693,7 +1693,7 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-content">
-          <h1>Why wait <span class="rotating-text" data-texts='["45 days", "forever"]'>45 days</span>?</h1>
+          <h1>Why wait?</h1>
           <p>Cash your invoice like a check. <span style="color: var(--green); font-weight: 600;">1% flat.</span> No strings.</p>
           <div class="hero-buttons">
             <a href="apply.html" class="btn btn-primary btn-large">Apply Now</a>
@@ -1979,70 +1979,6 @@
         btn.style.transform = 'translate(0, 0)';
       });
     });
-
-    // Typewriter effect with rotating last word
-    const headline = document.querySelector('.hero-content h1');
-    const phrases = [
-      { text: 'Why wait ', red: '45 days?' },
-      { text: 'Why wait ', red: 'forever?' }
-    ];
-    let phraseIndex = 0;
-
-    function typePhrase() {
-      const phrase = phrases[phraseIndex];
-      const fullText = phrase.text + phrase.red;
-      headline.innerHTML = '<span class="typewriter-text"></span><span class="typewriter-cursor"></span>';
-      const textSpan = headline.querySelector('.typewriter-text');
-
-      let i = 0;
-      const typeChar = () => {
-        if (i < fullText.length) {
-          const typed = fullText.substring(0, i + 1);
-          // Check if we're in the red part
-          if (i >= phrase.text.length) {
-            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + typed.substring(phrase.text.length) + '</span>';
-          } else {
-            textSpan.textContent = typed;
-          }
-          i++;
-          setTimeout(typeChar, 120);
-        } else {
-          // Hide cursor during pause
-          const cursor = headline.querySelector('.typewriter-cursor');
-          if (cursor) cursor.style.display = 'none';
-          // Pause longer, then erase
-          setTimeout(() => {
-            if (cursor) cursor.style.display = 'inline-block';
-            erasePhrase(textSpan, phrase.text.length);
-          }, 15000);
-        }
-      };
-      typeChar();
-    }
-
-    function erasePhrase(textSpan, keepLength) {
-      let currentLength = (phrases[phraseIndex].text + phrases[phraseIndex].red).length;
-      const eraseChar = () => {
-        if (currentLength > 0) {
-          currentLength--;
-          const fullText = phrases[phraseIndex].text + phrases[phraseIndex].red;
-          const remaining = fullText.substring(0, currentLength);
-          if (currentLength >= phrases[phraseIndex].text.length) {
-            textSpan.innerHTML = phrases[phraseIndex].text + '<span style="color: #E53935;">' + remaining.substring(phrases[phraseIndex].text.length) + '</span>';
-          } else {
-            textSpan.textContent = remaining;
-          }
-          setTimeout(eraseChar, 60);
-        } else {
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          setTimeout(typePhrase, 500);
-        }
-      };
-      eraseChar();
-    }
-
-    setTimeout(typePhrase, 500);
-
 
     // Back to Top Button
     const backToTop = document.getElementById('backToTop');
