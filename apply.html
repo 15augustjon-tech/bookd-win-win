@@ -575,6 +575,40 @@
       padding: 16px 48px;
     }
 
+    /* Consent Checkbox */
+    .consent-group {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    .consent-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--green);
+    }
+
+    .consent-label a {
+      color: var(--green-dark);
+      text-decoration: underline;
+    }
+
+    .consent-label a:hover {
+      color: var(--green);
+    }
+
     /* Mobile */
     @media (max-width: 480px) {
       .progress-step-label {
@@ -758,6 +792,13 @@
           <p>We need these to verify your identity and set up payments.</p>
         </div>
 
+        <div class="form-group consent-group" style="margin-top: 0; margin-bottom: 32px;">
+          <label class="consent-label">
+            <input type="checkbox" name="agreeTerms" required>
+            <span>I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. By submitting, I consent to receive calls and texts from Bookd regarding my application.</span>
+          </label>
+        </div>
+
         <div class="uploads-grid">
           <div class="form-group">
             <label>Driver's License Photo <span class="required">*</span></label>
@@ -838,7 +879,7 @@
     <div class="success-screen" id="successScreen">
       <div class="success-icon">✓</div>
       <h2>Application Submitted!</h2>
-      <p>We'll review your info and call you within 48 hours to discuss next steps. Keep an eye on your phone.</p>
+      <p>We'll review your info and reach out soon to discuss next steps. Keep an eye on your phone.</p>
       <a href="index.html" class="btn btn-next">Back to Home</a>
     </div>
   </div>
@@ -949,6 +990,26 @@
             valid = false;
           }
         }
+
+        // MC Number validation (MC-123456 or MC123456 format, 6-7 digits)
+        if (input.name === 'mcNumber' && input.value) {
+          const mcRegex = /^MC-?\d{6,7}$/i;
+          if (!mcRegex.test(input.value.trim())) {
+            group.classList.add('error');
+            group.querySelector('.error-message').textContent = 'Format: MC-123456 or MC123456';
+            valid = false;
+          }
+        }
+
+        // DOT Number validation (5-8 digits)
+        if (input.name === 'dotNumber' && input.value) {
+          const dotRegex = /^\d{5,8}$/;
+          if (!dotRegex.test(input.value.trim())) {
+            group.classList.add('error');
+            group.querySelector('.error-message').textContent = 'DOT number should be 5-8 digits';
+            valid = false;
+          }
+        }
       });
 
       // Special validation for radio buttons (step 3)
@@ -1006,14 +1067,22 @@
           e.preventDefault();
           area.classList.remove('dragover');
           if (e.dataTransfer.files.length) {
-            input.files = e.dataTransfer.files;
-            updateFileName(area, e.dataTransfer.files[0].name);
+            const file = e.dataTransfer.files[0];
+            if (validateFileSize(file)) {
+              input.files = e.dataTransfer.files;
+              updateFileName(area, file.name);
+            }
           }
         });
 
         input.addEventListener('change', () => {
           if (input.files.length) {
-            updateFileName(area, input.files[0].name);
+            const file = input.files[0];
+            if (validateFileSize(file)) {
+              updateFileName(area, file.name);
+            } else {
+              input.value = ''; // Clear the invalid file
+            }
           }
         });
       });
@@ -1024,6 +1093,17 @@
       fileNameEl.textContent = name;
       area.classList.add('has-file');
       area.style.borderColor = '';
+    }
+
+    // File size validation (10MB max)
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+
+    function validateFileSize(file) {
+      if (file.size > MAX_FILE_SIZE) {
+        alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
+        return false;
+      }
+      return true;
     }
 
     // Sliders
@@ -1164,7 +1244,6 @@
         window.location.href = 'thank-you.html';
 
       } catch (error) {
-        console.error('Submission error:', error);
         alert('There was an error submitting your application. Please try again or call us at (302) 507-3791.');
         btnNext.disabled = false;
         btnNext.textContent = 'Submit Application';

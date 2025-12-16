@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookd | Get Paid Today.</title>
-  <meta name="description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no long-term contracts, no minimums.">
+  <meta name="description" content="Invoice factoring for truckers. Get paid fast instead of waiting 45 days. 1% flat fee, no long-term contracts, no minimums.">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bookdpay.com/">
   <meta property="og:title" content="Bookd | Get Paid Today">
-  <meta property="og:description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no long-term contracts, no minimums.">
+  <meta property="og:description" content="Invoice factoring for truckers. Get paid fast instead of waiting 45 days. 1% flat fee, no long-term contracts, no minimums.">
   <meta property="og:image" content="https://bookdpay.com/og-image.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://bookdpay.com/">
   <meta name="twitter:title" content="Bookd | Get Paid Today">
-  <meta name="twitter:description" content="Invoice factoring for truckers. Get paid in 48 hours instead of 45 days. 3% flat fee, no long-term contracts, no minimums.">
+  <meta name="twitter:description" content="Invoice factoring for truckers. Get paid fast instead of waiting 45 days. 1% flat fee, no long-term contracts, no minimums.">
   <meta name="twitter:image" content="https://bookdpay.com/og-image.png">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -482,8 +482,8 @@
     .payment-card {
       background: var(--black);
       color: var(--white);
-      border-radius: 24px;
-      padding: 40px;
+      border-radius: 16px;
+      padding: 32px 40px;
       box-shadow: 0 40px 80px rgba(0,0,0,0.15);
       transform-style: preserve-3d;
       transition: transform 0.1s ease;
@@ -620,27 +620,232 @@
       border: none;
     }
 
-    .card-footer {
+    .card-comparison {
+      margin-bottom: 24px;
+    }
+
+    .comparison-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 12px 0;
+      font-size: 15px;
+    }
+
+    .comparison-row.them {
+      color: var(--gray-400);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .comparison-row.them span:last-child {
+      color: #E53935;
+      font-weight: 600;
+    }
+
+    .comparison-row.us {
+      color: var(--white);
+    }
+
+    .comparison-row.us span:last-child {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .card-footer {
       padding-top: 24px;
       border-top: 1px solid rgba(255,255,255,0.1);
       font-size: 14px;
+      text-align: center;
     }
 
-    .card-from {
+    .card-savings {
       color: var(--gray-400);
+      font-size: 16px;
     }
 
-    .card-from span {
-      color: var(--white);
-      font-weight: 500;
-    }
-
-    .card-status {
+    .card-savings span {
       color: var(--green);
-      font-weight: 500;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .card-early-bird {
+      text-align: center;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Check Design */
+    .check {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 32px 40px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      font-family: 'Courier New', monospace;
+      min-height: 320px;
+    }
+
+    .check::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 12px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 8px,
+        #dee2e6 8px,
+        #dee2e6 16px
+      );
+      border-radius: 8px 0 0 8px;
+    }
+
+    .check-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .check-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .check-logo span {
+      color: var(--green);
+    }
+
+    .check-number {
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .check-date {
+      font-size: 12px;
+      color: var(--gray-600);
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .check-payto {
+      margin-bottom: 16px;
+    }
+
+    .check-label {
+      display: block;
+      font-size: 10px;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .check-recipient {
+      display: block;
+      font-size: 18px;
+      color: var(--black);
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .check-amount-box {
+      position: absolute;
+      top: 100px;
+      right: 40px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 8px 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .check-written {
+      font-size: 14px;
+      color: var(--gray-600);
+      border-bottom: 1px solid var(--gray-400);
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .check-slider {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--gray-200);
+      border-radius: 2px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .check-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      border: 3px solid var(--white);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .check-memo {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .check-memo span:last-child {
+      margin-left: 8px;
+      border-bottom: 1px solid var(--gray-400);
+      padding-bottom: 2px;
+    }
+
+    .check-value-prop {
+      text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(0, 210, 106, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    .check-routing {
+      font-size: 14px;
+      color: var(--gray-400);
+      letter-spacing: 2px;
+    }
+
+    .check-stamp {
+      position: absolute;
+      bottom: 60px;
+      right: 40px;
+      border: 3px solid var(--green);
+      color: var(--green);
+      padding: 8px 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      transform: rotate(-12deg);
+      border-radius: 4px;
+      background: rgba(255,255,255,0.9);
     }
 
     /* Section Dividers */
@@ -1488,8 +1693,8 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-content">
-          <h1>Get Paid Today.</h1>
-          <p>You hauled the load. Why wait <span class="rotating-text" data-texts='["45 days", "forever"]'>45 days</span>?</p>
+          <h1>Why wait <span class="rotating-text" data-texts='["45 days", "forever"]'>45 days</span>?</h1>
+          <p>Cash your invoice like a check. <span style="color: var(--green); font-weight: 600;">1% flat.</span> No strings.</p>
           <div class="hero-buttons">
             <a href="apply.html" class="btn btn-primary btn-large">Apply Now</a>
             <a href="tel:+13025073791" class="btn btn-outline btn-large">Call (302) 507-3791</a>
@@ -1499,14 +1704,23 @@
           <div class="payment-card">
             <div class="card-header">
               <span class="card-logo">BOOK<span style="color: var(--green)">D</span></span>
-              <span class="card-badge">Funded</span>
+              <span class="card-badge">1% Flat</span>
             </div>
             <div class="card-amount">$<span id="cardAmount">3,500</span></div>
-            <div class="card-details">Load #4521 — Atlanta to Memphis</div>
+            <div class="card-details">Your Invoice</div>
             <input type="range" class="card-slider" id="invoiceSlider" min="1000" max="10000" step="100" value="3500">
-            <div class="card-footer">
-              <div class="card-from">From <span>Midwest Freight</span></div>
-              <div class="card-status">Paid</div>
+            <div class="card-comparison">
+              <div class="comparison-row them">
+                <span>Others (3-4% + fees)</span>
+                <span id="themFee">-$140</span>
+              </div>
+              <div class="comparison-row us">
+                <span>BOOKD (1%)</span>
+                <span id="usFee">-$35</span>
+              </div>
+            </div>
+                        <div class="card-footer">
+              <div class="card-savings">You save <span id="savings">$105</span></div>
             </div>
           </div>
         </div>
@@ -1549,7 +1763,7 @@
     <div class="container">
       <div class="section-header animate-on-scroll">
         <h2>How It Works</h2>
-        <p>No contracts. No minimums. 3% flat fee.</p>
+        <p>No contracts. No hidden fees. 1% flat fee.</p>
       </div>
       <div class="steps">
         <div class="step animate-on-scroll">
@@ -1565,52 +1779,12 @@
         <div class="step animate-on-scroll">
           <div class="step-number">3</div>
           <h3>Get Paid</h3>
-          <p>Money hits your account within 48 hours.</p>
+          <p>Money typically hits your account within 48 hours.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <div class="container">
-      <div class="testimonials-header animate-on-scroll">
-        <h2>Trusted by Owner-Operators</h2>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card animate-on-scroll">
-          <p class="testimonial-quote">Got my money in 36 hours. No hassle. I was skeptical at first but these guys are legit.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">MT</div>
-            <div class="testimonial-info">
-              <div class="testimonial-name">Marcus T.</div>
-              <div class="testimonial-role">Owner-Operator, Atlanta</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card animate-on-scroll">
-          <p class="testimonial-quote">Finally a factoring company that doesn't nickel and dime you. 3% flat, no surprises. Been with them 4 months now.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">RJ</div>
-            <div class="testimonial-info">
-              <div class="testimonial-name">Robert J.</div>
-              <div class="testimonial-role">Fleet Owner, Dallas</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card animate-on-scroll">
-          <p class="testimonial-quote">I called them on a Friday, had my first invoice funded by Monday. Real people who actually pick up the phone.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">DW</div>
-            <div class="testimonial-info">
-              <div class="testimonial-name">Dwayne W.</div>
-              <div class="testimonial-role">Owner-Operator, Memphis</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- FAQ -->
   <section class="faq">
@@ -1621,11 +1795,11 @@
       <div class="faq-list">
         <div class="faq-item animate-on-scroll">
           <h3>What do you charge?</h3>
-          <p>3% flat fee + $25 wire fee. That's it.</p>
+          <p>1% flat fee. No hidden fees, no wire fees, no minimums.</p>
         </div>
         <div class="faq-item animate-on-scroll">
           <h3>What do I need to get started?</h3>
-          <p>A delivered load, your MC number, and a driver's license. Takes 5 minutes.</p>
+          <p>A delivered load, your MC number, and a driver's license.</p>
         </div>
         <div class="faq-item animate-on-scroll">
           <h3>Can I talk to someone?</h3>
@@ -1651,7 +1825,7 @@
         <span class="footer-tagline">Get paid faster.</span>
       </div>
       <div class="footer-bottom">
-        &copy; 2025 Bookd Capital. All rights reserved.
+        &copy; 2025 Bookd Capital, Inc. All rights reserved.
       </div>
     </div>
   </footer>
@@ -1694,14 +1868,30 @@
       document.body.style.overflow = '';
     });
 
-    // Interactive Payment Card Slider
+    // Interactive Payment Card Slider with fee calculation
     const slider = document.getElementById('invoiceSlider');
     const amountDisplay = document.getElementById('cardAmount');
+    const themFee = document.getElementById('themFee');
+    const usFee = document.getElementById('usFee');
+    const savings = document.getElementById('savings');
+
+    function updateFees(value) {
+      const theirFee = value * 0.04; // 4% (competitors with fees)
+      const ourFee = value * 0.01;   // 1% BOOKD rate
+      const saved = theirFee - ourFee;
+
+      amountDisplay.textContent = value.toLocaleString();
+      themFee.textContent = '-$' + theirFee.toFixed(0);
+      usFee.textContent = '-$' + ourFee.toFixed(0);
+      savings.textContent = '$' + saved.toFixed(0);
+    }
 
     slider.addEventListener('input', () => {
-      const value = parseInt(slider.value);
-      amountDisplay.textContent = value.toLocaleString();
+      updateFees(parseInt(slider.value));
     });
+
+    // Initialize
+    updateFees(3500);
 
     // Scroll Animation Observer
     const observerOptions = {
@@ -1790,30 +1980,69 @@
       });
     });
 
-    // Typewriter Effect
+    // Typewriter effect with rotating last word
     const headline = document.querySelector('.hero-content h1');
-    const text = headline.textContent;
-    headline.innerHTML = '';
+    const phrases = [
+      { text: 'Why wait ', red: '45 days?' },
+      { text: 'Why wait ', red: 'forever?' }
+    ];
+    let phraseIndex = 0;
 
-    const typewriterSpan = document.createElement('span');
-    const cursorSpan = document.createElement('span');
-    cursorSpan.className = 'typewriter-cursor';
-    headline.appendChild(typewriterSpan);
-    headline.appendChild(cursorSpan);
+    function typePhrase() {
+      const phrase = phrases[phraseIndex];
+      const fullText = phrase.text + phrase.red;
+      headline.innerHTML = '<span class="typewriter-text"></span><span class="typewriter-cursor"></span>';
+      const textSpan = headline.querySelector('.typewriter-text');
 
-    let i = 0;
-    const typeWriter = () => {
-      if (i < text.length) {
-        typewriterSpan.textContent += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 80);
-      } else {
-        setTimeout(() => {
-          cursorSpan.style.display = 'none';
-        }, 1500);
-      }
-    };
-    setTimeout(typeWriter, 500);
+      let i = 0;
+      const typeChar = () => {
+        if (i < fullText.length) {
+          const typed = fullText.substring(0, i + 1);
+          // Check if we're in the red part
+          if (i >= phrase.text.length) {
+            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + typed.substring(phrase.text.length) + '</span>';
+          } else {
+            textSpan.textContent = typed;
+          }
+          i++;
+          setTimeout(typeChar, 120);
+        } else {
+          // Hide cursor during pause
+          const cursor = headline.querySelector('.typewriter-cursor');
+          if (cursor) cursor.style.display = 'none';
+          // Pause longer, then erase
+          setTimeout(() => {
+            if (cursor) cursor.style.display = 'inline-block';
+            erasePhrase(textSpan, phrase.text.length);
+          }, 15000);
+        }
+      };
+      typeChar();
+    }
+
+    function erasePhrase(textSpan, keepLength) {
+      let currentLength = (phrases[phraseIndex].text + phrases[phraseIndex].red).length;
+      const eraseChar = () => {
+        if (currentLength > 0) {
+          currentLength--;
+          const fullText = phrases[phraseIndex].text + phrases[phraseIndex].red;
+          const remaining = fullText.substring(0, currentLength);
+          if (currentLength >= phrases[phraseIndex].text.length) {
+            textSpan.innerHTML = phrases[phraseIndex].text + '<span style="color: #E53935;">' + remaining.substring(phrases[phraseIndex].text.length) + '</span>';
+          } else {
+            textSpan.textContent = remaining;
+          }
+          setTimeout(eraseChar, 60);
+        } else {
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(typePhrase, 500);
+        }
+      };
+      eraseChar();
+    }
+
+    setTimeout(typePhrase, 500);
+
 
     // Back to Top Button
     const backToTop = document.getElementById('backToTop');
@@ -1832,46 +2061,8 @@
         behavior: 'smooth'
       });
     });
-    // Rotating text animation
-    const rotatingText = document.querySelector('.rotating-text');
-    if (rotatingText) {
-      const texts = JSON.parse(rotatingText.dataset.texts);
-      let index = 0;
-      setInterval(() => {
-        rotatingText.classList.add('fade-out');
-        setTimeout(() => {
-          index = (index + 1) % texts.length;
-          rotatingText.textContent = texts[index];
-          rotatingText.classList.remove('fade-out');
-        }, 300);
-      }, 3000);
-    }
-
-    // Number ticker on card hover
-    const cardAmount = document.getElementById('cardAmount');
-    const paymentCard = document.querySelector('.payment-card');
-    let tickerInterval;
-
-    paymentCard.addEventListener('mouseenter', () => {
-      const finalValue = parseInt(cardAmount.textContent.replace(/,/g, ''));
-      let ticks = 0;
-      tickerInterval = setInterval(() => {
-        const randomNum = Math.floor(Math.random() * 9000) + 1000;
-        cardAmount.textContent = randomNum.toLocaleString();
-        ticks++;
-        if (ticks > 15) {
-          clearInterval(tickerInterval);
-          cardAmount.textContent = finalValue.toLocaleString();
-        }
-      }, 50);
-    });
-
-    paymentCard.addEventListener('mouseleave', () => {
-      clearInterval(tickerInterval);
-      const sliderValue = parseInt(document.getElementById('invoiceSlider').value);
-      cardAmount.textContent = sliderValue.toLocaleString();
-    });
-
+    
+    
     // Parallax scroll effect
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
