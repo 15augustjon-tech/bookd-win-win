@@ -2029,6 +2029,80 @@
     document.querySelectorAll('.reveal-text').forEach(el => {
       revealObserver.observe(el);
     });
+
+    // Typewriter effect - different for mobile vs desktop
+    const headline = document.querySelector('.hero-content h1');
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
+    const mobilePhrases = [
+      { text: 'Why wait ', red: 'forever?' },
+      { text: 'Why wait ', red: '45 days?' }
+    ];
+
+    const desktopPhrases = [
+      { text: 'Why wait?', red: '' }
+    ];
+
+    const phrases = isMobile ? mobilePhrases : desktopPhrases;
+    let phraseIndex = 0;
+
+    function typePhrase() {
+      const phrase = phrases[phraseIndex];
+      const fullText = phrase.text + phrase.red;
+      headline.innerHTML = '<span class="typewriter-text"></span><span class="typewriter-cursor"></span>';
+      const textSpan = headline.querySelector('.typewriter-text');
+
+      let i = 0;
+      const typeChar = () => {
+        if (i < fullText.length) {
+          const typed = fullText.substring(0, i + 1);
+          if (phrase.red && i >= phrase.text.length) {
+            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + typed.substring(phrase.text.length) + '</span>';
+          } else {
+            textSpan.textContent = typed;
+          }
+          i++;
+          setTimeout(typeChar, 120);
+        } else {
+          const cursor = headline.querySelector('.typewriter-cursor');
+          if (cursor) cursor.style.display = 'none';
+
+          // Only rotate on mobile
+          if (isMobile && phrases.length > 1) {
+            setTimeout(() => {
+              if (cursor) cursor.style.display = 'inline-block';
+              erasePhrase(textSpan);
+            }, 15000);
+          }
+        }
+      };
+      typeChar();
+    }
+
+    function erasePhrase(textSpan) {
+      const phrase = phrases[phraseIndex];
+      let currentLength = (phrase.text + phrase.red).length;
+
+      const eraseChar = () => {
+        if (currentLength > 0) {
+          currentLength--;
+          const fullText = phrase.text + phrase.red;
+          const remaining = fullText.substring(0, currentLength);
+          if (phrase.red && currentLength >= phrase.text.length) {
+            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + remaining.substring(phrase.text.length) + '</span>';
+          } else {
+            textSpan.textContent = remaining;
+          }
+          setTimeout(eraseChar, 60);
+        } else {
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(typePhrase, 500);
+        }
+      };
+      eraseChar();
+    }
+
+    setTimeout(typePhrase, 500);
   </script>
 
   </body>
