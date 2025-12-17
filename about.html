@@ -810,6 +810,10 @@
         font-size: 32px !important;
       }
 
+      .hide-mobile {
+        display: none !important;
+      }
+
       .about-comparison-grid {
         grid-template-columns: 1fr !important;
         gap: 24px !important;
@@ -939,7 +943,7 @@
           <div style="font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; color: var(--green); margin-bottom: 8px;">1%</div>
           <div style="font-size: 14px; color: var(--gray-600);">Flat Rate. Period.</div>
         </div>
-        <div style="background: var(--gray-50); padding: 32px 24px; border-radius: 20px;">
+        <div class="hide-mobile" style="background: var(--gray-50); padding: 32px 24px; border-radius: 20px;">
           <div style="font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; color: var(--green); margin-bottom: 8px;">0</div>
           <div style="font-size: 14px; color: var(--gray-600);">Contracts Required</div>
         </div>
