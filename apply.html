@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Get Started | Bookd</title>
+  <title>Book a Demo | Bookd</title>
   <meta name="description" content="Launch your white-label instant pay portal. Offer fast pay to your truckers and earn on every transaction.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
@@ -21,10 +21,12 @@
   <meta name="twitter:description" content="Partner with Bookd to offer instant pay to your truckers. Book a demo to learn more.">
   <meta name="twitter:image" content="https://bookdpay.com/og-image.png">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
   <style>
     * {
       margin: 0;
@@ -640,299 +642,62 @@
     </div>
   </nav>
 
-  <!-- Progress Bar -->
-  <div class="progress-container">
-    <div class="progress-inner">
-      <div class="progress-steps">
-        <div class="progress-step active" data-step="1">
-          <div class="progress-step-number">1</div>
-          <span class="progress-step-label">Contact</span>
-        </div>
-        <div class="progress-step" data-step="2">
-          <div class="progress-step-number">2</div>
-          <span class="progress-step-label">Business</span>
-        </div>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width: 25%"></div>
-      </div>
+  <!-- Calendly Embed -->
+  <div class="calendly-container">
+    <div class="calendly-header">
+      <h1>Book a Demo</h1>
+      <p>See how Bookd can help you offer instant pay to your truckers and earn on every payment.</p>
     </div>
+    <div class="calendly-inline-widget" data-url="https://calendly.com/jon-bookdpay/30min?hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
   </div>
 
-  <!-- Form -->
-  <div class="form-container">
-    <form id="applicationForm">
-      <!-- Step 1: Contact Info -->
-      <div class="form-step active" data-step="1">
-        <div class="step-header">
-          <h2>Let's get started</h2>
-          <p>Tell us about yourself so we can set up your instant pay portal.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Full Name <span class="required">*</span></label>
-          <input type="text" name="fullName" placeholder="John Smith" required>
-          <span class="error-message">Please enter your full name</span>
-        </div>
-
-        <div class="form-group">
-          <label>Email Address <span class="required">*</span></label>
-          <input type="email" name="email" placeholder="john@company.com" required>
-          <span class="error-message">Please enter a valid email address</span>
-        </div>
-
-        <div class="form-group">
-          <label>Phone Number <span class="required">*</span></label>
-          <input type="tel" name="phone" placeholder="(555) 123-4567" required>
-          <span class="error-message">Please enter your phone number</span>
-        </div>
-
-        <div class="form-group">
-          <label>Company Name <span class="required">*</span></label>
-          <input type="text" name="companyName" placeholder="Acme Freight Brokerage" required>
-          <span class="error-message">Please enter your company name</span>
-        </div>
-      </div>
-
-      <!-- Step 2: Business Info -->
-      <div class="form-step" data-step="2">
-        <div class="step-header">
-          <h2>Tell us about your operation</h2>
-          <p>This helps us set up your portal and estimate your earnings.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Estimated Monthly Invoice Volume</label>
-          <div class="slider-container">
-            <div class="slider-value">$<span id="volumeValue">500,000</span></div>
-            <input type="range" class="slider-input" name="monthlyVolume" min="100000" max="2000000" step="50000" value="500000">
-            <div class="slider-labels">
-              <span>$100k</span>
-              <span>$2M+</span>
-            </div>
-          </div>
-          <small>Total invoices your truckers might factor through your portal monthly.</small>
-        </div>
-
-        <div class="form-group">
-          <label>Number of Truckers in Your Network</label>
-          <select name="truckerCount">
-            <option value="">Select range</option>
-            <option value="1-10">1-10 truckers</option>
-            <option value="11-50">11-50 truckers</option>
-            <option value="51-100">51-100 truckers</option>
-            <option value="101-500">101-500 truckers</option>
-            <option value="500+">500+ truckers</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Anything else we should know?</label>
-          <textarea name="notes" rows="3" placeholder="Tell us about your business, goals, or any questions you have..."></textarea>
-        </div>
-
-        <div class="form-group consent-group">
-          <label class="consent-label">
-            <input type="checkbox" name="agreeTerms" required>
-            <span>I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. By submitting, I consent to receive calls and texts from Bookd Pay.</span>
-          </label>
-        </div>
-      </div>
-    </form>
-
-    <!-- Success Screen -->
-    <div class="success-screen" id="successScreen">
-      <div class="success-icon">✓</div>
-      <h2>We'll be in touch!</h2>
-      <p>We'll reach out to schedule your demo and walk you through timing and next steps.</p>
-      <a href="index.html" class="btn btn-next">Back to Home</a>
-    </div>
-  </div>
-
-  <!-- Navigation -->
-  <div class="form-nav" id="formNav">
-    <div class="form-nav-inner">
-      <button type="button" class="btn btn-back" id="btnBack" style="display: none;">Back</button>
-      <button type="button" class="btn btn-next" id="btnNext">Continue</button>
-    </div>
-  </div>
-
-  <script>
-    // Form state
-    let currentStep = 1;
-    const totalSteps = 2;
-    const form = document.getElementById('applicationForm');
-    const formNav = document.getElementById('formNav');
-    const btnBack = document.getElementById('btnBack');
-    const btnNext = document.getElementById('btnNext');
-    const progressFill = document.querySelector('.progress-fill');
-    const successScreen = document.getElementById('successScreen');
-
-    // Initialize
-    updateProgress();
-    initSliders();
-
-    // Navigation
-    btnNext.addEventListener('click', () => {
-      if (validateStep(currentStep)) {
-        if (currentStep < totalSteps) {
-          goToStep(currentStep + 1);
-        } else {
-          submitForm();
-        }
-      }
-    });
-
-    btnBack.addEventListener('click', () => {
-      if (currentStep > 1) {
-        goToStep(currentStep - 1);
-      }
-    });
-
-    function goToStep(step) {
-      // Update step classes
-      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-      document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
-
-      // Update progress indicators
-      document.querySelectorAll('.progress-step').forEach(s => {
-        const stepNum = parseInt(s.dataset.step);
-        s.classList.remove('active', 'completed');
-        if (stepNum === step) {
-          s.classList.add('active');
-        } else if (stepNum < step) {
-          s.classList.add('completed');
-        }
-      });
-
-      currentStep = step;
-      updateProgress();
-      updateButtons();
-      window.scrollTo(0, 0);
+  <style>
+    .calendly-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
     }
 
-    function updateProgress() {
-      const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-      progressFill.style.width = `${Math.max(10, progress)}%`;
+    .calendly-header {
+      text-align: center;
+      margin-bottom: 32px;
     }
 
-    function updateButtons() {
-      btnBack.style.display = currentStep > 1 ? 'block' : 'none';
+    .calendly-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
 
-      if (currentStep === totalSteps) {
-        btnNext.textContent = 'Submit Application';
-        btnNext.classList.remove('btn-next');
-        btnNext.classList.add('btn-submit');
-      } else {
-        btnNext.textContent = 'Continue';
-        btnNext.classList.remove('btn-submit');
-        btnNext.classList.add('btn-next');
+    .calendly-header p {
+      color: var(--gray-600);
+      font-size: 16px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .calendly-inline-widget {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .calendly-container {
+        padding: 24px 16px 40px;
+      }
+
+      .calendly-header h1 {
+        font-size: 24px;
+      }
+
+      .calendly-header p {
+        font-size: 14px;
+      }
+
+      .calendly-inline-widget {
+        height: 650px !important;
       }
     }
-
-    // Validation
-    function validateStep(step) {
-      const stepEl = document.querySelector(`.form-step[data-step="${step}"]`);
-      const inputs = stepEl.querySelectorAll('input[required], select[required]');
-      let valid = true;
-
-      inputs.forEach(input => {
-        const group = input.closest('.form-group');
-        if (!input.value.trim()) {
-          group.classList.add('error');
-          valid = false;
-        } else {
-          group.classList.remove('error');
-        }
-
-        // Email validation
-        if (input.type === 'email' && input.value) {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(input.value)) {
-            group.classList.add('error');
-            valid = false;
-          }
-        }
-
-      });
-
-      return valid;
-    }
-
-    // Clear errors on input
-    form.addEventListener('input', (e) => {
-      const group = e.target.closest('.form-group');
-      if (group) {
-        group.classList.remove('error');
-      }
-    });
-
-    // Sliders
-    function initSliders() {
-      const volumeSlider = form.querySelector('input[name="monthlyVolume"]');
-      const volumeValue = document.getElementById('volumeValue');
-
-      if (volumeSlider) {
-        volumeSlider.addEventListener('input', () => {
-          volumeValue.textContent = parseInt(volumeSlider.value).toLocaleString();
-        });
-      }
-    }
-
-    // Phone formatting
-    const phoneInput = form.querySelector('input[name="phone"]');
-    if (phoneInput) {
-      phoneInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length >= 6) {
-          value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6,10)}`;
-        } else if (value.length >= 3) {
-          value = `(${value.slice(0,3)}) ${value.slice(3)}`;
-        }
-        e.target.value = value;
-      });
-    }
-
-    // Supabase setup
-    const SUPABASE_URL = 'https://asnodzbvxjnegegelcpp.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzbm9kemJ2eGpuZWdlZ2VsY3BwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MDI1ODcsImV4cCI6MjA4MTE3ODU4N30.hkO0UOBkxtwThI7G0prNteGLGFRpbtHUGMuXitpHHCc';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Form submission
-    async function submitForm() {
-      const formData = new FormData(form);
-
-      // Disable button and show loading
-      btnNext.disabled = true;
-      btnNext.textContent = 'Submitting...';
-
-      try {
-        // Insert broker partner lead
-        const { error: insertError } = await supabase
-          .from('partner_leads')
-          .insert({
-            full_name: formData.get('fullName'),
-            email: formData.get('email'),
-            phone: formData.get('phone'),
-            company_name: formData.get('companyName'),
-            monthly_volume: parseInt(formData.get('monthlyVolume')) || null,
-            trucker_count: formData.get('truckerCount'),
-            notes: formData.get('notes')
-          });
-
-        if (insertError) {
-          throw insertError;
-        }
-
-        // Success - redirect to thank you page
-        window.location.href = 'thank-you.html';
-
-      } catch (error) {
-        alert('There was an error submitting your application. Please try again or call us at (302) 507-3791.');
-        btnNext.disabled = false;
-        btnNext.textContent = 'Submit';
-      }
-    }
-  </script>
+  </style>
 </body>
 </html>
