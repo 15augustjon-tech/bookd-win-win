@@ -435,17 +435,19 @@
     .reveal-text .word:nth-child(5) { transition-delay: 0.32s; }
 
     .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
       align-items: center;
+      text-align: center;
     }
 
-    .hero-content h1 {
-      font-size: clamp(40px, 6vw, 72px);
+    .hero-content h1,
+    .hero-content h2 {
+      font-size: clamp(28px, 4vw, 48px);
       font-weight: 700;
       margin-bottom: 24px;
-      letter-spacing: -2px;
+      letter-spacing: -1px;
     }
 
     .hero-content p {
@@ -459,6 +461,7 @@
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     /* Payment Card */
@@ -479,6 +482,541 @@
       filter: blur(60px);
       z-index: -1;
       pointer-events: none;
+    }
+
+    /* Option Toggle */
+    .option-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+
+    .option-toggle button {
+      padding: 8px 16px;
+      border: 2px solid var(--gray-200);
+      background: transparent;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .option-toggle button.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .option-toggle button:hover:not(.active) {
+      border-color: var(--black);
+    }
+
+    /* Volume Slider */
+    .volume-slider-container {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .slider-value {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .slider-track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .slider-min, .slider-max {
+      font-size: 13px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .volume-slider {
+      width: 200px;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--gray-200);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 210, 106, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 16px rgba(0, 210, 106, 0.5);
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0, 210, 106, 0.4);
+    }
+
+    /* iPad Frame */
+    .macbook-wrapper {
+      width: 420px;
+      margin: 0 auto;
+    }
+
+    .macbook-frame {
+      background: linear-gradient(145deg, #E3E3E8 0%, #C8C8CD 50%, #E3E3E8 100%);
+      border-radius: 24px;
+      padding: 12px;
+      position: relative;
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255,255,255,0.5) inset,
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .macbook-bezel-top {
+      display: none;
+    }
+
+    .macbook-camera {
+      display: none;
+    }
+
+    .macbook-screen {
+      background: #F5F5F7;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+
+    /* Company Name Input (White Label) */
+    .company-name-input {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1D1D1F;
+      background: transparent;
+      border: none;
+      border-bottom: 2px dashed rgba(0, 210, 106, 0.3);
+      outline: none;
+      width: 140px;
+      padding: 2px 0;
+      transition: border-color 0.2s ease;
+    }
+
+    .company-name-input::placeholder {
+      color: #86868B;
+      font-weight: 600;
+    }
+
+    .company-name-input:focus {
+      border-bottom-color: var(--green);
+      border-bottom-style: solid;
+    }
+
+    /* Yearly Estimation */
+    .stat-yearly {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1D1D1F;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    .per-period {
+      font-size: 14px;
+      font-weight: 500;
+      color: #86868B;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      padding: 20px;
+      min-height: 280px;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dashboard-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1D1D1F;
+    }
+
+    .dashboard-logo .green {
+      color: var(--green);
+    }
+
+    .dashboard-title {
+      font-size: 13px;
+      color: #86868B;
+      font-weight: 500;
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card {
+      padding: 16px;
+    }
+
+    .stat-card.main-stat {
+      background: rgba(0, 210, 106, 0.08);
+      border-color: rgba(0, 210, 106, 0.2);
+    }
+
+    .stat-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-percent {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #86868B;
+      font-weight: 500;
+    }
+
+    /* Chart Card */
+    .chart-card {
+      padding: 12px 16px;
+      margin-bottom: 12px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1D1D1F;
+    }
+
+    .chart-badge {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(0, 210, 106, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chart-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .chart-area {
+      height: 50px;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .chart-line {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      animation: drawLine 2s ease forwards;
+    }
+
+    .chart-fill {
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Earnings Card */
+    .earnings-card {
+      padding: 12px 16px;
+    }
+
+    .earnings-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1D1D1F;
+      margin-bottom: 10px;
+    }
+
+    .earnings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .earning-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .earning-name {
+      color: #86868B;
+    }
+
+    .earning-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    /* Dashboard Preview */
+    .dashboard-preview {
+      background: rgba(17, 17, 17, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      color: var(--white);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .dashboard-revenue {
+      text-align: left;
+    }
+
+    .dashboard-revenue-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .dashboard-revenue-label {
+      font-size: 13px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+
+    .dashboard-badge {
+      background: rgba(0, 210, 106, 0.15);
+      border: 1px solid rgba(0, 210, 106, 0.3);
+      color: var(--green);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dashboard-chart {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      height: 100px;
+    }
+
+    .dashboard-chart-label {
+      font-size: 11px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .chart-line {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      height: 50px;
+    }
+
+    .chart-line svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .chart-line path {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      animation: drawChart 2s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .chart-line .chart-glow {
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 8;
+      stroke-linecap: round;
+      opacity: 0.2;
+      filter: blur(4px);
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      animation: drawChart 2s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes drawChart {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .dashboard-earnings {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .earning-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateX(-10px);
+      animation: slideInRow 0.4s ease forwards;
+    }
+
+    .earning-row:nth-child(1) { animation-delay: 1s; }
+    .earning-row:nth-child(2) { animation-delay: 1.15s; }
+    .earning-row:nth-child(3) { animation-delay: 1.3s; }
+
+    @keyframes slideInRow {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .earning-company {
+      color: var(--gray-400);
+    }
+
+    .earning-amount {
+      color: var(--green);
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .earning-check {
+      color: var(--green);
+      margin-left: 8px;
+    }
+
+    /* Hide inactive option */
+    .visual-option {
+      display: none;
+    }
+
+    .visual-option.active {
+      display: block;
+      animation: fadeInOption 0.4s ease;
+    }
+
+    @keyframes fadeInOption {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .payment-card {
@@ -1283,7 +1821,21 @@
       }
 
       .hero-visual {
-        order: -1;
+        order: 1; /* Keep visual BELOW text on tablet/mobile */
+        margin-top: 0;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        justify-content: center;
       }
 
       .payment-card {
@@ -1534,6 +2086,12 @@
         font-size: 12px;
       }
 
+      /* You vs We mobile */
+      .you-vs-we-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
       /* FAQ mobile */
       .faq-list {
         gap: 20px;
@@ -1573,6 +2131,138 @@
 
       .footer-bottom {
         font-size: 11px;
+      }
+
+      /* MacBook Dashboard Mobile */
+      .volume-slider-container {
+        margin-bottom: 16px;
+      }
+
+      .slider-value {
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+
+      .slider-track {
+        gap: 10px;
+      }
+
+      .slider-min, .slider-max {
+        font-size: 11px;
+      }
+
+      .volume-slider {
+        width: 150px;
+        height: 4px;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        width: 16px;
+        height: 16px;
+      }
+
+      .macbook-wrapper {
+        max-width: 100%;
+      }
+
+      .macbook-frame {
+        border-radius: 18px;
+        padding: 8px;
+      }
+
+      .macbook-screen {
+        border-radius: 10px;
+      }
+
+
+      .dashboard {
+        padding: 12px;
+        min-height: auto;
+      }
+
+      .dashboard-header {
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .company-name-input {
+        font-size: 13px;
+        width: 100px;
+      }
+
+      .dashboard-title {
+        font-size: 10px;
+      }
+
+      .dashboard-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .stat-card {
+        padding: 10px;
+      }
+
+      .stat-amount {
+        font-size: 18px;
+      }
+
+      .per-period {
+        font-size: 10px;
+      }
+
+      .stat-yearly {
+        font-size: 11px;
+        margin-top: 2px;
+      }
+
+      .stat-percent {
+        font-size: 14px;
+      }
+
+      .stat-label {
+        font-size: 8px;
+      }
+
+      .chart-card {
+        padding: 8px 10px;
+        margin-bottom: 6px;
+      }
+
+      .chart-header {
+        margin-bottom: 4px;
+      }
+
+      .chart-title {
+        font-size: 9px;
+      }
+
+      .chart-badge {
+        font-size: 7px;
+        padding: 2px 4px;
+      }
+
+      .chart-area {
+        height: 30px;
+      }
+
+      .earnings-card {
+        padding: 8px 10px;
+      }
+
+      .earnings-title {
+        font-size: 9px;
+        margin-bottom: 6px;
+      }
+
+      .earnings-list {
+        gap: 4px;
+      }
+
+      .earning-item {
+        font-size: 9px;
       }
 
       /* Pricing card if visible */
@@ -1694,36 +2384,90 @@
   <section class="hero">
     <div class="container">
       <div class="hero-grid">
-        <div class="hero-content">
-          <h1>Why wait?</h1>
-          <p>Cash your invoice like a check. <span style="color: var(--green); font-weight: 600;">1% flat.</span></p>
-          <div class="hero-buttons">
-            <a href="apply.html" class="btn btn-primary btn-large">Apply Now</a>
-            <a href="tel:+13025073791" class="btn btn-outline btn-large">Call (302) 507-3791</a>
+        <div class="hero-visual">
+          <!-- Volume Slider -->
+          <div class="volume-slider-container">
+            <span class="slider-value">$<span id="volumeDisplay">500k</span> monthly volume</span>
+            <div class="slider-track">
+              <span class="slider-min">$150k</span>
+              <input type="range" class="volume-slider" id="volumeSlider" min="150000" max="1500000" step="50000" value="500000">
+              <span class="slider-max">$1.5M</span>
+            </div>
+          </div>
+
+          <!-- MacBook Frame -->
+          <div class="macbook-wrapper">
+            <div class="macbook-frame">
+              <div class="macbook-bezel-top">
+                <div class="macbook-camera"></div>
+              </div>
+              <div class="macbook-screen">
+                <!-- Dashboard -->
+                <div class="dashboard">
+                  <div class="dashboard-header">
+                    <input type="text" class="company-name-input" id="companyName" placeholder="Your Company" maxlength="20">
+                    <span class="dashboard-title">Broker Portal</span>
+                  </div>
+
+                  <div class="dashboard-stats">
+                    <div class="glass-card stat-card main-stat">
+                      <div class="stat-amount">$<span id="monthlyRevenue">833</span><span class="per-period">/mo</span></div>
+                      <div class="stat-yearly">$<span id="yearlyRevenue">10,000</span>/year</div>
+                      <div class="stat-label">Earnings</div>
+                    </div>
+                    <div class="glass-card stat-card">
+                      <div class="stat-percent">2%</div>
+                      <div class="stat-label">Your Profit</div>
+                    </div>
+                  </div>
+
+                  <div class="glass-card chart-card">
+                    <div class="chart-header">
+                      <span class="chart-title">Revenue</span>
+                      <span class="chart-badge">Live</span>
+                    </div>
+                    <div class="chart-area">
+                      <svg viewBox="0 0 200 60" preserveAspectRatio="none" class="chart-svg">
+                        <defs>
+                          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00D26A;stop-opacity:0.3"/>
+                            <stop offset="100%" style="stop-color:#00D26A;stop-opacity:0"/>
+                          </linearGradient>
+                        </defs>
+                        <path class="chart-fill" d="M0,55 C30,50 50,40 80,35 C110,30 130,45 160,25 C180,15 195,20 200,18 L200,60 L0,60 Z" fill="url(#chartGradient)"/>
+                        <path class="chart-line" d="M0,55 C30,50 50,40 80,35 C110,30 130,45 160,25 C180,15 195,20 200,18" fill="none" stroke="#00D26A" stroke-width="2"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="glass-card earnings-card">
+                    <div class="earnings-title">Recent Earnings</div>
+                    <div class="earnings-list">
+                      <div class="earning-item">
+                        <span class="earning-name">TMC Logistics</span>
+                        <span class="earning-amount">+$248</span>
+                      </div>
+                      <div class="earning-item">
+                        <span class="earning-name">Fast Freight LLC</span>
+                        <span class="earning-amount">+$186</span>
+                      </div>
+                      <div class="earning-item">
+                        <span class="earning-name">Route 66 Transport</span>
+                        <span class="earning-amount">+$312</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="hero-visual">
-          <div class="payment-card">
-            <div class="card-header">
-              <span class="card-logo">BOOK<span style="color: var(--green)">D</span></span>
-              <span class="card-badge">1% Flat</span>
-            </div>
-            <div class="card-amount">$<span id="cardAmount">3,500</span></div>
-            <div class="card-details">Your Invoice</div>
-            <input type="range" class="card-slider" id="invoiceSlider" min="1000" max="10000" step="100" value="3500">
-            <div class="card-comparison">
-              <div class="comparison-row them">
-                <span>Others (3-4% + fees)</span>
-                <span id="themFee">-$140</span>
-              </div>
-              <div class="comparison-row us">
-                <span>BOOKD (1%)</span>
-                <span id="usFee">-$35</span>
-              </div>
-            </div>
-                        <div class="card-footer">
-              <div class="card-savings">You save <span id="savings">$105</span></div>
-            </div>
+        <div class="hero-content">
+          <h2>You have the truckers. We have the capital.</h2>
+          <p style="font-size: 17px; color: var(--gray-600); margin-bottom: 32px; max-width: 420px; margin-left: auto; margin-right: auto;">We'd rather split profits with you than waste money on marketing.</p>
+          <div class="hero-buttons">
+            <a href="apply.html" class="btn btn-primary btn-large">Book a Demo</a>
+            <a href="tel:+13025073791" class="btn btn-outline btn-large">Call (302) 507-3791</a>
           </div>
         </div>
       </div>
@@ -1737,17 +2481,21 @@
     </svg>
   </div>
 
-  <!-- Stats -->
+  <!-- Features -->
   <section class="stats">
     <div class="container">
-      <div class="stats-grid">
-        <div class="stat animate-on-scroll">
-          <div class="stat-number" style="color: #E53935;"><span class="counter" data-target="45">0</span> days</div>
-          <div class="stat-label">without Bookd</div>
+      <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="stat animate-on-scroll" style="text-align: left;">
+          <h3 style="font-size: 20px; margin-bottom: 8px;">We Fund</h3>
+          <p style="color: var(--gray-600); font-size: 15px; line-height: 1.5;">We put up the capital. You put up nothing.</p>
         </div>
-        <div class="stat animate-on-scroll">
-          <div class="stat-number" style="color: var(--green);"><span class="counter" data-target="48">0</span> hours</div>
-          <div class="stat-label">with Bookd</div>
+        <div class="stat animate-on-scroll" style="text-align: left;">
+          <h3 style="font-size: 20px; margin-bottom: 8px;">You Earn</h3>
+          <p style="color: var(--gray-600); font-size: 15px; line-height: 1.5;">2% on every deal. Passive income.</p>
+        </div>
+        <div class="stat animate-on-scroll" style="text-align: left;">
+          <h3 style="font-size: 20px; margin-bottom: 8px;">Your Brand</h3>
+          <p style="color: var(--gray-600); font-size: 15px; line-height: 1.5;">They see your logo. Not ours.</p>
         </div>
       </div>
     </div>
@@ -1760,28 +2508,67 @@
     </svg>
   </div>
 
+  <!-- Why We Do This -->
+  <section class="how-it-works" style="padding: 80px 0;">
+    <div class="container">
+      <div class="section-header animate-on-scroll" style="margin-bottom: 40px;">
+        <h2>Why We Do This</h2>
+      </div>
+      <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <p class="animate-on-scroll" style="font-size: 18px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.6;">
+          Factoring companies spend <strong style="color: var(--black);">$1,500</strong> to acquire one trucker.<br>
+          Ads. Cold calls. Trade shows.
+        </p>
+        <p class="animate-on-scroll" style="font-size: 20px; color: var(--black); font-weight: 600; margin-bottom: 24px;">
+          We'd rather give that money to you.
+        </p>
+        <p class="animate-on-scroll" style="font-size: 16px; color: var(--gray-600); line-height: 1.6;">
+          You get revenue. We get distribution. Both sides win.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- You vs We -->
+  <section class="stats" style="padding: 60px 0;">
+    <div class="container">
+      <div class="you-vs-we-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 700px; margin: 0 auto;">
+        <div class="animate-on-scroll" style="text-align: center; padding: 32px; background: var(--white); border-radius: 16px;">
+          <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-400); margin-bottom: 16px;">What You Do</h3>
+          <p style="font-size: 28px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px;">Nothing.</p>
+          <p style="font-size: 15px; color: var(--gray-600);">Point truckers to your portal.<br>That's it.</p>
+        </div>
+        <div class="animate-on-scroll" style="text-align: center; padding: 32px; background: var(--white); border-radius: 16px;">
+          <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-400); margin-bottom: 16px;">What We Do</h3>
+          <p style="font-size: 28px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--green); margin-bottom: 12px;">Everything.</p>
+          <p style="font-size: 15px; color: var(--gray-600);">Capital. Risk. Collections.<br>Paperwork. Payments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- How It Works -->
   <section class="how-it-works">
     <div class="container">
       <div class="section-header animate-on-scroll">
         <h2>How It Works</h2>
-        <p>No contracts. No hidden fees. 1% flat fee.</p>
+        <p>Zero risk. Zero work. Just profit.</p>
       </div>
       <div class="steps">
         <div class="step animate-on-scroll">
           <div class="step-number">1</div>
-          <h3>Send Your Invoice</h3>
-          <p>Upload your rate confirmation and proof of delivery.</p>
+          <h3>Get Your Portal</h3>
+          <p>We set up your white-label factoring portal in 24 hours.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">2</div>
-          <h3>We Verify</h3>
-          <p>We confirm the load was delivered and approve your invoice.</p>
+          <h3>Your Truckers Factor</h3>
+          <p>They submit invoices through your branded portal.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">3</div>
-          <h3>Get Paid</h3>
-          <p>Money typically hits your account within 48 hours.</p>
+          <h3>You Profit</h3>
+          <p>Earn 2% on every transaction. We handle everything else.</p>
         </div>
       </div>
     </div>
@@ -1796,19 +2583,35 @@
       </div>
       <div class="faq-list">
         <div class="faq-item animate-on-scroll">
-          <h3>What do you charge?</h3>
-          <p>1% flat fee. No hidden fees, no wire fees, no minimums.</p>
+          <h3>What's my cut?</h3>
+          <p>2% on every transaction your truckers factor through your portal.</p>
         </div>
         <div class="faq-item animate-on-scroll">
-          <h3>What do I need to get started?</h3>
-          <p>A delivered load, your MC number, and a driver's license.</p>
+          <h3>Is there any risk to me?</h3>
+          <p>Zero. We fund the invoices. You just collect your share.</p>
         </div>
         <div class="faq-item animate-on-scroll">
-          <h3>Can I talk to someone?</h3>
-          <p>Yes. Call us at <a href="tel:+13025073791" style="color: var(--green-dark); font-weight: 600;">(302) 507-3791</a>.</p>
+          <h3>What do my truckers see?</h3>
+          <p>Your brand. Your logo. Your portal. They don't see Bookd.</p>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <h3>How do I get started?</h3>
+          <p>Book a demo. We'll have your portal live in 24 hours.</p>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <h3>Why should I trust you?</h3>
+          <p>We're the ones taking the risk. We put up the capital. If anyone should be worried, it's us.</p>
         </div>
       </div>
-      <p class="faq-more animate-on-scroll"><a href="faq.html">More questions? See our FAQ</a></p>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta">
+    <div class="container">
+      <p style="font-size: 15px; margin-bottom: 12px; opacity: 0.8;">Join 50+ freight brokers already earning passive income.</p>
+      <h2 style="margin-bottom: 32px;">Want in?</h2>
+      <a href="apply.html" class="btn btn-secondary btn-large">Let's Talk</a>
     </div>
   </section>
 
@@ -1870,30 +2673,7 @@
       document.body.style.overflow = '';
     });
 
-    // Interactive Payment Card Slider with fee calculation
-    const slider = document.getElementById('invoiceSlider');
-    const amountDisplay = document.getElementById('cardAmount');
-    const themFee = document.getElementById('themFee');
-    const usFee = document.getElementById('usFee');
-    const savings = document.getElementById('savings');
-
-    function updateFees(value) {
-      const theirFee = value * 0.04; // 4% (competitors with fees)
-      const ourFee = value * 0.01;   // 1% BOOKD rate
-      const saved = theirFee - ourFee;
-
-      amountDisplay.textContent = value.toLocaleString();
-      themFee.textContent = '-$' + theirFee.toFixed(0);
-      usFee.textContent = '-$' + ourFee.toFixed(0);
-      savings.textContent = '$' + saved.toFixed(0);
-    }
-
-    slider.addEventListener('input', () => {
-      updateFees(parseInt(slider.value));
-    });
-
-    // Initialize
-    updateFees(3500);
+    // Old payment card slider removed - now using Money Flow / Dashboard options
 
     // Scroll Animation Observer
     const observerOptions = {
@@ -1941,32 +2721,40 @@
       counterObserver.observe(counter);
     });
 
-    // Card Tilt Parallax Effect
-    const card = document.querySelector('.payment-card');
-    const heroVisual = document.querySelector('.hero-visual');
+    // Volume Slider - Updates dashboard revenue
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeDisplay = document.getElementById('volumeDisplay');
+    const monthlyRevenue = document.getElementById('monthlyRevenue');
+    const yearlyRevenue = document.getElementById('yearlyRevenue');
 
-    if (card && heroVisual) {
-      heroVisual.addEventListener('mousemove', (e) => {
-        const rect = heroVisual.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+    function updateRevenue(volume) {
+      // Display volume in k or M format
+      if (volume >= 1000000) {
+        const volumeM = (volume / 1000000).toFixed(1).replace('.0', '');
+        volumeDisplay.textContent = volumeM + 'M';
+      } else {
+        const volumeK = Math.round(volume / 1000);
+        volumeDisplay.textContent = volumeK + 'k';
+      }
 
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
+      // Calculate monthly revenue: volume × 2%
+      const monthly = Math.round(volume * 0.02);
+      monthlyRevenue.textContent = monthly.toLocaleString();
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      // Calculate yearly revenue: monthly × 12
+      const yearly = monthly * 12;
+      if (yearlyRevenue) {
+        yearlyRevenue.textContent = yearly.toLocaleString();
+      }
+    }
+
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', () => {
+        updateRevenue(parseInt(volumeSlider.value));
       });
 
-      heroVisual.addEventListener('mouseleave', () => {
-        card.style.transform = 'rotateX(0) rotateY(0)';
-        card.style.transition = 'transform 0.5s ease';
-      });
-
-      heroVisual.addEventListener('mouseenter', () => {
-        card.style.transition = 'transform 0.1s ease';
-      });
+      // Initialize
+      updateRevenue(500000);
     }
 
     // Magnetic Buttons
@@ -2032,79 +2820,6 @@
       revealObserver.observe(el);
     });
 
-    // Typewriter effect - different for mobile vs desktop
-    const headline = document.querySelector('.hero-content h1');
-    const isMobile = window.matchMedia('(max-width: 600px)').matches;
-
-    const mobilePhrases = [
-      { text: 'Why wait ', red: 'forever?' },
-      { text: 'Why wait ', red: '45 days?' }
-    ];
-
-    const desktopPhrases = [
-      { text: 'Why wait?', red: '' }
-    ];
-
-    const phrases = isMobile ? mobilePhrases : desktopPhrases;
-    let phraseIndex = 0;
-
-    function typePhrase() {
-      const phrase = phrases[phraseIndex];
-      const fullText = phrase.text + phrase.red;
-      headline.innerHTML = '<span class="typewriter-text"></span><span class="typewriter-cursor"></span>';
-      const textSpan = headline.querySelector('.typewriter-text');
-
-      let i = 0;
-      const typeChar = () => {
-        if (i < fullText.length) {
-          const typed = fullText.substring(0, i + 1);
-          if (phrase.red && i >= phrase.text.length) {
-            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + typed.substring(phrase.text.length) + '</span>';
-          } else {
-            textSpan.textContent = typed;
-          }
-          i++;
-          setTimeout(typeChar, 120);
-        } else {
-          const cursor = headline.querySelector('.typewriter-cursor');
-          if (cursor) cursor.style.display = 'none';
-
-          // Only rotate on mobile
-          if (isMobile && phrases.length > 1) {
-            setTimeout(() => {
-              if (cursor) cursor.style.display = 'inline-block';
-              erasePhrase(textSpan);
-            }, 15000);
-          }
-        }
-      };
-      typeChar();
-    }
-
-    function erasePhrase(textSpan) {
-      const phrase = phrases[phraseIndex];
-      let currentLength = (phrase.text + phrase.red).length;
-
-      const eraseChar = () => {
-        if (currentLength > 0) {
-          currentLength--;
-          const fullText = phrase.text + phrase.red;
-          const remaining = fullText.substring(0, currentLength);
-          if (phrase.red && currentLength >= phrase.text.length) {
-            textSpan.innerHTML = phrase.text + '<span style="color: #E53935;">' + remaining.substring(phrase.text.length) + '</span>';
-          } else {
-            textSpan.textContent = remaining;
-          }
-          setTimeout(eraseChar, 60);
-        } else {
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          setTimeout(typePhrase, 500);
-        }
-      };
-      eraseChar();
-    }
-
-    setTimeout(typePhrase, 500);
   </script>
 
   </body>
