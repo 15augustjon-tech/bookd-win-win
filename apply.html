@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apply | Bookd</title>
-  <meta name="description" content="Apply for Bookd invoice factoring. Get paid in 48 hours. Takes 5 minutes to apply.">
+  <title>Get Started | Bookd Pay</title>
+  <meta name="description" content="Launch your instant pay portal in 48 hours. Offer same-day pay to your truckers and earn on every transaction.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Open Graph / Facebook -->
@@ -652,21 +652,9 @@
           <div class="progress-step-number">2</div>
           <span class="progress-step-label">Business</span>
         </div>
-        <div class="progress-step" data-step="3">
-          <div class="progress-step-number">3</div>
-          <span class="progress-step-label">Status</span>
-        </div>
-        <div class="progress-step" data-step="4">
-          <div class="progress-step-number">4</div>
-          <span class="progress-step-label">Documents</span>
-        </div>
-        <div class="progress-step" data-step="5">
-          <div class="progress-step-number">5</div>
-          <span class="progress-step-label">Needs</span>
-        </div>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width: 10%"></div>
+        <div class="progress-fill" style="width: 25%"></div>
       </div>
     </div>
   </div>
@@ -677,8 +665,8 @@
       <!-- Step 1: Contact Info -->
       <div class="form-step active" data-step="1">
         <div class="step-header">
-          <h2>Let's start with you</h2>
-          <p>We need some basic info to get in touch.</p>
+          <h2>Let's get started</h2>
+          <p>Tell us about yourself so we can set up your instant pay portal.</p>
         </div>
 
         <div class="form-group">
@@ -689,7 +677,7 @@
 
         <div class="form-group">
           <label>Email Address <span class="required">*</span></label>
-          <input type="email" name="email" placeholder="john@example.com" required>
+          <input type="email" name="email" placeholder="john@company.com" required>
           <span class="error-message">Please enter a valid email address</span>
         </div>
 
@@ -698,179 +686,56 @@
           <input type="tel" name="phone" placeholder="(555) 123-4567" required>
           <span class="error-message">Please enter your phone number</span>
         </div>
+
+        <div class="form-group">
+          <label>Company Name <span class="required">*</span></label>
+          <input type="text" name="companyName" placeholder="Acme Freight Brokerage" required>
+          <span class="error-message">Please enter your company name</span>
+        </div>
       </div>
 
       <!-- Step 2: Business Info -->
       <div class="form-step" data-step="2">
         <div class="step-header">
-          <h2>Tell us about your business</h2>
-          <p>We need this to verify your authority and set up payments.</p>
+          <h2>Tell us about your operation</h2>
+          <p>This helps us set up your portal and estimate your earnings.</p>
         </div>
 
         <div class="form-group">
-          <label>Company Name <span class="required">*</span></label>
-          <input type="text" name="companyName" placeholder="Smith Trucking LLC" required>
-          <span class="error-message">Please enter your company name</span>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>MC Number <span class="required">*</span></label>
-            <input type="text" name="mcNumber" placeholder="MC-123456" required>
-            <span class="error-message">Please enter your MC number</span>
+          <label>Estimated Monthly Invoice Volume</label>
+          <div class="slider-container">
+            <div class="slider-value">$<span id="volumeValue">500,000</span></div>
+            <input type="range" class="slider-input" name="monthlyVolume" min="100000" max="2000000" step="50000" value="500000">
+            <div class="slider-labels">
+              <span>$100k</span>
+              <span>$2M+</span>
+            </div>
           </div>
-          <div class="form-group">
-            <label>DOT Number <span class="required">*</span></label>
-            <input type="text" name="dotNumber" placeholder="1234567" required>
-            <span class="error-message">Please enter your DOT number</span>
-          </div>
+          <small>Total invoices your truckers might factor through your portal monthly.</small>
         </div>
 
         <div class="form-group">
-          <label>Business Address <span class="required">*</span></label>
-          <input type="text" name="address" placeholder="123 Main St, City, State ZIP" required>
-          <span class="error-message">Please enter your business address</span>
-        </div>
-
-        <div class="form-group">
-          <label>Number of Trucks <span class="required">*</span></label>
-          <select name="truckCount" required>
-            <option value="">Select truck count</option>
-            <option value="1">1 truck (Owner-operator)</option>
-            <option value="2-5">2-5 trucks</option>
-            <option value="6-10">6-10 trucks</option>
-            <option value="11-25">11-25 trucks</option>
-            <option value="26+">26+ trucks</option>
+          <label>Number of Truckers in Your Network</label>
+          <select name="truckerCount">
+            <option value="">Select range</option>
+            <option value="1-10">1-10 truckers</option>
+            <option value="11-50">11-50 truckers</option>
+            <option value="51-100">51-100 truckers</option>
+            <option value="101-500">101-500 truckers</option>
+            <option value="500+">500+ truckers</option>
           </select>
-          <span class="error-message">Please select your truck count</span>
-        </div>
-      </div>
-
-      <!-- Step 3: Current Service Status -->
-      <div class="form-step" data-step="3">
-        <div class="step-header">
-          <h2>Are you using a factoring service?</h2>
-          <p>This helps us understand your current situation.</p>
         </div>
 
         <div class="form-group">
-          <div class="option-group">
-            <label class="option-card">
-              <input type="radio" name="currentService" value="yes">
-              <div class="option-content">
-                <div class="option-indicator"></div>
-                <div class="option-text">
-                  <h4>Yes, I use factoring</h4>
-                  <p>I currently work with another factoring company</p>
-                </div>
-              </div>
-            </label>
-            <label class="option-card">
-              <input type="radio" name="currentService" value="no">
-              <div class="option-content">
-                <div class="option-indicator"></div>
-                <div class="option-text">
-                  <h4>No, I don't use factoring</h4>
-                  <p>I wait for brokers to pay me directly</p>
-                </div>
-              </div>
-            </label>
-          </div>
+          <label>Anything else we should know?</label>
+          <textarea name="notes" rows="3" placeholder="Tell us about your business, goals, or any questions you have..."></textarea>
         </div>
 
-        <div class="form-group" id="currentProviderGroup" style="display: none;">
-          <label>Current Provider (Optional)</label>
-          <input type="text" name="currentProvider" placeholder="Who do you currently use?">
-          <small>No judgment - we just want to know what you're comparing us to.</small>
-        </div>
-      </div>
-
-      <!-- Step 4: Document Uploads -->
-      <div class="form-step" data-step="4">
-        <div class="step-header">
-          <h2>Upload your documents</h2>
-          <p>We need these to verify your identity and set up payments.</p>
-        </div>
-
-        <div class="form-group consent-group" style="margin-top: 0; margin-bottom: 32px;">
+        <div class="form-group consent-group">
           <label class="consent-label">
             <input type="checkbox" name="agreeTerms" required>
-            <span>I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. By submitting, I consent to receive calls and texts from Bookd regarding my application.</span>
+            <span>I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. By submitting, I consent to receive calls and texts from Bookd Pay.</span>
           </label>
-        </div>
-
-        <div class="uploads-grid">
-          <div class="form-group">
-            <label>Driver's License Photo <span class="required">*</span></label>
-            <div class="upload-area" data-upload="license">
-              <input type="file" name="license" accept="image/*,.pdf" required>
-              <div class="upload-icon">📄</div>
-              <h4>Click to upload or drag and drop</h4>
-              <p>PNG, JPG, or PDF up to 10MB</p>
-              <div class="file-name"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>W-9 or Tax Document <span class="required">*</span></label>
-            <div class="upload-area" data-upload="tax">
-              <input type="file" name="taxDocument" accept="image/*,.pdf" required>
-              <div class="upload-icon">📄</div>
-              <h4>Click to upload or drag and drop</h4>
-              <p>PNG, JPG, or PDF up to 10MB</p>
-              <div class="file-name"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Voided Check <span class="required">*</span></label>
-            <div class="upload-area" data-upload="check">
-              <input type="file" name="voidedCheck" accept="image/*,.pdf" required>
-              <div class="upload-icon">📄</div>
-              <h4>Click to upload or drag and drop</h4>
-              <p>PNG, JPG, or PDF up to 10MB</p>
-              <div class="file-name"></div>
-            </div>
-            <small>For direct deposit setup - we'll never withdraw from your account.</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 5: Service Needs -->
-      <div class="form-step" data-step="5">
-        <div class="step-header">
-          <h2>Tell us about your needs</h2>
-          <p>This helps us give you accurate quotes.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Average Invoice Size</label>
-          <div class="slider-container">
-            <div class="slider-value">$<span id="invoiceSizeValue">2,500</span></div>
-            <input type="range" class="slider-input" name="avgInvoiceSize" min="500" max="10000" step="100" value="2500">
-            <div class="slider-labels">
-              <span>$500</span>
-              <span>$10,000+</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Invoices Per Month</label>
-          <div class="slider-container">
-            <div class="slider-value"><span id="invoiceCountValue">8</span> invoices</div>
-            <input type="range" class="slider-input" name="invoicesPerMonth" min="1" max="50" step="1" value="8">
-            <div class="slider-labels">
-              <span>1</span>
-              <span>50+</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Main Clients</label>
-          <textarea name="mainClients" rows="3" placeholder="Who are your biggest clients or brokers? (e.g., TQL, CH Robinson, direct shippers)"></textarea>
-          <small>Helps us check their payment history and credit.</small>
         </div>
       </div>
     </form>
@@ -878,8 +743,8 @@
     <!-- Success Screen -->
     <div class="success-screen" id="successScreen">
       <div class="success-icon">✓</div>
-      <h2>Application Submitted!</h2>
-      <p>We'll review your info and reach out soon to discuss next steps. Keep an eye on your phone.</p>
+      <h2>We'll be in touch!</h2>
+      <p>Expect a call within 24 hours to discuss your instant pay portal. We'll have you live in 48 hours.</p>
       <a href="index.html" class="btn btn-next">Back to Home</a>
     </div>
   </div>
@@ -895,7 +760,7 @@
   <script>
     // Form state
     let currentStep = 1;
-    const totalSteps = 5;
+    const totalSteps = 2;
     const form = document.getElementById('applicationForm');
     const formNav = document.getElementById('formNav');
     const btnBack = document.getElementById('btnBack');
@@ -905,9 +770,7 @@
 
     // Initialize
     updateProgress();
-    initUploadAreas();
     initSliders();
-    initOptionCards();
 
     // Navigation
     btnNext.addEventListener('click', () => {
@@ -991,49 +854,7 @@
           }
         }
 
-        // MC Number validation (MC-123456 or MC123456 format, 6-7 digits)
-        if (input.name === 'mcNumber' && input.value) {
-          const mcRegex = /^MC-?\d{6,7}$/i;
-          if (!mcRegex.test(input.value.trim())) {
-            group.classList.add('error');
-            group.querySelector('.error-message').textContent = 'Format: MC-123456 or MC123456';
-            valid = false;
-          }
-        }
-
-        // DOT Number validation (5-8 digits)
-        if (input.name === 'dotNumber' && input.value) {
-          const dotRegex = /^\d{5,8}$/;
-          if (!dotRegex.test(input.value.trim())) {
-            group.classList.add('error');
-            group.querySelector('.error-message').textContent = 'DOT number should be 5-8 digits';
-            valid = false;
-          }
-        }
       });
-
-      // Special validation for radio buttons (step 3)
-      if (step === 3) {
-        const serviceRadio = stepEl.querySelector('input[name="currentService"]:checked');
-        if (!serviceRadio) {
-          // Allow proceeding without selection for now
-          valid = true;
-        }
-      }
-
-      // Special validation for file uploads (step 4)
-      if (step === 4) {
-        const uploadAreas = stepEl.querySelectorAll('.upload-area');
-        uploadAreas.forEach(area => {
-          const input = area.querySelector('input[type="file"]');
-          if (input.required && !input.files.length) {
-            area.style.borderColor = '#E53935';
-            valid = false;
-          } else {
-            area.style.borderColor = '';
-          }
-        });
-      }
 
       return valid;
     }
@@ -1046,109 +867,16 @@
       }
     });
 
-    // File uploads
-    function initUploadAreas() {
-      document.querySelectorAll('.upload-area').forEach(area => {
-        const input = area.querySelector('input[type="file"]');
-        const fileNameEl = area.querySelector('.file-name');
-
-        area.addEventListener('click', () => input.click());
-
-        area.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          area.classList.add('dragover');
-        });
-
-        area.addEventListener('dragleave', () => {
-          area.classList.remove('dragover');
-        });
-
-        area.addEventListener('drop', (e) => {
-          e.preventDefault();
-          area.classList.remove('dragover');
-          if (e.dataTransfer.files.length) {
-            const file = e.dataTransfer.files[0];
-            if (validateFileSize(file)) {
-              input.files = e.dataTransfer.files;
-              updateFileName(area, file.name);
-            }
-          }
-        });
-
-        input.addEventListener('change', () => {
-          if (input.files.length) {
-            const file = input.files[0];
-            if (validateFileSize(file)) {
-              updateFileName(area, file.name);
-            } else {
-              input.value = ''; // Clear the invalid file
-            }
-          }
-        });
-      });
-    }
-
-    function updateFileName(area, name) {
-      const fileNameEl = area.querySelector('.file-name');
-      fileNameEl.textContent = name;
-      area.classList.add('has-file');
-      area.style.borderColor = '';
-    }
-
-    // File size validation (10MB max)
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-
-    function validateFileSize(file) {
-      if (file.size > MAX_FILE_SIZE) {
-        alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
-        return false;
-      }
-      return true;
-    }
-
     // Sliders
     function initSliders() {
-      const invoiceSizeSlider = form.querySelector('input[name="avgInvoiceSize"]');
-      const invoiceSizeValue = document.getElementById('invoiceSizeValue');
+      const volumeSlider = form.querySelector('input[name="monthlyVolume"]');
+      const volumeValue = document.getElementById('volumeValue');
 
-      const invoiceCountSlider = form.querySelector('input[name="invoicesPerMonth"]');
-      const invoiceCountValue = document.getElementById('invoiceCountValue');
-
-      if (invoiceSizeSlider) {
-        invoiceSizeSlider.addEventListener('input', () => {
-          invoiceSizeValue.textContent = parseInt(invoiceSizeSlider.value).toLocaleString();
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', () => {
+          volumeValue.textContent = parseInt(volumeSlider.value).toLocaleString();
         });
       }
-
-      if (invoiceCountSlider) {
-        invoiceCountSlider.addEventListener('input', () => {
-          invoiceCountValue.textContent = invoiceCountSlider.value;
-        });
-      }
-    }
-
-    // Option cards
-    function initOptionCards() {
-      document.querySelectorAll('.option-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const name = card.querySelector('input').name;
-          document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
-            input.closest('.option-card').classList.remove('selected');
-          });
-          card.classList.add('selected');
-          card.querySelector('input').checked = true;
-
-          // Show/hide current provider field
-          if (name === 'currentService') {
-            const providerGroup = document.getElementById('currentProviderGroup');
-            if (card.querySelector('input').value === 'yes') {
-              providerGroup.style.display = 'block';
-            } else {
-              providerGroup.style.display = 'none';
-            }
-          }
-        });
-      });
     }
 
     // Phone formatting
@@ -1179,61 +907,17 @@
       btnNext.textContent = 'Submitting...';
 
       try {
-        // Generate unique ID for this application
-        const appId = crypto.randomUUID();
-        const timestamp = Date.now();
-
-        // Upload files to Supabase Storage
-        const licenseFile = form.querySelector('input[name="license"]').files[0];
-        const taxFile = form.querySelector('input[name="taxDocument"]').files[0];
-        const checkFile = form.querySelector('input[name="voidedCheck"]').files[0];
-
-        let licenseUrl = null;
-        let taxDocUrl = null;
-        let checkUrl = null;
-
-        if (licenseFile) {
-          const { data, error } = await supabase.storage
-            .from('documents')
-            .upload(`${appId}/license_${timestamp}.${licenseFile.name.split('.').pop()}`, licenseFile);
-          if (!error) licenseUrl = data.path;
-        }
-
-        if (taxFile) {
-          const { data, error } = await supabase.storage
-            .from('documents')
-            .upload(`${appId}/tax_${timestamp}.${taxFile.name.split('.').pop()}`, taxFile);
-          if (!error) taxDocUrl = data.path;
-        }
-
-        if (checkFile) {
-          const { data, error } = await supabase.storage
-            .from('documents')
-            .upload(`${appId}/check_${timestamp}.${checkFile.name.split('.').pop()}`, checkFile);
-          if (!error) checkUrl = data.path;
-        }
-
-        // Insert application data
+        // Insert broker partner lead
         const { error: insertError } = await supabase
-          .from('applications')
+          .from('partner_leads')
           .insert({
-            id: appId,
             full_name: formData.get('fullName'),
             email: formData.get('email'),
             phone: formData.get('phone'),
             company_name: formData.get('companyName'),
-            mc_number: formData.get('mcNumber'),
-            dot_number: formData.get('dotNumber'),
-            address: formData.get('address'),
-            truck_count: formData.get('truckCount'),
-            current_service: formData.get('currentService'),
-            current_provider: formData.get('currentProvider'),
-            avg_invoice_size: parseInt(formData.get('avgInvoiceSize')) || null,
-            invoices_per_month: parseInt(formData.get('invoicesPerMonth')) || null,
-            main_clients: formData.get('mainClients'),
-            license_url: licenseUrl,
-            tax_document_url: taxDocUrl,
-            voided_check_url: checkUrl
+            monthly_volume: parseInt(formData.get('monthlyVolume')) || null,
+            trucker_count: formData.get('truckerCount'),
+            notes: formData.get('notes')
           });
 
         if (insertError) {
@@ -1246,7 +930,7 @@
       } catch (error) {
         alert('There was an error submitting your application. Please try again or call us at (302) 507-3791.');
         btnNext.disabled = false;
-        btnNext.textContent = 'Submit Application';
+        btnNext.textContent = 'Submit';
       }
     }
   </script>
