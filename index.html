@@ -2680,12 +2680,12 @@
         </div>
 
         <!-- Results -->
-        <div style="background: var(--white); border-radius: 16px; padding: 32px; text-align: center;">
-          <div style="padding: 16px 0;">
-            <span style="font-weight: 600; font-size: 18px; display: block; margin-bottom: 8px;">You earn monthly</span>
-            <span style="font-weight: 700; font-size: 32px; color: var(--green);">$<span id="monthlyEarnings">5,000</span></span>
+        <div style="background: var(--white); border-radius: 16px; padding: 32px; text-align: left;">
+          <div style="display: flex; justify-content: space-between; padding: 16px 0; margin-top: 8px;">
+            <span style="font-weight: 600; font-size: 18px;">You earn monthly</span>
+            <span style="font-weight: 700; font-size: 24px; color: var(--green);">$<span id="monthlyEarnings">5,000</span></span>
           </div>
-          <div>
+          <div style="text-align: right;">
             <span style="font-size: 14px; color: var(--gray-600);">$<span id="yearlyEarnings">60,000</span>/year</span>
           </div>
         </div>
@@ -2898,11 +2898,11 @@
 
       // Display fee
       feeDisplay.textContent = fee.toFixed(1);
-      yourFeeDisplay.textContent = fee.toFixed(1);
+      if (yourFeeDisplay) yourFeeDisplay.textContent = fee.toFixed(1);
 
       // Total fee (2% base + your fee)
       const totalFee = 2 + fee;
-      totalFeeDisplay.textContent = totalFee.toFixed(1);
+      if (totalFeeDisplay) totalFeeDisplay.textContent = totalFee.toFixed(1);
 
       // Monthly earnings: volume × your fee %
       const monthly = Math.round(volume * (fee / 100));
