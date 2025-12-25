@@ -592,7 +592,7 @@
           <h2>Pending Requests</h2>
           <a href="requests.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="pendingRequests">
           <div class="request-item">
             <div class="request-info">
               <div class="request-avatar">JS</div>
@@ -652,7 +652,7 @@
           <h2>Your Truckers</h2>
           <a href="truckers.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="truckersList">
           <div class="trucker-item">
             <div class="trucker-info">
               <div class="trucker-avatar">JS</div>
@@ -735,5 +735,133 @@
     </div>
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    let currentProfile = null;
+    let currentBroker = null;
+
+    async function initPage() {
+      const profile = await requireAuth('broker');
+      if (!profile) return;
+
+      currentProfile = profile;
+      currentBroker = profile.broker;
+
+      updateUserInfo();
+      await loadData();
+    }
+
+    function updateUserInfo() {
+      const companyName = currentBroker?.company_name || 'Company';
+      const initials = companyName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+      document.querySelector('.dashboard-header h1').textContent = `Welcome back, ${companyName.split(' ')[0]}`;
+      document.querySelector('.nav-user-avatar').textContent = initials;
+    }
+
+    async function loadData() {
+      if (!currentBroker) return;
+
+      const truckers = await getBrokerTruckers(currentBroker.id);
+      const requests = await getBrokerRequests(currentBroker.id);
+      const invoices = await getBrokerInvoices(currentBroker.id);
+
+      // Calculate stats
+      const totalEarned = currentBroker.total_earned || 0;
+      const pendingRequests = requests.filter(r => r.status === 'pending');
+      const totalOwed = invoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
+      const fundedThisMonth = requests
+        .filter(r => r.status === 'funded' && new Date(r.funded_at).getMonth() === new Date().getMonth())
+        .reduce((sum, r) => sum + parseFloat(r.broker_fee || 0), 0);
+
+      // Update stats
+      document.querySelector('.earnings-card-amount').textContent = formatCurrency(totalEarned);
+      document.querySelector('.earnings-card-subtitle').textContent = `From ${requests.filter(r => r.status === 'funded').length} approved early pay requests`;
+
+      const statValues = document.querySelectorAll('.stat-card-value');
+      statValues[0].textContent = pendingRequests.length;
+      statValues[1].textContent = truckers.length;
+      statValues[2].textContent = formatCurrency(totalOwed);
+      statValues[3].textContent = formatCurrency(fundedThisMonth);
+
+      renderPendingRequests(pendingRequests.slice(0, 3));
+      renderTruckers(truckers.slice(0, 3), invoices);
+    }
+
+    function renderPendingRequests(requests) {
+      const container = document.getElementById('pendingRequests');
+
+      if (requests.length === 0) {
+        container.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No pending requests</p>';
+        return;
+      }
+
+      container.innerHTML = requests.map(req => {
+        const trucker = req.trucker;
+        const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+        const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        return `
+          <div class="request-item">
+            <div class="request-info">
+              <div class="request-avatar">${initials}</div>
+              <div class="request-details">
+                <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
+                <p>Requested ${date}</p>
+              </div>
+            </div>
+            <div class="request-right">
+              <div class="request-amount">
+                <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
+                <div class="request-amount-fee">You earn ${formatCurrency(req.broker_fee)}</div>
+              </div>
+              <a href="approve.html?id=${req.id}" class="badge badge-action">Review</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTruckers(truckers, invoices) {
+      const container = document.getElementById('truckersList');
+
+      if (truckers.length === 0) {
+        container.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No truckers connected yet</p>';
+        return;
+      }
+
+      container.innerHTML = truckers.map(rel => {
+        const trucker = rel.trucker;
+        const truckerInvoices = invoices.filter(inv => inv.trucker_id === trucker.id);
+        const amountOwed = truckerInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
+        const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+
+        return `
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">${initials}</div>
+              <div>
+                <div class="trucker-name">${trucker?.profile?.full_name || 'Unknown'}</div>
+                <div class="trucker-mc">${trucker?.mc_number || 'No MC'}</div>
+              </div>
+            </div>
+            <div class="trucker-owed">
+              <div class="trucker-owed-value">${formatCurrency(amountOwed)}</div>
+              <div class="trucker-owed-label">owed</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Wire logout
+    document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+
+    initPage();
+  </script>
 </body>
 </html>

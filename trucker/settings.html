@@ -603,17 +603,83 @@
     </div>
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
   <script>
+    let currentProfile = null;
+    let currentTrucker = null;
+
+    async function initPage() {
+      const profile = await requireAuth('trucker');
+      if (!profile) return;
+
+      currentProfile = profile;
+      currentTrucker = profile.trucker;
+
+      populateForm();
+    }
+
+    function populateForm() {
+      const nameParts = currentProfile.full_name.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      const initials = currentProfile.full_name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+
+      // Update avatar section
+      document.querySelector('.avatar-large').textContent = initials;
+      document.querySelector('.nav-user-avatar').textContent = initials;
+      document.querySelector('.avatar-info h3').textContent = currentProfile.full_name;
+      document.querySelector('.avatar-info p').textContent = currentProfile.email || '';
+
+      // Update form fields
+      document.getElementById('firstName').value = firstName;
+      document.getElementById('lastName').value = lastName;
+      document.getElementById('email').value = currentProfile.email || '';
+      document.getElementById('phone').value = currentProfile.phone || '';
+
+      // Update business info
+      if (currentTrucker) {
+        document.getElementById('mcNumber').value = currentTrucker.mc_number || '';
+        document.getElementById('dotNumber').value = currentTrucker.dot_number || '';
+        document.querySelector('.credit-info-value').textContent = formatCurrency(currentTrucker.bonus_credit_remaining || 0);
+      }
+    }
+
     // Profile form
-    document.getElementById('profileForm').addEventListener('submit', (e) => {
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('Profile updated');
-      // TODO: Connect to Supabase
-      alert('Profile saved!');
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const phone = document.getElementById('phone').value;
+      const fullName = `${firstName} ${lastName}`.trim();
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ full_name: fullName, phone: phone })
+        .eq('id', currentProfile.id);
+
+      if (error) {
+        alert('Error saving: ' + error.message);
+      } else {
+        currentProfile.full_name = fullName;
+        currentProfile.phone = phone;
+        populateForm();
+        alert('Profile saved!');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
     });
 
     // Password form
-    document.getElementById('passwordForm').addEventListener('submit', (e) => {
+    document.getElementById('passwordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPass = document.getElementById('newPassword').value;
       const confirmPass = document.getElementById('confirmPassword').value;
@@ -623,28 +689,40 @@
         return;
       }
 
-      console.log('Password updated');
-      // TODO: Connect to Supabase
-      alert('Password updated!');
-      e.target.reset();
+      if (newPass.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+      }
+
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Updating...';
+
+      const { error } = await supabase.auth.updateUser({ password: newPass });
+
+      if (error) {
+        alert('Error updating password: ' + error.message);
+      } else {
+        alert('Password updated!');
+        e.target.reset();
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Update Password';
     });
 
     // Delete account
-    document.getElementById('deleteAccount').addEventListener('click', () => {
+    document.getElementById('deleteAccount').addEventListener('click', async () => {
       if (confirm('Are you sure you want to delete your account? This cannot be undone.')) {
-        console.log('Account deleted');
-        // TODO: Connect to Supabase
-        alert('Account deleted');
-        window.location.href = '../index.html';
+        alert('Please contact support to delete your account.');
       }
     });
 
     // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      console.log('Logged out');
-      // TODO: Connect to Supabase auth
-      window.location.href = '../login.html';
-    });
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+
+    initPage();
   </script>
 
 </body>

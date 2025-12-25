@@ -501,7 +501,7 @@
         <div class="card-header">
           <h2>Earnings History</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="earningsList">
           <div class="earning-item">
             <div class="earning-info">
               <div class="earning-icon">
@@ -634,5 +634,119 @@
     </div>
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    let currentProfile = null;
+    let currentBroker = null;
+    let allRequests = [];
+
+    async function initPage() {
+      const profile = await requireAuth('broker');
+      if (!profile) return;
+
+      currentProfile = profile;
+      currentBroker = profile.broker;
+
+      updateUserInfo();
+      await loadData();
+    }
+
+    function updateUserInfo() {
+      const companyName = currentBroker?.company_name || 'Company';
+      const initials = companyName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      document.querySelector('.nav-user-avatar').textContent = initials;
+    }
+
+    async function loadData() {
+      if (!currentBroker) return;
+
+      allRequests = await getBrokerRequests(currentBroker.id);
+
+      const fundedRequests = allRequests.filter(r => r.status === 'funded' || r.status === 'completed');
+      const totalEarned = currentBroker.total_earned || fundedRequests.reduce((sum, r) => sum + parseFloat(r.broker_fee || 0), 0);
+
+      // This month
+      const now = new Date();
+      const thisMonth = fundedRequests.filter(r => {
+        const d = new Date(r.funded_at);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+      const thisMonthEarnings = thisMonth.reduce((sum, r) => sum + parseFloat(r.broker_fee || 0), 0);
+
+      // Last month
+      const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1);
+      const lastMonth = fundedRequests.filter(r => {
+        const d = new Date(r.funded_at);
+        return d.getMonth() === lastMonthDate.getMonth() && d.getFullYear() === lastMonthDate.getFullYear();
+      });
+      const lastMonthEarnings = lastMonth.reduce((sum, r) => sum + parseFloat(r.broker_fee || 0), 0);
+
+      const avgPerRequest = fundedRequests.length > 0 ? totalEarned / fundedRequests.length : 0;
+      const percentChange = lastMonthEarnings > 0 ? Math.round(((thisMonthEarnings - lastMonthEarnings) / lastMonthEarnings) * 100) : 0;
+
+      // Update stats
+      document.querySelector('.earnings-card-amount').textContent = formatCurrency(totalEarned);
+      document.querySelector('.earnings-card-subtitle').textContent = `From ${fundedRequests.length} funded early pay requests`;
+
+      const statValues = document.querySelectorAll('.stat-card-value');
+      statValues[0].textContent = formatCurrency(thisMonthEarnings);
+      statValues[1].textContent = formatCurrency(avgPerRequest);
+      statValues[2].textContent = fundedRequests.length;
+
+      const changeEl = document.querySelector('.stat-card-change');
+      if (percentChange >= 0) {
+        changeEl.textContent = `+${percentChange}% from last month`;
+        changeEl.style.color = 'var(--green-dark)';
+      } else {
+        changeEl.textContent = `${percentChange}% from last month`;
+        changeEl.style.color = 'var(--red)';
+      }
+
+      renderEarnings(fundedRequests);
+    }
+
+    function renderEarnings(requests) {
+      const container = document.getElementById('earningsList');
+
+      if (requests.length === 0) {
+        container.innerHTML = '<p style="padding: 40px; color: var(--gray-600); text-align: center;">No earnings yet</p>';
+        return;
+      }
+
+      container.innerHTML = requests.map(req => {
+        const trucker = req.trucker;
+        const date = new Date(req.funded_at || req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        return `
+          <div class="earning-item">
+            <div class="earning-info">
+              <div class="earning-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="earning-details">
+                <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
+                <p>Funded ${date}</p>
+              </div>
+            </div>
+            <div class="earning-amount">
+              <div class="earning-amount-value">+${formatCurrency(req.broker_fee)}</div>
+              <div class="earning-amount-label">from ${formatCurrency(req.amount_requested)} request</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Wire logout
+    document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+
+    initPage();
+  </script>
 </body>
 </html>

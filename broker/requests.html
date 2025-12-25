@@ -473,7 +473,7 @@
         <div class="card-header">
           <h2>Pending Approval</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="pendingList">
           <div class="request-item">
             <div class="request-info">
               <div class="request-avatar">JS</div>
@@ -538,7 +538,7 @@
         <div class="card-header">
           <h2>Completed</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="completedList">
           <div class="request-item">
             <div class="request-info">
               <div class="request-avatar">RW</div>
@@ -632,16 +632,140 @@
     </div>
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/app.js"></script>
   <script>
+    let currentProfile = null;
+    let currentBroker = null;
+    let allRequests = [];
+    let currentFilter = 'all';
+
+    async function initPage() {
+      const profile = await requireAuth('broker');
+      if (!profile) return;
+
+      currentProfile = profile;
+      currentBroker = profile.broker;
+
+      updateUserInfo();
+      await loadData();
+    }
+
+    function updateUserInfo() {
+      const companyName = currentBroker?.company_name || 'Company';
+      const initials = companyName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      document.querySelector('.nav-user-avatar').textContent = initials;
+    }
+
+    async function loadData() {
+      if (!currentBroker) return;
+
+      allRequests = await getBrokerRequests(currentBroker.id);
+
+      // Update filter count
+      const pendingCount = allRequests.filter(r => r.status === 'pending').length;
+      document.querySelector('[data-filter="pending"]').textContent = `Pending (${pendingCount})`;
+
+      renderRequests();
+    }
+
+    function renderRequests() {
+      const pendingContainer = document.getElementById('pendingList');
+      const completedContainer = document.getElementById('completedList');
+
+      let pending = allRequests.filter(r => r.status === 'pending' || r.status === 'approved');
+      let completed = allRequests.filter(r => r.status === 'funded' || r.status === 'completed' || r.status === 'rejected');
+
+      if (currentFilter === 'pending') {
+        completed = [];
+      } else if (currentFilter === 'funded') {
+        pending = [];
+      }
+
+      // Render pending
+      if (pending.length === 0) {
+        pendingContainer.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No pending requests</p>';
+      } else {
+        pendingContainer.innerHTML = pending.map(req => {
+          const trucker = req.trucker;
+          const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+          const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+          return `
+            <div class="request-item">
+              <div class="request-info">
+                <div class="request-avatar">${initials}</div>
+                <div class="request-details">
+                  <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
+                  <p>${trucker?.mc_number || 'No MC'} • Requested ${date}</p>
+                </div>
+              </div>
+              <div class="request-right">
+                <div class="request-amount">
+                  <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
+                  <div class="request-amount-fee">You earn ${formatCurrency(req.broker_fee)}</div>
+                </div>
+                <div class="request-actions">
+                  <a href="approve.html?id=${req.id}" class="btn btn-primary">Review</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render completed
+      if (completed.length === 0) {
+        completedContainer.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No completed requests</p>';
+      } else {
+        completedContainer.innerHTML = completed.map(req => {
+          const trucker = req.trucker;
+          const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+          const date = req.funded_at
+            ? new Date(req.funded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            : new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const statusLabel = req.status === 'funded' ? 'Funded' : req.status === 'rejected' ? 'Rejected' : 'Completed';
+          const badgeClass = req.status === 'rejected' ? 'badge-rejected' : 'badge-funded';
+
+          return `
+            <div class="request-item">
+              <div class="request-info">
+                <div class="request-avatar">${initials}</div>
+                <div class="request-details">
+                  <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
+                  <p>${trucker?.mc_number || 'No MC'} • ${statusLabel} ${date}</p>
+                </div>
+              </div>
+              <div class="request-right">
+                <div class="request-amount">
+                  <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
+                  <div class="request-amount-fee">You ${req.status === 'rejected' ? 'would have earned' : 'earned'} ${formatCurrency(req.broker_fee)}</div>
+                </div>
+                <span class="badge ${badgeClass}">${statusLabel}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        // TODO: Filter requests
-        console.log('Filter:', this.dataset.filter);
+        currentFilter = this.dataset.filter;
+        renderRequests();
       });
     });
+
+    // Wire logout
+    document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+
+    initPage();
   </script>
 
 </body>
