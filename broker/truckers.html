@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Truckers | Bookd</title>
+  <meta name="description" content="Manage your connected truckers.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-50: #FAFAFA;
+      --gray-100: #F5F5F5;
+      --gray-200: #E5E5E5;
+      --gray-400: #A3A3A3;
+      --gray-600: #525252;
+      --green: #00D26A;
+      --green-dark: #00B85C;
+    }
+
+    ::selection {
+      background: rgba(0, 210, 106, 0.3);
+      color: var(--black);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--black);
+      background: var(--gray-50);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Nav */
+    nav {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-600);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--black);
+    }
+
+    .nav-logout {
+      color: var(--gray-400) !important;
+    }
+
+    .nav-logout:hover {
+      color: var(--black) !important;
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-user-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--black);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--gray-200);
+      color: var(--black);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--black);
+    }
+
+    /* Form Styles */
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      background: var(--white);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 210, 106, 0.1);
+    }
+
+    /* Dashboard Layout */
+    .dashboard {
+      padding: 32px 0;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+      color: var(--gray-600);
+    }
+
+    /* Search */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .search-bar .form-input {
+      flex: 1;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    .stat-card-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    /* Trucker Item */
+    .trucker-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.2s ease;
+    }
+
+    .trucker-item:last-child {
+      border-bottom: none;
+    }
+
+    .trucker-item:hover {
+      background: var(--gray-50);
+    }
+
+    .trucker-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .trucker-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .trucker-name {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .trucker-mc {
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    .trucker-stats {
+      display: flex;
+      gap: 32px;
+    }
+
+    .trucker-stat {
+      text-align: right;
+    }
+
+    .trucker-stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .trucker-stat-label {
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .trucker-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .trucker-actions .btn {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* Add Invoice Modal Content */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      margin: 24px;
+    }
+
+    .modal h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: var(--gray-600);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    /* Mobile Menu */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .mobile-nav-inner {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 12px;
+      color: var(--gray-600);
+      font-size: 10px;
+    }
+
+    .mobile-nav-item.active {
+      color: var(--green-dark);
+    }
+
+    .mobile-nav-item svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: block;
+      }
+
+      body {
+        padding-bottom: 80px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trucker-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .trucker-stats {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .trucker-stat {
+        text-align: left;
+      }
+
+      .trucker-actions {
+        width: 100%;
+      }
+
+      .trucker-actions .btn {
+        flex: 1;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .dashboard {
+        padding: 24px 0;
+      }
+
+      .dashboard-header h1 {
+        font-size: 24px;
+      }
+
+      .search-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="dashboard.html" class="logo">BOOK<span style="color: var(--green)">D</span></a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="truckers.html" class="active">Truckers</a>
+        <a href="requests.html">Requests</a>
+        <a href="earnings.html">Earnings</a>
+        <a href="settings.html">Settings</a>
+        <a href="../login.html" class="nav-logout">Log out</a>
+      </div>
+      <div class="nav-user">
+        <div class="nav-user-avatar">FL</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <main class="dashboard">
+    <div class="container">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div>
+          <h1>Your Truckers</h1>
+          <p>Manage truckers and invoices</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Connected Truckers</div>
+          <div class="stat-card-value">8</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Owed</div>
+          <div class="stat-card-value">$24,500</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Pending Requests</div>
+          <div class="stat-card-value">3</div>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <input type="text" class="form-input" placeholder="Search truckers...">
+      </div>
+
+      <!-- Truckers List -->
+      <div class="card">
+        <div class="card-body">
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">JS</div>
+              <div>
+                <div class="trucker-name">John Smith</div>
+                <div class="trucker-mc">MC-456789</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">$3,000</div>
+                <div class="trucker-stat-label">Owed</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">1</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="trucker-actions">
+              <button class="btn btn-outline" onclick="openAddInvoice('John Smith')">Add Load</button>
+            </div>
+          </div>
+
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">MJ</div>
+              <div>
+                <div class="trucker-name">Mike Johnson</div>
+                <div class="trucker-mc">MC-789012</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">$5,500</div>
+                <div class="trucker-stat-label">Owed</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">1</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="trucker-actions">
+              <button class="btn btn-outline" onclick="openAddInvoice('Mike Johnson')">Add Load</button>
+            </div>
+          </div>
+
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">SL</div>
+              <div>
+                <div class="trucker-name">Sarah Lee</div>
+                <div class="trucker-mc">MC-345678</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">$2,200</div>
+                <div class="trucker-stat-label">Owed</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">1</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="trucker-actions">
+              <button class="btn btn-outline" onclick="openAddInvoice('Sarah Lee')">Add Load</button>
+            </div>
+          </div>
+
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">RW</div>
+              <div>
+                <div class="trucker-name">Robert Williams</div>
+                <div class="trucker-mc">MC-901234</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">$4,800</div>
+                <div class="trucker-stat-label">Owed</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">0</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="trucker-actions">
+              <button class="btn btn-outline" onclick="openAddInvoice('Robert Williams')">Add Load</button>
+            </div>
+          </div>
+
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">EB</div>
+              <div>
+                <div class="trucker-name">Emily Brown</div>
+                <div class="trucker-mc">MC-567890</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">$3,200</div>
+                <div class="trucker-stat-label">Owed</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">0</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="trucker-actions">
+              <button class="btn btn-outline" onclick="openAddInvoice('Emily Brown')">Add Load</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Add Invoice Modal -->
+  <div class="modal-backdrop" id="addInvoiceModal">
+    <div class="modal">
+      <h2>Add Load</h2>
+      <p>Add an amount owed to <span id="truckerNameModal">John Smith</span></p>
+      <form id="addInvoiceForm">
+        <div class="form-group">
+          <label class="form-label">Load Reference</label>
+          <input type="text" class="form-input" placeholder="e.g. LOAD-12345">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <input type="number" class="form-input" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" class="form-input">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeAddInvoice()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Load</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="dashboard.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        Home
+      </a>
+      <a href="truckers.html" class="mobile-nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        Truckers
+      </a>
+      <a href="requests.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        Requests
+      </a>
+      <a href="earnings.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Earnings
+      </a>
+      <a href="settings.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Settings
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function openAddInvoice(truckerName) {
+      document.getElementById('truckerNameModal').textContent = truckerName;
+      document.getElementById('addInvoiceModal').classList.add('active');
+    }
+
+    function closeAddInvoice() {
+      document.getElementById('addInvoiceModal').classList.remove('active');
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('addInvoiceModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeAddInvoice();
+      }
+    });
+
+    // Form submit
+    document.getElementById('addInvoiceForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      console.log('Invoice added');
+      // TODO: Connect to Supabase
+      alert('Load added successfully!');
+      closeAddInvoice();
+    });
+  </script>
+
+</body>
+</html>

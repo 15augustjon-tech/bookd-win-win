@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Brokers | Bookd</title>
+  <meta name="description" content="Manage your connected brokers on Bookd.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-50: #FAFAFA;
+      --gray-100: #F5F5F5;
+      --gray-200: #E5E5E5;
+      --gray-400: #A3A3A3;
+      --gray-600: #525252;
+      --green: #00D26A;
+      --green-dark: #00B85C;
+    }
+
+    ::selection {
+      background: rgba(0, 210, 106, 0.3);
+      color: var(--black);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--black);
+      background: var(--gray-50);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Nav */
+    nav {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-600);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--black);
+    }
+
+    .nav-logout {
+      color: var(--gray-400) !important;
+    }
+
+    .nav-logout:hover {
+      color: var(--black) !important;
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-user-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
+    }
+
+    .btn-secondary {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .btn-secondary:hover {
+      background: #222;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--gray-200);
+      color: var(--black);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--black);
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--black);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      background: var(--white);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 210, 106, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: var(--gray-400);
+    }
+
+    /* Dashboard Layout */
+    .dashboard {
+      padding: 32px 0;
+    }
+
+    .dashboard-header {
+      margin-bottom: 32px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+      color: var(--gray-600);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    /* Invite Card */
+    .invite-card {
+      background: linear-gradient(135deg, var(--black) 0%, #1a1a1a 100%);
+      color: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .invite-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0, 210, 106, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .invite-card h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .invite-card p {
+      color: var(--gray-400);
+      margin-bottom: 24px;
+    }
+
+    .invite-form {
+      display: flex;
+      gap: 12px;
+    }
+
+    .invite-form .form-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--white);
+    }
+
+    .invite-form .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .invite-form .form-input:focus {
+      border-color: var(--green);
+    }
+
+    /* Broker List */
+    .broker-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .broker-item:last-child {
+      border-bottom: none;
+    }
+
+    .broker-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .broker-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--gray-200);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .broker-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .broker-mc {
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    .broker-amount {
+      text-align: right;
+    }
+
+    .broker-amount-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .broker-amount-label {
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .broker-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .broker-actions .btn {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 100px;
+    }
+
+    .badge-pending {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    .badge-active {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .empty-state-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--gray-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .empty-state-icon svg {
+      width: 32px;
+      height: 32px;
+      color: var(--gray-400);
+    }
+
+    .empty-state h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    /* Pending Invites */
+    .pending-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .pending-item:last-child {
+      border-bottom: none;
+    }
+
+    .pending-info h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .pending-info p {
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    /* Mobile Menu */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .mobile-nav-inner {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 16px;
+      color: var(--gray-600);
+      font-size: 11px;
+    }
+
+    .mobile-nav-item.active {
+      color: var(--green-dark);
+    }
+
+    .mobile-nav-item svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: block;
+      }
+
+      body {
+        padding-bottom: 80px;
+      }
+
+      .invite-form {
+        flex-direction: column;
+      }
+
+      .broker-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .broker-amount {
+        text-align: left;
+      }
+
+      .broker-actions {
+        width: 100%;
+      }
+
+      .broker-actions .btn {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .dashboard {
+        padding: 24px 0;
+      }
+
+      .dashboard-header h1 {
+        font-size: 24px;
+      }
+
+      .invite-card {
+        padding: 24px;
+      }
+
+      .invite-card h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="dashboard.html" class="logo">BOOK<span style="color: var(--green)">D</span></a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="brokers.html" class="active">Brokers</a>
+        <a href="request.html">Request Pay</a>
+        <a href="history.html">History</a>
+        <a href="settings.html">Settings</a>
+        <a href="../login.html" class="nav-logout">Log out</a>
+      </div>
+      <div class="nav-user">
+        <div class="nav-user-avatar">JS</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <main class="dashboard">
+    <div class="container">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <h1>My Brokers</h1>
+        <p>Invite and manage your freight brokers</p>
+      </div>
+
+      <!-- Invite Card -->
+      <div class="invite-card">
+        <h2>Invite a Broker</h2>
+        <p>Send an invite to your broker. They'll earn 3% on every early pay they approve.</p>
+        <form class="invite-form" id="inviteForm">
+          <input type="email" class="form-input" placeholder="Broker's email address" required>
+          <button type="submit" class="btn btn-primary">Send Invite</button>
+        </form>
+      </div>
+
+      <!-- Pending Invites -->
+      <div class="card" id="pendingCard" style="display: none;">
+        <div class="card-header">
+          <h2>Pending Invites</h2>
+        </div>
+        <div class="card-body" id="pendingList">
+          <div class="pending-item">
+            <div class="pending-info">
+              <h4>broker@example.com</h4>
+              <p>Invited Dec 23, 2025</p>
+            </div>
+            <span class="badge badge-pending">Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connected Brokers -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Connected Brokers</h2>
+          <span class="badge badge-active">2 Active</span>
+        </div>
+        <div class="card-body">
+          <div class="broker-item">
+            <div class="broker-info">
+              <div class="broker-avatar">FL</div>
+              <div>
+                <div class="broker-name">FastLoad Logistics</div>
+                <div class="broker-mc">MC-123456</div>
+              </div>
+            </div>
+            <div class="broker-amount">
+              <div class="broker-amount-value">$3,000</div>
+              <div class="broker-amount-label">owed to you</div>
+            </div>
+            <div class="broker-actions">
+              <a href="request.html" class="btn btn-primary">Request Pay</a>
+            </div>
+          </div>
+          <div class="broker-item">
+            <div class="broker-info">
+              <div class="broker-avatar">HS</div>
+              <div>
+                <div class="broker-name">Highway Stars Inc</div>
+                <div class="broker-mc">MC-789012</div>
+              </div>
+            </div>
+            <div class="broker-amount">
+              <div class="broker-amount-value">$1,500</div>
+              <div class="broker-amount-label">owed to you</div>
+            </div>
+            <div class="broker-actions">
+              <a href="request.html" class="btn btn-primary">Request Pay</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="dashboard.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        Home
+      </a>
+      <a href="brokers.html" class="mobile-nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        Brokers
+      </a>
+      <a href="request.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Request
+      </a>
+      <a href="settings.html" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Settings
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Invite form
+    document.getElementById('inviteForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = e.target.querySelector('input').value;
+      console.log('Invite sent to:', email);
+      // TODO: Connect to Supabase
+      alert('Invite sent to ' + email + '!');
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>
