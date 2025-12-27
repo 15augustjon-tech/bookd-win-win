@@ -3,247 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up as Broker | Bookd</title>
-  <meta name="description" content="Sign up for Bookd and earn 3% on every early pay transaction.">
-
+  <title>Sign Up | Bookd</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --black: #000000;
       --white: #FFFFFF;
-      --gray-50: #FAFAFA;
       --gray-100: #F5F5F5;
       --gray-200: #E5E5E5;
       --gray-400: #A3A3A3;
       --gray-600: #525252;
       --green: #00D26A;
       --green-dark: #00B85C;
-    }
-
-    ::selection {
-      background: rgba(0, 210, 106, 0.3);
-      color: var(--black);
-    }
-
-    html {
-      scroll-behavior: smooth;
+      --red: #DC2626;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--black);
       background: var(--white);
-      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    h1, h2, h3, h4 {
+    h1, h2 {
       font-family: 'Space Grotesk', sans-serif;
-      line-height: 1.1;
+      line-height: 1.2;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* Nav */
-    nav {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--gray-200);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--white);
-      z-index: 100;
-      transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    nav.scrolled {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border-color: transparent;
-    }
-
-    .nav-inner {
+    /* Header */
+    .header {
+      padding: 20px 24px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     .logo {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
-      letter-spacing: -1px;
-      transition: transform 0.2s ease;
+      text-decoration: none;
+      color: var(--black);
     }
 
-    .logo span {
-      transition: text-shadow 0.3s ease;
-    }
+    .logo span { color: var(--green); }
 
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .logo:hover span {
-      text-shadow: 0 0 20px rgba(0, 210, 106, 0.6), 0 0 40px rgba(0, 210, 106, 0.3);
-    }
-
-    .nav-right {
-      display: none;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .phone-link {
-      font-weight: 500;
-      color: var(--gray-600);
-      font-size: 15px;
-      transition: color 0.2s ease;
-    }
-
-    .phone-link:hover {
-      color: var(--green-dark);
-    }
-
-    /* Mobile Menu */
-    .hamburger {
+    .step-indicator {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 28px;
-      height: 28px;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: var(--black);
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    .mobile-menu {
-      display: flex;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--white);
-      z-index: 1000;
-      padding: 80px 24px 40px;
-      flex-direction: column;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .mobile-menu.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-menu-links {
-      display: flex;
-      flex-direction: column;
       gap: 8px;
+    }
+
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      transition: background 0.3s ease;
+    }
+
+    .step-dot.active { background: var(--green); }
+    .step-dot.done { background: var(--black); }
+
+    /* Main */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .step {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .step.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      color: var(--gray-600);
+      font-size: 16px;
       margin-bottom: 32px;
     }
 
-    .mobile-menu-links a {
-      font-size: 24px;
-      font-weight: 600;
-      font-family: 'Space Grotesk', sans-serif;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--gray-200);
-      transition: color 0.2s ease;
-    }
+    /* Forms */
+    .form-group { margin-bottom: 24px; }
 
-    .mobile-menu-links a:hover {
-      color: var(--green-dark);
-    }
-
-    .mobile-menu-contact {
-      margin-top: auto;
-    }
-
-    .mobile-menu-contact .btn {
+    .form-input {
       width: 100%;
-      margin-top: 16px;
+      padding: 16px;
+      font-size: 18px;
+      font-family: inherit;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      background: var(--white);
+      transition: border-color 0.2s ease;
     }
 
-    .mobile-menu-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      background: var(--gray-100);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
+    .form-input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .form-input::placeholder { color: var(--gray-400); }
+
+    /* Phone input with country code */
+    .phone-input-wrap {
       display: flex;
       align-items: center;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .phone-input-wrap:focus-within { border-color: var(--green); }
+
+    .country-code {
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 500;
+      background: var(--gray-100);
+      border-right: 2px solid var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    .phone-input-wrap input {
+      flex: 1;
+      padding: 16px;
+      font-size: 18px;
+      font-family: inherit;
+      border: none;
+      background: transparent;
+    }
+
+    .phone-input-wrap input:focus { outline: none; }
+
+    /* Code input */
+    .code-inputs {
+      display: flex;
+      gap: 12px;
       justify-content: center;
-      transition: all 0.2s ease;
     }
 
-    .mobile-menu-close:hover {
-      background: var(--gray-200);
+    .code-input {
+      width: 52px;
+      height: 64px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Space Grotesk', monospace;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      transition: border-color 0.2s ease;
     }
 
-    .mobile-menu-close svg {
-      width: 20px;
-      height: 20px;
-      color: var(--black);
+    .code-input:focus {
+      outline: none;
+      border-color: var(--green);
     }
 
     /* Buttons */
     .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      font-size: 15px;
+      display: block;
+      width: 100%;
+      padding: 16px 24px;
+      font-size: 16px;
       font-weight: 600;
-      border-radius: 8px;
+      font-family: inherit;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
       border: none;
@@ -255,511 +204,444 @@
       color: var(--black);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: var(--green-dark);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: none;
-    }
-
-    .btn-secondary {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .btn-secondary:hover {
-      background: #222;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-large {
-      padding: 16px 32px;
-      font-size: 16px;
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    .btn-block {
-      display: block;
-      width: 100%;
-    }
-
-    /* Form Styles */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--black);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 16px;
-      font-family: inherit;
-      border: 2px solid var(--gray-200);
-      border-radius: 8px;
-      background: var(--white);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(0, 210, 106, 0.1);
-    }
-
-    .form-input::placeholder {
-      color: var(--gray-400);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    /* Signup Section */
-    .signup-section {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 120px 24px 60px;
-    }
-
-    .signup-card {
-      width: 100%;
-      max-width: 480px;
-      background: var(--white);
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-      border: 1px solid var(--gray-200);
-    }
-
-    .signup-header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .signup-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-
-    .signup-header p {
-      color: var(--gray-600);
-      font-size: 15px;
-    }
-
-    /* Bonus Badge */
-    .bonus-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 210, 106, 0.1);
-      color: var(--green-dark);
-      padding: 8px 16px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .bonus-badge svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .signup-footer {
-      text-align: center;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .signup-footer p {
+    .btn-link {
+      background: none;
       color: var(--gray-600);
       font-size: 14px;
+      margin-top: 16px;
     }
 
-    .signup-footer a {
-      color: var(--green-dark);
-      font-weight: 600;
-    }
+    .btn-link:hover { color: var(--black); }
 
-    .signup-footer a:hover {
-      text-decoration: underline;
-    }
-
-    .signup-type-switch {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
+    /* Error */
+    .error-msg {
+      color: var(--red);
+      font-size: 14px;
       margin-top: 12px;
-    }
-
-    .signup-type-switch a {
-      font-size: 14px;
-      color: var(--gray-600);
-      padding: 8px 16px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .signup-type-switch a:hover {
-      background: var(--gray-100);
-    }
-
-    .signup-type-switch a.active {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-600);
-      margin-bottom: 24px;
-      transition: color 0.2s ease;
-    }
-
-    .back-link:hover {
-      color: var(--black);
-    }
-
-    .back-link svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .error-message {
-      background: #FEE2E2;
-      border: 1px solid #FECACA;
-      color: #DC2626;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 20px;
       display: none;
     }
 
-    /* Footer */
-    footer {
-      background: var(--black);
-      color: var(--white);
-      padding: 48px 0;
+    .error-msg.show { display: block; }
+
+    /* Bank link card */
+    .bank-card {
+      background: var(--gray-100);
+      border-radius: 16px;
+      padding: 24px;
       text-align: center;
-      margin-top: auto;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
     }
 
-    .footer-brand {
+    .bank-card:hover {
+      border-color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .bank-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      background: var(--white);
+      border-radius: 12px;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 24px;
     }
 
-    .footer-logo {
+    .bank-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--green-dark);
+    }
+
+    .bank-card h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    .footer-bottom {
+    .bank-card p {
       color: var(--gray-600);
-      font-size: 13px;
+      font-size: 14px;
+      margin-bottom: 0;
     }
+
+    /* Footer link */
+    .footer-link {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .footer-link a {
+      color: var(--green-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer-link a:hover { text-decoration: underline; }
 
     /* Responsive */
-    @media (min-width: 768px) {
-      .nav-right {
-        display: flex;
-      }
-
-      .hamburger {
-        display: none;
-      }
-
-      .mobile-menu {
-        display: none;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 0 16px;
-      }
-
-      nav {
-        padding: 12px 0;
-      }
-
-      .logo {
-        font-size: 22px;
-      }
-
-      .signup-section {
-        padding: 100px 16px 40px;
-      }
-
-      .signup-card {
-        padding: 24px;
-        border-radius: 12px;
-      }
-
-      .signup-header h1 {
-        font-size: 24px;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        padding: 32px 0;
-      }
-
-      .footer-logo {
-        font-size: 24px;
-      }
+    @media (max-width: 480px) {
+      .step h1 { font-size: 28px; }
+      .code-input { width: 44px; height: 56px; font-size: 20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
-  <nav>
-    <div class="container nav-inner">
-      <a href="/" class="logo">BOOK<span style="color: var(--green)">D</span></a>
-      <div class="nav-right">
-        <a href="tel:+13025073791" class="phone-link">(302) 507-3791</a>
-        <a href="login.html" class="btn btn-primary">Book a demo</a>
-      </div>
-      <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+  <!-- Header -->
+  <header class="header">
+    <a href="/" class="logo">BOOK<span>D</span></a>
+    <div class="step-indicator">
+      <div class="step-dot active" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+      <div class="step-dot" data-step="4"></div>
     </div>
-  </nav>
+  </header>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
-    <div class="mobile-menu-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="faq.html">FAQ</a>
-      <a href="contact.html">Contact</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-    </div>
-    <div class="mobile-menu-contact">
-      <a href="login.html" class="btn btn-primary">Book a demo</a>
-    </div>
-  </div>
+  <!-- Main Content -->
+  <main class="main">
 
-  <!-- Signup Section -->
-  <section class="signup-section">
-    <div class="signup-card">
-      <a href="index.html" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-        Back
-      </a>
-      <div class="signup-header">
-        <span class="bonus-badge">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-          Earn 3% on every transaction
-        </span>
-        <h1>Grow your business</h1>
-        <p>Offer early pay to your truckers and earn on every payment</p>
-      </div>
-
-      <form id="signupForm">
-        <div id="error-message" class="error-message"></div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="firstName">First name</label>
-            <input type="text" id="firstName" class="form-input" placeholder="John" required>
+    <!-- Step 1: Phone -->
+    <div class="step active" id="step1">
+      <h1>Your phone</h1>
+      <p>We'll text you a code to sign in</p>
+      <form id="phoneForm">
+        <div class="form-group">
+          <div class="phone-input-wrap">
+            <span class="country-code">+1</span>
+            <input type="tel" id="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel" required>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="lastName">Last name</label>
-            <input type="text" id="lastName" class="form-input" placeholder="Smith" required>
-          </div>
+          <div class="error-msg" id="phoneError"></div>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="companyName">Company name</label>
-          <input type="text" id="companyName" class="form-input" placeholder="Your Brokerage LLC" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="email">Email</label>
-          <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="phone">Phone</label>
-          <input type="tel" id="phone" class="form-input" placeholder="(555) 123-4567" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="mcNumber">MC Number</label>
-          <input type="text" id="mcNumber" class="form-input" placeholder="MC-123456" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="password">Password</label>
-          <input type="password" id="password" class="form-input" placeholder="Create a password" required>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn btn-primary btn-large btn-block">Create Account</button>
+        <button type="submit" class="btn btn-primary" id="phoneBtn">Continue</button>
       </form>
+      <div class="footer-link">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </div>
 
-      <div class="signup-footer">
-        <p>Already have an account? <a href="login.html">Log in</a></p>
-        <div class="signup-type-switch">
-          <a href="signup-trucker.html">I'm a Trucker</a>
-          <a href="signup-broker.html" class="active">I'm a Broker</a>
+    <!-- Step 2: Code -->
+    <div class="step" id="step2">
+      <h1>Enter code</h1>
+      <p id="codeSentTo">We sent a code to your phone</p>
+      <form id="codeForm">
+        <div class="form-group">
+          <div class="code-inputs">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="0">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="1">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="2">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="3">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="4">
+            <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="5">
+          </div>
+          <div class="error-msg" id="codeError"></div>
         </div>
-      </div>
+      </form>
+      <button class="btn btn-link" id="resendBtn">Resend code</button>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-brand">
-        <span class="footer-logo">BOOK<span style="color: var(--green)">D</span></span>
-      </div>
-      <p style="color: var(--gray-400); margin-bottom: 16px;"><a href="mailto:jon@bookdpay.com" style="color: var(--gray-400);">jon@bookdpay.com</a></p>
-      <div class="footer-bottom">
-        Bookd &middot; Bookd Capital, Inc.
-      </div>
+    <!-- Step 3: Company Name -->
+    <div class="step" id="step3">
+      <h1>Your company</h1>
+      <p>This is how truckers will find you</p>
+      <form id="companyForm">
+        <div class="form-group">
+          <input type="text" id="companyName" class="form-input" placeholder="Company name" autocomplete="organization" required>
+          <div class="error-msg" id="companyError"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="companyBtn">Continue</button>
+      </form>
     </div>
-  </footer>
 
-  <script>
-    // Nav scroll effect
-    const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
-    });
+    <!-- Step 4: Bank -->
+    <div class="step" id="step4">
+      <h1>Link your bank</h1>
+      <p>Where you'll fund payments from</p>
+      <div class="bank-card" id="bankCard">
+        <div class="bank-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+        </div>
+        <h3>Connect Bank Account</h3>
+        <p>Secure connection via Plaid</p>
+      </div>
+      <button class="btn btn-link" id="skipBankBtn">I'll do this later</button>
+    </div>
 
-    // Mobile Menu Toggle
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-    });
-
-    // Close mobile menu when clicking a link
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Close button inside menu
-    const mobileMenuClose = document.getElementById('mobileMenuClose');
-    mobileMenuClose.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  </script>
+  </main>
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
   <script src="js/auth.js"></script>
+
   <script>
-    // Check if already logged in
-    (async () => {
-      await redirectIfAuthenticated();
-    })();
+    // State
+    let currentStep = 1;
+    let userPhone = '';
 
-    // Signup form
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Elements
+    const steps = document.querySelectorAll('.step');
+    const stepDots = document.querySelectorAll('.step-dot');
 
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const companyName = document.getElementById('companyName').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const mcNumber = document.getElementById('mcNumber').value;
-      const password = document.getElementById('password').value;
-      const submitBtn = document.getElementById('submitBtn');
-      const errorDiv = document.getElementById('error-message');
+    // Show step
+    function showStep(step) {
+      steps.forEach(s => s.classList.remove('active'));
+      document.getElementById(`step${step}`).classList.add('active');
 
-      // Hide previous error
-      errorDiv.style.display = 'none';
-
-      // Validate password
-      if (password.length < 6) {
-        errorDiv.textContent = 'Password must be at least 6 characters';
-        errorDiv.style.display = 'block';
-        return;
-      }
-
-      // Show loading
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
-
-      const result = await signUp(email, password, 'broker', {
-        fullName: firstName + ' ' + lastName,
-        phone: phone,
-        mcNumber: mcNumber,
-        companyName: companyName
+      stepDots.forEach((dot, i) => {
+        dot.classList.remove('active', 'done');
+        if (i + 1 < step) dot.classList.add('done');
+        if (i + 1 === step) dot.classList.add('active');
       });
 
-      if (!result.success) {
-        errorDiv.textContent = result.error;
-        errorDiv.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
+      currentStep = step;
+    }
+
+    // Phone formatting
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 10) value = value.slice(0, 10);
+
+      if (value.length >= 6) {
+        e.target.value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
+      } else if (value.length >= 3) {
+        e.target.value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+      } else {
+        e.target.value = value;
+      }
+    });
+
+    // Step 1: Phone form
+    document.getElementById('phoneForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('phoneBtn');
+      const errorEl = document.getElementById('phoneError');
+      errorEl.classList.remove('show');
+
+      const phone = phoneInput.value;
+      const digits = phone.replace(/\D/g, '');
+
+      if (digits.length !== 10) {
+        errorEl.textContent = 'Enter a valid 10-digit phone number';
+        errorEl.classList.add('show');
         return;
       }
 
-      // Redirect to broker dashboard
-      window.location.href = 'broker/dashboard.html';
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      userPhone = '+1' + digits;
+
+      const result = await sendOTP(userPhone);
+
+      if (!result.success) {
+        errorEl.textContent = result.error;
+        errorEl.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+        return;
+      }
+
+      // Update step 2 text
+      document.getElementById('codeSentTo').textContent =
+        `We sent a code to ${formatPhoneDisplay(userPhone)}`;
+
+      showStep(2);
+
+      // Focus first code input
+      document.querySelector('.code-input').focus();
     });
+
+    // Step 2: Code inputs
+    const codeInputs = document.querySelectorAll('.code-input');
+
+    codeInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        e.target.value = value;
+
+        if (value && index < 5) {
+          codeInputs[index + 1].focus();
+        }
+
+        // Check if all filled
+        const code = Array.from(codeInputs).map(i => i.value).join('');
+        if (code.length === 6) {
+          verifyCode(code);
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          codeInputs[index - 1].focus();
+        }
+      });
+
+      // Handle paste
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = paste.replace(/\D/g, '').slice(0, 6);
+
+        digits.split('').forEach((digit, i) => {
+          if (codeInputs[i]) codeInputs[i].value = digit;
+        });
+
+        if (digits.length === 6) {
+          verifyCode(digits);
+        } else if (digits.length > 0) {
+          codeInputs[Math.min(digits.length, 5)].focus();
+        }
+      });
+    });
+
+    async function verifyCode(code) {
+      const errorEl = document.getElementById('codeError');
+      errorEl.classList.remove('show');
+
+      // Disable inputs
+      codeInputs.forEach(i => i.disabled = true);
+
+      const result = await verifyOTP(userPhone, code, 'broker');
+
+      if (!result.success) {
+        errorEl.textContent = result.error;
+        errorEl.classList.add('show');
+        codeInputs.forEach(i => {
+          i.disabled = false;
+          i.value = '';
+        });
+        codeInputs[0].focus();
+        return;
+      }
+
+      // If existing user, go to dashboard
+      if (!result.isNewUser) {
+        window.location.href = '/broker/dashboard.html';
+        return;
+      }
+
+      // New user - continue to company name
+      showStep(3);
+      document.getElementById('companyName').focus();
+    }
+
+    // Resend code
+    document.getElementById('resendBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('resendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      await sendOTP(userPhone);
+
+      btn.textContent = 'Code sent!';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Resend code';
+      }, 3000);
+    });
+
+    // Step 3: Company form
+    document.getElementById('companyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('companyBtn');
+      const errorEl = document.getElementById('companyError');
+      const companyName = document.getElementById('companyName').value.trim();
+
+      errorEl.classList.remove('show');
+
+      if (companyName.length < 2) {
+        errorEl.textContent = 'Enter your company name';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      // Update profile with company name (also updates full_name for display)
+      const profileResult = await updateProfile({ full_name: companyName });
+
+      // Update broker record with company name
+      const user = await getCurrentUser();
+      if (user) {
+        await supabase
+          .from('brokers')
+          .update({ company_name: companyName })
+          .eq('user_id', user.id);
+      }
+
+      if (!profileResult.success) {
+        errorEl.textContent = profileResult.error;
+        errorEl.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+        return;
+      }
+
+      showStep(4);
+    });
+
+    // Step 4: Bank link
+    document.getElementById('bankCard').addEventListener('click', () => {
+      // TODO: Initialize Plaid/Moov Link
+      // For now, simulate success
+      linkBank();
+    });
+
+    async function linkBank() {
+      // This will be replaced with actual Plaid/Moov integration
+      // For now, mark onboarding complete and go to dashboard
+      await completeOnboarding();
+      window.location.href = '/broker/dashboard.html';
+    }
+
+    // Skip bank for now
+    document.getElementById('skipBankBtn').addEventListener('click', async () => {
+      await completeOnboarding();
+      window.location.href = '/broker/dashboard.html';
+    });
+
+    // Check if already logged in
+    (async () => {
+      const session = await getSession();
+      if (session) {
+        const profile = await getUserProfile();
+        if (profile) {
+          // Check onboarding status
+          if (profile.broker?.onboarding_completed) {
+            window.location.href = '/broker/dashboard.html';
+          } else if (profile.broker?.company_name) {
+            // Has company name, show bank step
+            showStep(4);
+          } else {
+            // Show company name step
+            showStep(3);
+          }
+        }
+      }
+    })();
   </script>
+
 </body>
 </html>

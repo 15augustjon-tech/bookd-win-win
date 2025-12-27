@@ -427,6 +427,86 @@
       color: #92400E;
     }
 
+    .instructions.auto-pay {
+      background: rgba(0, 210, 106, 0.1);
+      border-color: var(--green);
+    }
+
+    .instructions.auto-pay h4 {
+      color: var(--green-dark);
+    }
+
+    .instructions.auto-pay p {
+      color: #059669;
+    }
+
+    /* Payment Method Badge */
+    .payment-method-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+
+    .payment-method-badge.paypal {
+      background: #0070BA;
+      color: white;
+    }
+
+    .payment-method-badge.venmo {
+      background: #008CFF;
+      color: white;
+    }
+
+    .payment-method-badge.manual {
+      background: var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    /* Payment Status */
+    .payout-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .payout-status.pending {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    .payout-status.success {
+      background: rgba(0, 210, 106, 0.1);
+      color: var(--green-dark);
+    }
+
+    .payout-status.failed {
+      background: rgba(220, 38, 38, 0.1);
+      color: var(--red);
+    }
+
+    .payout-status svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
     /* Mobile Menu */
     .mobile-nav {
       display: none;
@@ -542,7 +622,7 @@
         <div class="trucker-header">
           <div class="trucker-avatar">JS</div>
           <div class="trucker-info">
-            <h1>John Smith</h1>
+            <h1>John Smith <span class="payment-method-badge manual" id="paymentBadge">Manual</span></h1>
             <p>MC-456789 &bull; Requested Dec 24, 2025</p>
           </div>
         </div>
@@ -609,10 +689,16 @@
           </div>
         </div>
 
-        <!-- Instructions -->
-        <div class="instructions">
+        <!-- Instructions (Manual) -->
+        <div class="instructions" id="manualInstructions">
           <h4>How to fund this request</h4>
           <p>After approving, send $970 to the trucker via Zelle, wire, or your preferred method. Then click "Mark as Funded" to complete the request.</p>
+        </div>
+
+        <!-- Instructions (Auto-Pay) -->
+        <div class="instructions auto-pay" id="autoPayInstructions" style="display: none;">
+          <h4>Automatic Payment Enabled</h4>
+          <p>When you approve, we'll instantly send <strong id="autoPayAmount">$970</strong> to the trucker's <span id="autoPayMethod">PayPal</span> account. No extra steps needed!</p>
         </div>
 
         <!-- Action Buttons -->
@@ -624,14 +710,17 @@
         <!-- Funded State (hidden by default) -->
         <div class="card" id="fundedCard" style="display: none;">
           <div class="card-body">
+            <!-- Payout Status (for auto-pay) -->
+            <div id="payoutStatusContainer" style="display: none;"></div>
+
             <div class="funded-state">
-              <div class="funded-icon">
+              <div class="funded-icon" id="fundedIcon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2>Request Approved!</h2>
-              <p>Send $970 to John Smith, then mark as funded.</p>
+              <h2 id="fundedTitle">Request Approved!</h2>
+              <p id="fundedMessage">Send $970 to John Smith, then mark as funded.</p>
               <button class="btn btn-primary btn-large btn-block" style="margin-top: 24px;" id="markFundedBtn">Mark as Funded</button>
             </div>
           </div>
@@ -741,9 +830,24 @@
       const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
       const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+      // Get payment method info
+      const paymentMethod = trucker?.payment_method || 'manual';
+      const isAutoPay = paymentMethod === 'paypal' || paymentMethod === 'venmo';
+      const paymentBadge = document.getElementById('paymentBadge');
+
+      // Update payment badge
+      paymentBadge.className = `payment-method-badge ${paymentMethod}`;
+      if (paymentMethod === 'paypal') {
+        paymentBadge.textContent = 'PayPal';
+      } else if (paymentMethod === 'venmo') {
+        paymentBadge.textContent = 'Venmo';
+      } else {
+        paymentBadge.textContent = 'Manual';
+      }
+
       // Update trucker info
       document.querySelector('.trucker-avatar').textContent = initials;
-      document.querySelector('.trucker-info h1').textContent = trucker?.profile?.full_name || 'Unknown';
+      document.querySelector('.trucker-info h1').innerHTML = `${trucker?.profile?.full_name || 'Unknown'} <span class="payment-method-badge ${paymentMethod}" id="paymentBadge">${paymentMethod === 'paypal' ? 'PayPal' : paymentMethod === 'venmo' ? 'Venmo' : 'Manual'}</span>`;
       document.querySelector('.trucker-info p').textContent = `${trucker?.mc_number || 'No MC'} • Requested ${date}`;
 
       // Update amounts
@@ -765,24 +869,80 @@
       detailValues[1].textContent = formatCurrency((invoice?.amount_remaining || 0) - req.amount_requested);
       detailValues[2].textContent = invoice?.due_date ? new Date(invoice.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
 
+      // Show appropriate instructions based on payment method
+      const manualInstructions = document.getElementById('manualInstructions');
+      const autoPayInstructions = document.getElementById('autoPayInstructions');
+      const approveBtn = document.getElementById('approveBtn');
+
+      if (isAutoPay) {
+        manualInstructions.style.display = 'none';
+        autoPayInstructions.style.display = 'block';
+        document.getElementById('autoPayAmount').textContent = formatCurrency(req.amount_to_trucker);
+        document.getElementById('autoPayMethod').textContent = paymentMethod === 'paypal' ? 'PayPal' : 'Venmo';
+        approveBtn.textContent = 'Approve & Pay';
+      } else {
+        manualInstructions.style.display = 'block';
+        autoPayInstructions.style.display = 'none';
+        approveBtn.textContent = 'Approve Request';
+      }
+
       // Update funded state message
-      document.querySelector('.funded-state p').textContent = `Send ${formatCurrency(req.amount_to_trucker)} to ${trucker?.profile?.full_name}, then mark as funded.`;
+      document.getElementById('fundedMessage').textContent = isAutoPay
+        ? `Payment of ${formatCurrency(req.amount_to_trucker)} sent to ${trucker?.profile?.full_name}'s ${paymentMethod === 'paypal' ? 'PayPal' : 'Venmo'}.`
+        : `Send ${formatCurrency(req.amount_to_trucker)} to ${trucker?.profile?.full_name}, then mark as funded.`;
 
       // Handle status
       if (req.status === 'approved') {
         document.querySelector('.action-buttons').style.display = 'none';
-        document.querySelector('.instructions').style.display = 'none';
+        manualInstructions.style.display = 'none';
+        autoPayInstructions.style.display = 'none';
         document.getElementById('fundedCard').style.display = 'block';
+
+        // For manual payments, show mark as funded button
+        if (!isAutoPay) {
+          document.getElementById('markFundedBtn').style.display = 'block';
+        } else {
+          document.getElementById('markFundedBtn').style.display = 'none';
+        }
       } else if (req.status === 'funded' || req.status === 'completed') {
         document.querySelector('.action-buttons').style.display = 'none';
-        document.querySelector('.instructions').style.display = 'none';
+        manualInstructions.style.display = 'none';
+        autoPayInstructions.style.display = 'none';
         document.getElementById('fundedCard').style.display = 'block';
-        document.querySelector('.funded-state h2').textContent = 'Request Funded!';
+        document.getElementById('fundedTitle').textContent = 'Payment Complete!';
         document.getElementById('markFundedBtn').style.display = 'none';
+
+        // Show payout status if available
+        if (req.payout_status) {
+          showPayoutStatus(req.payout_status, req.payout_method);
+        }
       } else if (req.status === 'rejected') {
         alert('This request has been rejected');
         window.location.href = 'requests.html';
       }
+    }
+
+    function showPayoutStatus(status, method) {
+      const container = document.getElementById('payoutStatusContainer');
+      container.style.display = 'block';
+
+      let statusClass, icon, message;
+
+      if (status === 'success') {
+        statusClass = 'success';
+        icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>';
+        message = `Payment sent via ${method === 'paypal' ? 'PayPal' : 'Venmo'}`;
+      } else if (status === 'pending') {
+        statusClass = 'pending';
+        icon = '<svg class="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>';
+        message = 'Payment processing...';
+      } else if (status === 'failed' || status === 'unclaimed') {
+        statusClass = 'failed';
+        icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+        message = status === 'unclaimed' ? 'Payment unclaimed - recipient needs to accept' : 'Payment failed - contact support';
+      }
+
+      container.innerHTML = `<div class="payout-status ${statusClass}">${icon}<span>${message}</span></div>`;
     }
 
     const approveBtn = document.getElementById('approveBtn');
@@ -793,19 +953,73 @@
 
     // Approve
     approveBtn.addEventListener('click', async () => {
-      approveBtn.disabled = true;
-      approveBtn.textContent = 'Approving...';
+      const trucker = currentRequest.trucker;
+      const paymentMethod = trucker?.payment_method || 'manual';
+      const isAutoPay = paymentMethod === 'paypal' || paymentMethod === 'venmo';
 
+      approveBtn.disabled = true;
+      approveBtn.textContent = isAutoPay ? 'Processing Payment...' : 'Approving...';
+
+      // First approve the request
       const result = await approveRequest(currentRequest.id);
 
-      if (result.success) {
-        actionButtons.style.display = 'none';
-        document.querySelector('.instructions').style.display = 'none';
-        fundedCard.style.display = 'block';
-      } else {
+      if (!result.success) {
         alert('Error: ' + result.error);
         approveBtn.disabled = false;
-        approveBtn.textContent = 'Approve Request';
+        approveBtn.textContent = isAutoPay ? 'Approve & Pay' : 'Approve Request';
+        return;
+      }
+
+      // If auto-pay is enabled, trigger the payout
+      if (isAutoPay) {
+        try {
+          const { data, error } = await supabase.functions.invoke('payout', {
+            body: { requestId: currentRequest.id }
+          });
+
+          if (error) {
+            // Show approved state but with error message
+            actionButtons.style.display = 'none';
+            document.getElementById('manualInstructions').style.display = 'none';
+            document.getElementById('autoPayInstructions').style.display = 'none';
+            fundedCard.style.display = 'block';
+            document.getElementById('fundedTitle').textContent = 'Approved - Payment Failed';
+            document.getElementById('fundedMessage').textContent = `Request approved but automatic payment failed. Please contact support or pay manually.`;
+            showPayoutStatus('failed', paymentMethod);
+            return;
+          }
+
+          // Success - show funded state
+          actionButtons.style.display = 'none';
+          document.getElementById('manualInstructions').style.display = 'none';
+          document.getElementById('autoPayInstructions').style.display = 'none';
+          fundedCard.style.display = 'block';
+          document.getElementById('fundedTitle').textContent = 'Payment Sent!';
+          document.getElementById('fundedMessage').textContent = `${formatCurrency(currentRequest.amount_to_trucker)} sent to ${trucker?.profile?.full_name}'s ${paymentMethod === 'paypal' ? 'PayPal' : 'Venmo'}.`;
+          document.getElementById('markFundedBtn').style.display = 'none';
+          showPayoutStatus('success', paymentMethod);
+
+          // Show earnings earned
+          setTimeout(() => {
+            alert(`Payment complete! You earned ${formatCurrency(currentRequest.broker_fee)}.`);
+          }, 500);
+
+        } catch (err) {
+          console.error('Payout error:', err);
+          actionButtons.style.display = 'none';
+          document.getElementById('manualInstructions').style.display = 'none';
+          document.getElementById('autoPayInstructions').style.display = 'none';
+          fundedCard.style.display = 'block';
+          document.getElementById('fundedTitle').textContent = 'Approved - Payment Failed';
+          document.getElementById('fundedMessage').textContent = 'Request approved but payment failed. Please try again or contact support.';
+          showPayoutStatus('failed', paymentMethod);
+        }
+      } else {
+        // Manual payment flow
+        actionButtons.style.display = 'none';
+        document.getElementById('manualInstructions').style.display = 'none';
+        document.getElementById('autoPayInstructions').style.display = 'none';
+        fundedCard.style.display = 'block';
       }
     });
 

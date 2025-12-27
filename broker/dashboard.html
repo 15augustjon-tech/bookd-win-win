@@ -150,19 +150,11 @@
 
     .btn-primary:hover {
       background: var(--green-dark);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
     }
 
-    .btn-secondary {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .btn-secondary:hover {
-      background: #222;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 13px;
     }
 
     .btn-outline {
@@ -173,6 +165,15 @@
 
     .btn-outline:hover {
       border-color: var(--black);
+    }
+
+    .btn-danger {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .btn-danger:hover {
+      background: #FECACA;
     }
 
     /* Dashboard Layout */
@@ -194,8 +195,8 @@
       color: var(--gray-600);
     }
 
-    /* Earnings Card */
-    .earnings-card {
+    /* Search Code Card */
+    .search-code-card {
       background: linear-gradient(135deg, var(--black) 0%, #1a1a1a 100%);
       color: var(--white);
       border-radius: 16px;
@@ -205,7 +206,7 @@
       overflow: hidden;
     }
 
-    .earnings-card::before {
+    .search-code-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -216,7 +217,7 @@
       pointer-events: none;
     }
 
-    .earnings-card-label {
+    .search-code-label {
       font-size: 13px;
       color: var(--gray-400);
       margin-bottom: 8px;
@@ -224,17 +225,37 @@
       letter-spacing: 1px;
     }
 
-    .earnings-card-amount {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 48px;
+    .search-code-value {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 42px;
       font-weight: 700;
       color: var(--green);
+      letter-spacing: 4px;
       margin-bottom: 8px;
     }
 
-    .earnings-card-subtitle {
+    .search-code-subtitle {
       font-size: 14px;
       color: var(--gray-400);
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.2);
     }
 
     /* Stats Grid */
@@ -266,6 +287,10 @@
 
     .stat-card-value.highlight {
       color: var(--green-dark);
+    }
+
+    .stat-card-value.warning {
+      color: #B45309;
     }
 
     /* Cards */
@@ -351,9 +376,14 @@
       font-weight: 700;
     }
 
-    .request-amount-fee {
+    .request-amount-label {
       font-size: 12px;
-      color: var(--green-dark);
+      color: var(--gray-600);
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 8px;
     }
 
     /* Badge */
@@ -370,69 +400,15 @@
       color: #B45309;
     }
 
-    .badge-action {
-      background: var(--green);
-      color: var(--black);
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .badge-instant {
+      background: rgba(0, 210, 106, 0.15);
+      color: var(--green-dark);
     }
 
-    .badge-action:hover {
-      background: var(--green-dark);
-    }
-
-    /* Trucker List */
-    .trucker-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-
-    .trucker-item:last-child {
-      border-bottom: none;
-    }
-
-    .trucker-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .trucker-avatar {
-      width: 40px;
-      height: 40px;
-      background: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .trucker-name {
-      font-weight: 600;
-    }
-
-    .trucker-mc {
-      font-size: 13px;
-      color: var(--gray-600);
-    }
-
-    .trucker-owed {
-      text-align: right;
-    }
-
-    .trucker-owed-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .trucker-owed-label {
-      font-size: 12px;
+    /* Empty State */
+    .empty-state {
+      padding: 40px;
+      text-align: center;
       color: var(--gray-600);
     }
 
@@ -491,8 +467,8 @@
         padding-bottom: 80px;
       }
 
-      .earnings-card-amount {
-        font-size: 36px;
+      .search-code-value {
+        font-size: 32px;
       }
     }
 
@@ -540,9 +516,8 @@
         <a href="dashboard.html" class="active">Dashboard</a>
         <a href="truckers.html">Truckers</a>
         <a href="requests.html">Requests</a>
-        <a href="earnings.html">Earnings</a>
         <a href="settings.html">Settings</a>
-        <a href="../login.html" class="nav-logout">Log out</a>
+        <a href="#" class="nav-logout">Log out</a>
       </div>
       <div class="nav-user">
         <div class="nav-user-avatar">FL</div>
@@ -555,143 +530,57 @@
     <div class="container">
       <!-- Header -->
       <div class="dashboard-header">
-        <h1>Welcome back, FastLoad</h1>
-        <p>Here's your early pay activity</p>
+        <h1 id="welcomeMessage">Welcome back</h1>
+        <p>Here's your activity overview</p>
       </div>
 
-      <!-- Earnings Card -->
-      <div class="earnings-card">
-        <div class="earnings-card-label">Total Earned</div>
-        <div class="earnings-card-amount">$1,245</div>
-        <div class="earnings-card-subtitle">From 15 approved early pay requests</div>
+      <!-- Search Code Card -->
+      <div class="search-code-card">
+        <div class="search-code-label">Your Search Code</div>
+        <div class="search-code-value" id="searchCode">---</div>
+        <div class="search-code-subtitle">Share this code with truckers so they can find and connect with you</div>
+        <button class="copy-btn" onclick="copySearchCode()">Copy Code</button>
       </div>
 
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-card-label">Pending Requests</div>
-          <div class="stat-card-value highlight">3</div>
+          <div class="stat-card-label">Pending Connections</div>
+          <div class="stat-card-value warning" id="pendingConnections">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Pending Payments</div>
+          <div class="stat-card-value warning" id="pendingPayments">0</div>
         </div>
         <div class="stat-card">
           <div class="stat-card-label">Connected Truckers</div>
-          <div class="stat-card-value">8</div>
+          <div class="stat-card-value" id="connectedTruckers">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-card-label">Total Owed</div>
-          <div class="stat-card-value">$24,500</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">This Month</div>
-          <div class="stat-card-value highlight">$380</div>
+          <div class="stat-card-label">Completed Payments</div>
+          <div class="stat-card-value highlight" id="completedPayments">0</div>
         </div>
       </div>
 
-      <!-- Pending Requests -->
+      <!-- Pending Connection Requests -->
       <div class="card">
         <div class="card-header">
-          <h2>Pending Requests</h2>
-          <a href="requests.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
-        </div>
-        <div class="card-body" id="pendingRequests">
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">JS</div>
-              <div class="request-details">
-                <h4>John Smith</h4>
-                <p>Requested Dec 24, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$1,000</div>
-                <div class="request-amount-fee">You earn $30</div>
-              </div>
-              <a href="approve.html?id=1" class="badge badge-action">Review</a>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">MJ</div>
-              <div class="request-details">
-                <h4>Mike Johnson</h4>
-                <p>Requested Dec 24, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$2,500</div>
-                <div class="request-amount-fee">You earn $75</div>
-              </div>
-              <a href="approve.html?id=2" class="badge badge-action">Review</a>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">SL</div>
-              <div class="request-details">
-                <h4>Sarah Lee</h4>
-                <p>Requested Dec 23, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$800</div>
-                <div class="request-amount-fee">You earn $24</div>
-              </div>
-              <a href="approve.html?id=3" class="badge badge-action">Review</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Top Truckers -->
-      <div class="card">
-        <div class="card-header">
-          <h2>Your Truckers</h2>
+          <h2>Connection Requests</h2>
           <a href="truckers.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
         </div>
-        <div class="card-body" id="truckersList">
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">JS</div>
-              <div>
-                <div class="trucker-name">John Smith</div>
-                <div class="trucker-mc">MC-456789</div>
-              </div>
-            </div>
-            <div class="trucker-owed">
-              <div class="trucker-owed-value">$3,000</div>
-              <div class="trucker-owed-label">owed</div>
-            </div>
-          </div>
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">MJ</div>
-              <div>
-                <div class="trucker-name">Mike Johnson</div>
-                <div class="trucker-mc">MC-789012</div>
-              </div>
-            </div>
-            <div class="trucker-owed">
-              <div class="trucker-owed-value">$5,500</div>
-              <div class="trucker-owed-label">owed</div>
-            </div>
-          </div>
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">SL</div>
-              <div>
-                <div class="trucker-name">Sarah Lee</div>
-                <div class="trucker-mc">MC-345678</div>
-              </div>
-            </div>
-            <div class="trucker-owed">
-              <div class="trucker-owed-value">$2,200</div>
-              <div class="trucker-owed-label">owed</div>
-            </div>
-          </div>
+        <div class="card-body" id="connectionRequests">
+          <div class="empty-state">No pending connection requests</div>
+        </div>
+      </div>
+
+      <!-- Pending Payment Requests -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Payment Requests</h2>
+          <a href="requests.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
+        </div>
+        <div class="card-body" id="paymentRequests">
+          <div class="empty-state">No pending payment requests</div>
         </div>
       </div>
 
@@ -718,12 +607,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
         Requests
-      </a>
-      <a href="earnings.html" class="mobile-nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Earnings
       </a>
       <a href="settings.html" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -759,103 +642,191 @@
       const companyName = currentBroker?.company_name || 'Company';
       const initials = companyName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
-      document.querySelector('.dashboard-header h1').textContent = `Welcome back, ${companyName.split(' ')[0]}`;
+      document.getElementById('welcomeMessage').textContent = `Welcome back, ${companyName.split(' ')[0]}`;
       document.querySelector('.nav-user-avatar').textContent = initials;
+      document.getElementById('searchCode').textContent = currentBroker?.search_code || '---';
     }
 
     async function loadData() {
       if (!currentBroker) return;
 
-      const truckers = await getBrokerTruckers(currentBroker.id);
-      const requests = await getBrokerRequests(currentBroker.id);
-      const invoices = await getBrokerInvoices(currentBroker.id);
+      // Load pending connections
+      const connections = await getBrokerPendingConnections(currentBroker.id);
+      const pendingConnections = connections.filter(c => c.status === 'pending');
 
-      // Calculate stats
-      const totalEarned = currentBroker.total_earned || 0;
-      const pendingRequests = requests.filter(r => r.status === 'pending');
-      const totalOwed = invoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-      const fundedThisMonth = requests
-        .filter(r => r.status === 'funded' && new Date(r.funded_at).getMonth() === new Date().getMonth())
-        .reduce((sum, r) => sum + parseFloat(r.broker_fee || 0), 0);
+      // Load payment requests
+      const requests = await getBrokerPaymentRequests(currentBroker.id);
+      const pendingPayments = requests.filter(r => r.status === 'pending');
+      const completedPayments = requests.filter(r => r.status === 'completed');
+
+      // Load active truckers
+      const activeTruckers = connections.filter(c => c.status === 'active');
 
       // Update stats
-      document.querySelector('.earnings-card-amount').textContent = formatCurrency(totalEarned);
-      document.querySelector('.earnings-card-subtitle').textContent = `From ${requests.filter(r => r.status === 'funded').length} approved early pay requests`;
+      document.getElementById('pendingConnections').textContent = pendingConnections.length;
+      document.getElementById('pendingPayments').textContent = pendingPayments.length;
+      document.getElementById('connectedTruckers').textContent = activeTruckers.length;
+      document.getElementById('completedPayments').textContent = completedPayments.length;
 
-      const statValues = document.querySelectorAll('.stat-card-value');
-      statValues[0].textContent = pendingRequests.length;
-      statValues[1].textContent = truckers.length;
-      statValues[2].textContent = formatCurrency(totalOwed);
-      statValues[3].textContent = formatCurrency(fundedThisMonth);
-
-      renderPendingRequests(pendingRequests.slice(0, 3));
-      renderTruckers(truckers.slice(0, 3), invoices);
+      renderConnectionRequests(pendingConnections.slice(0, 3));
+      renderPaymentRequests(pendingPayments.slice(0, 3));
     }
 
-    function renderPendingRequests(requests) {
-      const container = document.getElementById('pendingRequests');
+    function renderConnectionRequests(connections) {
+      const container = document.getElementById('connectionRequests');
+
+      if (connections.length === 0) {
+        container.innerHTML = '<div class="empty-state">No pending connection requests</div>';
+        return;
+      }
+
+      container.innerHTML = connections.map(conn => {
+        const trucker = conn.trucker;
+        const profile = trucker?.profiles || trucker?.profile;
+        const name = profile?.full_name || 'Unknown';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        const date = new Date(conn.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        return `
+          <div class="request-item" id="conn-${conn.id}">
+            <div class="request-info">
+              <div class="request-avatar">${initials}</div>
+              <div class="request-details">
+                <h4>${name}</h4>
+                <p>Requested ${date}</p>
+              </div>
+            </div>
+            <div class="request-right">
+              <div class="request-actions">
+                <button class="btn btn-primary btn-sm" onclick="handleApproveConnection('${conn.id}')">Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="handleRejectConnection('${conn.id}')">Reject</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPaymentRequests(requests) {
+      const container = document.getElementById('paymentRequests');
 
       if (requests.length === 0) {
-        container.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No pending requests</p>';
+        container.innerHTML = '<div class="empty-state">No pending payment requests</div>';
         return;
       }
 
       container.innerHTML = requests.map(req => {
         const trucker = req.trucker;
-        const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
-        const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const profile = trucker?.profiles || trucker?.profile;
+        const name = profile?.full_name || 'Unknown';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const speedBadge = req.speed === 'instant' ? '<span class="badge badge-instant">Instant</span>' : '';
 
         return `
-          <div class="request-item">
+          <div class="request-item" id="req-${req.id}">
             <div class="request-info">
               <div class="request-avatar">${initials}</div>
               <div class="request-details">
-                <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
-                <p>Requested ${date}</p>
+                <h4>${name}</h4>
+                <p>Load ${req.load_reference} &bull; ${date} ${speedBadge}</p>
               </div>
             </div>
             <div class="request-right">
               <div class="request-amount">
                 <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
-                <div class="request-amount-fee">You earn ${formatCurrency(req.broker_fee)}</div>
+                <div class="request-amount-label">of ${formatCurrency(req.total_owed)} owed</div>
               </div>
-              <a href="approve.html?id=${req.id}" class="badge badge-action">Review</a>
+              <div class="request-actions">
+                <button class="btn btn-primary btn-sm" onclick="handleApprovePayment('${req.id}')">Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="handleRejectPayment('${req.id}')">Reject</button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function renderTruckers(truckers, invoices) {
-      const container = document.getElementById('truckersList');
+    async function handleApproveConnection(connectionId) {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
 
-      if (truckers.length === 0) {
-        container.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No truckers connected yet</p>';
-        return;
+      const result = await approveConnection(connectionId, currentBroker.id);
+      if (result.success) {
+        document.getElementById(`conn-${connectionId}`).remove();
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Approve';
       }
+    }
 
-      container.innerHTML = truckers.map(rel => {
-        const trucker = rel.trucker;
-        const truckerInvoices = invoices.filter(inv => inv.trucker_id === trucker.id);
-        const amountOwed = truckerInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-        const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+    async function handleRejectConnection(connectionId) {
+      if (!confirm('Reject this connection request?')) return;
 
-        return `
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">${initials}</div>
-              <div>
-                <div class="trucker-name">${trucker?.profile?.full_name || 'Unknown'}</div>
-                <div class="trucker-mc">${trucker?.mc_number || 'No MC'}</div>
-              </div>
-            </div>
-            <div class="trucker-owed">
-              <div class="trucker-owed-value">${formatCurrency(amountOwed)}</div>
-              <div class="trucker-owed-label">owed</div>
-            </div>
-          </div>
-        `;
-      }).join('');
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await rejectConnection(connectionId, currentBroker.id);
+      if (result.success) {
+        document.getElementById(`conn-${connectionId}`).remove();
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Reject';
+      }
+    }
+
+    async function handleApprovePayment(requestId) {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await approvePaymentRequest(requestId, currentBroker.id);
+      if (result.success) {
+        document.getElementById(`req-${requestId}`).remove();
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Approve';
+      }
+    }
+
+    async function handleRejectPayment(requestId) {
+      const reason = prompt('Reason for rejection (optional):');
+      if (reason === null) return; // Cancelled
+
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await rejectPaymentRequest(requestId, currentBroker.id, reason || null);
+      if (result.success) {
+        document.getElementById(`req-${requestId}`).remove();
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Reject';
+      }
+    }
+
+    function copySearchCode() {
+      const code = currentBroker?.search_code;
+      if (!code) return;
+
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy Code';
+        }, 2000);
+      });
     }
 
     // Wire logout

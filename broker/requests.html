@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Requests | Bookd</title>
-  <meta name="description" content="Manage early pay requests.">
+  <title>Payment Requests | Bookd</title>
+  <meta name="description" content="Manage payment requests from truckers.">
 
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,6 +128,42 @@
       justify-content: center;
       font-weight: 600;
       font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-danger {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .btn-danger:hover {
+      background: #FECACA;
     }
 
     /* Dashboard Layout */
@@ -266,9 +302,9 @@
       font-weight: 700;
     }
 
-    .request-amount-fee {
+    .request-amount-label {
       font-size: 13px;
-      color: var(--green-dark);
+      color: var(--gray-600);
     }
 
     .request-actions {
@@ -279,10 +315,11 @@
     /* Badge */
     .badge {
       display: inline-block;
-      padding: 6px 14px;
-      font-size: 13px;
+      padding: 4px 12px;
+      font-size: 12px;
       font-weight: 600;
       border-radius: 100px;
+      margin-left: 8px;
     }
 
     .badge-pending {
@@ -290,7 +327,12 @@
       color: #B45309;
     }
 
-    .badge-funded {
+    .badge-approved {
+      background: #DBEAFE;
+      color: #1D4ED8;
+    }
+
+    .badge-completed {
       background: rgba(0, 210, 106, 0.15);
       color: var(--green-dark);
     }
@@ -300,36 +342,21 @@
       color: #DC2626;
     }
 
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
+    .badge-instant {
+      background: rgba(0, 210, 106, 0.15);
+      color: var(--green-dark);
+    }
+
+    .badge-standard {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    /* Empty State */
+    .empty-state {
+      padding: 40px;
       text-align: center;
-    }
-
-    .btn-primary {
-      background: var(--green);
-      color: var(--black);
-    }
-
-    .btn-primary:hover {
-      background: var(--green-dark);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--gray-200);
-      color: var(--black);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--black);
+      color: var(--gray-600);
     }
 
     /* Mobile Menu */
@@ -442,9 +469,8 @@
         <a href="dashboard.html">Dashboard</a>
         <a href="truckers.html">Truckers</a>
         <a href="requests.html" class="active">Requests</a>
-        <a href="earnings.html">Earnings</a>
         <a href="settings.html">Settings</a>
-        <a href="../login.html" class="nav-logout">Log out</a>
+        <a href="#" class="nav-logout">Log out</a>
       </div>
       <div class="nav-user">
         <div class="nav-user-avatar">FL</div>
@@ -458,137 +484,35 @@
       <!-- Header -->
       <div class="dashboard-header">
         <div>
-          <h1>Early Pay Requests</h1>
-          <p>Review and approve trucker requests</p>
+          <h1>Payment Requests</h1>
+          <p>Review and approve trucker payment requests</p>
         </div>
         <div class="filters">
           <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="pending">Pending (3)</button>
-          <button class="filter-btn" data-filter="funded">Funded</button>
+          <button class="filter-btn" data-filter="pending">Pending (<span id="pendingCount">0</span>)</button>
+          <button class="filter-btn" data-filter="approved">Processing</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
+          <button class="filter-btn" data-filter="rejected">Rejected</button>
         </div>
       </div>
 
       <!-- Pending Requests -->
-      <div class="card">
+      <div class="card" id="pendingCard">
         <div class="card-header">
           <h2>Pending Approval</h2>
         </div>
         <div class="card-body" id="pendingList">
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">JS</div>
-              <div class="request-details">
-                <h4>John Smith</h4>
-                <p>MC-456789 &bull; Requested Dec 24, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$1,000</div>
-                <div class="request-amount-fee">You earn $30</div>
-              </div>
-              <div class="request-actions">
-                <a href="approve.html?id=1" class="btn btn-primary">Review</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">MJ</div>
-              <div class="request-details">
-                <h4>Mike Johnson</h4>
-                <p>MC-789012 &bull; Requested Dec 24, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$2,500</div>
-                <div class="request-amount-fee">You earn $75</div>
-              </div>
-              <div class="request-actions">
-                <a href="approve.html?id=2" class="btn btn-primary">Review</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">SL</div>
-              <div class="request-details">
-                <h4>Sarah Lee</h4>
-                <p>MC-345678 &bull; Requested Dec 23, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$800</div>
-                <div class="request-amount-fee">You earn $24</div>
-              </div>
-              <div class="request-actions">
-                <a href="approve.html?id=3" class="btn btn-primary">Review</a>
-              </div>
-            </div>
-          </div>
+          <div class="empty-state">No pending requests</div>
         </div>
       </div>
 
-      <!-- Completed Requests -->
-      <div class="card">
+      <!-- Other Requests -->
+      <div class="card" id="otherCard">
         <div class="card-header">
-          <h2>Completed</h2>
+          <h2>Request History</h2>
         </div>
-        <div class="card-body" id="completedList">
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">RW</div>
-              <div class="request-details">
-                <h4>Robert Williams</h4>
-                <p>MC-901234 &bull; Funded Dec 20, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$1,500</div>
-                <div class="request-amount-fee">You earned $45</div>
-              </div>
-              <span class="badge badge-funded">Funded</span>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">EB</div>
-              <div class="request-details">
-                <h4>Emily Brown</h4>
-                <p>MC-567890 &bull; Funded Dec 18, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$2,000</div>
-                <div class="request-amount-fee">You earned $60</div>
-              </div>
-              <span class="badge badge-funded">Funded</span>
-            </div>
-          </div>
-
-          <div class="request-item">
-            <div class="request-info">
-              <div class="request-avatar">JS</div>
-              <div class="request-details">
-                <h4>John Smith</h4>
-                <p>MC-456789 &bull; Funded Dec 15, 2025</p>
-              </div>
-            </div>
-            <div class="request-right">
-              <div class="request-amount">
-                <div class="request-amount-value">$800</div>
-                <div class="request-amount-fee">You earned $24</div>
-              </div>
-              <span class="badge badge-funded">Funded</span>
-            </div>
-          </div>
+        <div class="card-body" id="otherList">
+          <div class="empty-state">No requests yet</div>
         </div>
       </div>
 
@@ -615,12 +539,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
         Requests
-      </a>
-      <a href="earnings.html" class="mobile-nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Earnings
       </a>
       <a href="settings.html" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -663,92 +581,164 @@
     async function loadData() {
       if (!currentBroker) return;
 
-      allRequests = await getBrokerRequests(currentBroker.id);
+      allRequests = await getBrokerPaymentRequests(currentBroker.id);
 
-      // Update filter count
+      // Update pending count
       const pendingCount = allRequests.filter(r => r.status === 'pending').length;
-      document.querySelector('[data-filter="pending"]').textContent = `Pending (${pendingCount})`;
+      document.getElementById('pendingCount').textContent = pendingCount;
 
-      renderRequests();
+      renderLists();
     }
 
-    function renderRequests() {
+    function renderLists() {
       const pendingContainer = document.getElementById('pendingList');
-      const completedContainer = document.getElementById('completedList');
+      const otherContainer = document.getElementById('otherList');
 
-      let pending = allRequests.filter(r => r.status === 'pending' || r.status === 'approved');
-      let completed = allRequests.filter(r => r.status === 'funded' || r.status === 'completed' || r.status === 'rejected');
+      let pending = allRequests.filter(r => r.status === 'pending');
+      let other = allRequests.filter(r => r.status !== 'pending');
 
+      // Apply filter
       if (currentFilter === 'pending') {
-        completed = [];
-      } else if (currentFilter === 'funded') {
+        other = [];
+      } else if (currentFilter === 'approved') {
         pending = [];
+        other = allRequests.filter(r => r.status === 'approved');
+      } else if (currentFilter === 'completed') {
+        pending = [];
+        other = allRequests.filter(r => r.status === 'completed');
+      } else if (currentFilter === 'rejected') {
+        pending = [];
+        other = allRequests.filter(r => r.status === 'rejected');
       }
+
+      // Show/hide pending card
+      document.getElementById('pendingCard').style.display = pending.length > 0 || currentFilter === 'all' || currentFilter === 'pending' ? 'block' : 'none';
+      document.getElementById('otherCard').style.display = other.length > 0 || currentFilter !== 'pending' ? 'block' : 'none';
 
       // Render pending
       if (pending.length === 0) {
-        pendingContainer.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No pending requests</p>';
+        pendingContainer.innerHTML = '<div class="empty-state">No pending requests</div>';
       } else {
-        pendingContainer.innerHTML = pending.map(req => {
-          const trucker = req.trucker;
-          const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
-          const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-          return `
-            <div class="request-item">
-              <div class="request-info">
-                <div class="request-avatar">${initials}</div>
-                <div class="request-details">
-                  <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
-                  <p>${trucker?.mc_number || 'No MC'} • Requested ${date}</p>
-                </div>
-              </div>
-              <div class="request-right">
-                <div class="request-amount">
-                  <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
-                  <div class="request-amount-fee">You earn ${formatCurrency(req.broker_fee)}</div>
-                </div>
-                <div class="request-actions">
-                  <a href="approve.html?id=${req.id}" class="btn btn-primary">Review</a>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
+        pendingContainer.innerHTML = pending.map(req => renderPendingRequest(req)).join('');
       }
 
-      // Render completed
-      if (completed.length === 0) {
-        completedContainer.innerHTML = '<p style="padding: 20px; color: var(--gray-600); text-align: center;">No completed requests</p>';
+      // Render other
+      if (other.length === 0) {
+        otherContainer.innerHTML = '<div class="empty-state">No requests to show</div>';
       } else {
-        completedContainer.innerHTML = completed.map(req => {
-          const trucker = req.trucker;
-          const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
-          const date = req.funded_at
-            ? new Date(req.funded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            : new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          const statusLabel = req.status === 'funded' ? 'Funded' : req.status === 'rejected' ? 'Rejected' : 'Completed';
-          const badgeClass = req.status === 'rejected' ? 'badge-rejected' : 'badge-funded';
+        otherContainer.innerHTML = other.map(req => renderOtherRequest(req)).join('');
+      }
+    }
 
-          return `
-            <div class="request-item">
-              <div class="request-info">
-                <div class="request-avatar">${initials}</div>
-                <div class="request-details">
-                  <h4>${trucker?.profile?.full_name || 'Unknown'}</h4>
-                  <p>${trucker?.mc_number || 'No MC'} • ${statusLabel} ${date}</p>
-                </div>
-              </div>
-              <div class="request-right">
-                <div class="request-amount">
-                  <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
-                  <div class="request-amount-fee">You ${req.status === 'rejected' ? 'would have earned' : 'earned'} ${formatCurrency(req.broker_fee)}</div>
-                </div>
-                <span class="badge ${badgeClass}">${statusLabel}</span>
-              </div>
+    function renderPendingRequest(req) {
+      const trucker = req.trucker;
+      const profile = trucker?.profiles || trucker?.profile;
+      const name = profile?.full_name || 'Unknown';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+      const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const speedBadge = req.speed === 'instant'
+        ? '<span class="badge badge-instant">Instant</span>'
+        : '<span class="badge badge-standard">Standard</span>';
+
+      return `
+        <div class="request-item" id="req-${req.id}">
+          <div class="request-info">
+            <div class="request-avatar">${initials}</div>
+            <div class="request-details">
+              <h4>${name} ${speedBadge}</h4>
+              <p>Load ${req.load_reference} &bull; Requested ${date}</p>
             </div>
-          `;
-        }).join('');
+          </div>
+          <div class="request-right">
+            <div class="request-amount">
+              <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
+              <div class="request-amount-label">of ${formatCurrency(req.total_owed)} owed</div>
+            </div>
+            <div class="request-actions">
+              <button class="btn btn-primary btn-sm" onclick="handleApprove('${req.id}')">Approve</button>
+              <button class="btn btn-danger btn-sm" onclick="handleReject('${req.id}')">Reject</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOtherRequest(req) {
+      const trucker = req.trucker;
+      const profile = trucker?.profiles || trucker?.profile;
+      const name = profile?.full_name || 'Unknown';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+      let statusDate = req.requested_at;
+      let statusLabel = 'Requested';
+      let badgeClass = 'badge-pending';
+
+      if (req.status === 'approved') {
+        statusDate = req.approved_at || req.requested_at;
+        statusLabel = 'Approved';
+        badgeClass = 'badge-approved';
+      } else if (req.status === 'completed') {
+        statusDate = req.completed_at || req.approved_at || req.requested_at;
+        statusLabel = 'Completed';
+        badgeClass = 'badge-completed';
+      } else if (req.status === 'rejected') {
+        statusDate = req.rejected_at || req.requested_at;
+        statusLabel = 'Rejected';
+        badgeClass = 'badge-rejected';
+      }
+
+      const date = new Date(statusDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+      return `
+        <div class="request-item">
+          <div class="request-info">
+            <div class="request-avatar">${initials}</div>
+            <div class="request-details">
+              <h4>${name}</h4>
+              <p>Load ${req.load_reference} &bull; ${statusLabel} ${date}</p>
+            </div>
+          </div>
+          <div class="request-right">
+            <div class="request-amount">
+              <div class="request-amount-value">${formatCurrency(req.amount_requested)}</div>
+              <div class="request-amount-label">of ${formatCurrency(req.total_owed)} owed</div>
+            </div>
+            <span class="badge ${badgeClass}">${statusLabel}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    async function handleApprove(requestId) {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await approvePaymentRequest(requestId, currentBroker.id);
+      if (result.success) {
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Approve';
+      }
+    }
+
+    async function handleReject(requestId) {
+      const reason = prompt('Reason for rejection (optional):');
+      if (reason === null) return; // Cancelled
+
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await rejectPaymentRequest(requestId, currentBroker.id, reason || null);
+      if (result.success) {
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Reject';
       }
     }
 
@@ -758,7 +748,7 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         currentFilter = this.dataset.filter;
-        renderRequests();
+        renderLists();
       });
     });
 

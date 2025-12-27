@@ -3,19 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Request Early Pay | Bookd</title>
-  <meta name="description" content="Request early payment from your broker.">
-
+  <title>Request Payment | Bookd</title>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --black: #000000;
@@ -27,15 +21,7 @@
       --gray-600: #525252;
       --green: #00D26A;
       --green-dark: #00B85C;
-    }
-
-    ::selection {
-      background: rgba(0, 210, 106, 0.3);
-      color: var(--black);
-    }
-
-    html {
-      scroll-behavior: smooth;
+      --red: #DC2626;
     }
 
     body {
@@ -46,21 +32,9 @@
       min-height: 100vh;
     }
 
-    h1, h2, h3, h4 {
-      font-family: 'Space Grotesk', sans-serif;
-      line-height: 1.1;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; line-height: 1.1; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 24px; }
 
     /* Nav */
     nav {
@@ -72,342 +46,193 @@
       z-index: 100;
     }
 
-    .nav-inner {
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto; padding: 0 24px; }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; }
+    .logo span { color: var(--green); }
+
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--gray-600); }
+    .nav-links a:hover, .nav-links a.active { color: var(--black); }
+    .nav-logout { color: var(--gray-400) !important; }
+
+    /* Page */
+    .page { padding: 32px 0; }
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .page-header p { color: var(--gray-600); }
+
+    /* Form Card */
+    .form-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--gray-200);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .form-hint { font-size: 13px; color: var(--gray-600); margin-top: 6px; }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      background: var(--white);
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus { outline: none; border-color: var(--green); }
+    .form-input::placeholder { color: var(--gray-400); }
+
+    /* Amount input */
+    .amount-input-wrap {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .amount-input-wrap:focus-within { border-color: var(--green); }
+
+    .amount-prefix {
+      padding: 14px 16px;
+      font-size: 18px;
+      font-weight: 600;
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    .amount-input {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      border: none;
+      background: transparent;
+    }
+
+    .amount-input:focus { outline: none; }
+
+    /* Speed options */
+    .speed-options { display: flex; gap: 12px; }
+
+    .speed-option {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .speed-option:hover { border-color: var(--gray-400); }
+    .speed-option.selected { border-color: var(--green); background: rgba(0, 210, 106, 0.05); }
+
+    .speed-option input { display: none; }
+    .speed-option h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .speed-option p { font-size: 13px; color: var(--gray-600); margin-bottom: 8px; }
+    .speed-option .price { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--green-dark); }
+    .speed-option .price.free { color: var(--green-dark); }
+
+    /* Breakdown */
+    .breakdown {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+    }
+
+    .breakdown-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -1px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-
-    .nav-links a {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--gray-600);
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--black);
-    }
-
-    .nav-logout {
-      color: var(--gray-400) !important;
-    }
-
-    .nav-logout:hover {
-      color: var(--black) !important;
-    }
-
-    .nav-user {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-user-avatar {
-      width: 36px;
-      height: 36px;
-      background: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
+      padding: 8px 0;
       font-size: 14px;
+    }
+
+    .breakdown-row.total {
+      border-top: 2px solid var(--gray-200);
+      margin-top: 8px;
+      padding-top: 16px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .breakdown-row .value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+    }
+
+    .breakdown-row.total .value {
+      color: var(--green-dark);
+      font-size: 20px;
     }
 
     /* Buttons */
     .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      font-size: 15px;
+      display: block;
+      width: 100%;
+      padding: 16px 24px;
+      font-size: 16px;
       font-weight: 600;
-      border-radius: 8px;
+      font-family: inherit;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
       border: none;
       text-align: center;
     }
 
-    .btn-primary {
-      background: var(--green);
-      color: var(--black);
-    }
+    .btn-primary { background: var(--green); color: var(--black); }
+    .btn-primary:hover:not(:disabled) { background: var(--green-dark); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .btn-primary:hover {
-      background: var(--green-dark);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
-    }
-
-    .btn-secondary {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .btn-secondary:hover {
-      background: #222;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--gray-200);
-      color: var(--black);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--black);
-    }
-
-    .btn-large {
-      padding: 16px 32px;
-      font-size: 16px;
-    }
-
-    .btn-block {
-      display: block;
-      width: 100%;
-    }
-
-    /* Form Styles */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--black);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 16px;
-      font-family: inherit;
-      border: 2px solid var(--gray-200);
-      border-radius: 8px;
-      background: var(--white);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(0, 210, 106, 0.1);
-    }
-
-    .form-input::placeholder {
-      color: var(--gray-400);
-    }
-
-    select.form-input {
-      cursor: pointer;
-    }
-
-    /* Dashboard Layout */
-    .dashboard {
-      padding: 32px 0;
-    }
-
-    .dashboard-header {
-      margin-bottom: 32px;
-    }
-
-    .dashboard-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .dashboard-header p {
+    .btn-link {
+      background: none;
       color: var(--gray-600);
-    }
-
-    /* Request Container */
-    .request-container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Cards */
-    .card {
-      background: var(--white);
-      border-radius: 12px;
-      border: 1px solid var(--gray-200);
-      margin-bottom: 24px;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .card-header h2 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .card-body {
-      padding: 24px;
-    }
-
-    /* Amount Input */
-    .amount-input-wrapper {
-      position: relative;
-    }
-
-    .amount-input-wrapper .currency-symbol {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--gray-400);
-    }
-
-    .amount-input {
-      width: 100%;
-      padding: 20px 16px 20px 40px;
-      font-size: 32px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      border: 2px solid var(--gray-200);
-      border-radius: 12px;
-      background: var(--white);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .amount-input:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(0, 210, 106, 0.1);
-    }
-
-    .amount-available {
-      margin-top: 8px;
       font-size: 14px;
-      color: var(--gray-600);
+      margin-top: 16px;
     }
 
-    .amount-available span {
-      color: var(--green-dark);
-      font-weight: 600;
+    .btn-link:hover { color: var(--black); }
+
+    /* Error */
+    .error-msg { color: var(--red); font-size: 14px; margin-bottom: 16px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* Success */
+    .success-state {
+      text-align: center;
+      padding: 48px 24px;
+      display: none;
     }
 
-    /* Fee Breakdown */
-    .fee-breakdown {
-      background: var(--gray-50);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }
+    .success-state.show { display: block; }
 
-    .fee-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-    }
-
-    .fee-row.total {
-      border-top: 2px solid var(--gray-200);
-      margin-top: 12px;
-      padding-top: 16px;
-    }
-
-    .fee-label {
-      font-size: 14px;
-      color: var(--gray-600);
-    }
-
-    .fee-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .fee-row.total .fee-label {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--black);
-    }
-
-    .fee-row.total .fee-value {
-      font-size: 24px;
-      color: var(--green-dark);
-    }
-
-    .fee-credit {
-      color: var(--green-dark);
-    }
-
-    /* Credit Banner */
-    .credit-banner {
-      background: rgba(0, 210, 106, 0.1);
-      border: 1px solid rgba(0, 210, 106, 0.3);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .credit-banner-icon {
-      width: 32px;
-      height: 32px;
-      background: var(--green);
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 210, 106, 0.15);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0 auto 24px;
     }
 
-    .credit-banner-icon svg {
-      width: 18px;
-      height: 18px;
-      color: var(--black);
-    }
+    .success-icon svg { width: 40px; height: 40px; color: var(--green-dark); }
 
-    .credit-banner-text {
-      flex: 1;
-    }
+    .success-state h2 { font-size: 24px; margin-bottom: 8px; }
+    .success-state p { color: var(--gray-600); margin-bottom: 24px; }
 
-    .credit-banner-text strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 2px;
-    }
-
-    .credit-banner-text span {
-      font-size: 13px;
-      color: var(--gray-600);
-    }
-
-    /* Mobile Menu */
+    /* Mobile Nav */
     .mobile-nav {
       display: none;
       position: fixed;
@@ -420,10 +245,7 @@
       z-index: 100;
     }
 
-    .mobile-nav-inner {
-      display: flex;
-      justify-content: space-around;
-    }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
 
     .mobile-nav-item {
       display: flex;
@@ -434,56 +256,20 @@
       font-size: 11px;
     }
 
-    .mobile-nav-item.active {
-      color: var(--green-dark);
-    }
+    .mobile-nav-item.active { color: var(--green-dark); }
+    .mobile-nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; }
 
-    .mobile-nav-item svg {
-      width: 24px;
-      height: 24px;
-      margin-bottom: 4px;
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-
-      .mobile-nav {
-        display: block;
-      }
-
-      body {
-        padding-bottom: 80px;
-      }
+      .nav-links { display: none; }
+      .mobile-nav { display: block; }
+      body { padding-bottom: 80px; }
+      .speed-options { flex-direction: column; }
     }
 
     @media (max-width: 600px) {
-      .container {
-        padding: 0 16px;
-      }
-
-      .logo {
-        font-size: 22px;
-      }
-
-      .dashboard {
-        padding: 24px 0;
-      }
-
-      .dashboard-header h1 {
-        font-size: 24px;
-      }
-
-      .amount-input {
-        font-size: 24px;
-        padding: 16px 16px 16px 36px;
-      }
-
-      .amount-input-wrapper .currency-symbol {
-        font-size: 20px;
-      }
+      .container { padding: 0 16px; }
+      .page { padding: 24px 0; }
+      .page-header h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -491,97 +277,118 @@
 
   <!-- Nav -->
   <nav>
-    <div class="container nav-inner">
-      <a href="dashboard.html" class="logo">BOOK<span style="color: var(--green)">D</span></a>
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">BOOK<span>D</span></a>
       <div class="nav-links">
-        <a href="dashboard.html">Dashboard</a>
+        <a href="dashboard.html">Home</a>
         <a href="brokers.html">Brokers</a>
-        <a href="request.html" class="active">Request Pay</a>
-        <a href="history.html">History</a>
+        <a href="request.html" class="active">Request</a>
         <a href="settings.html">Settings</a>
-        <a href="../login.html" class="nav-logout">Log out</a>
-      </div>
-      <div class="nav-user">
-        <div class="nav-user-avatar">JS</div>
+        <a href="#" class="nav-logout" id="logoutBtn">Log out</a>
       </div>
     </div>
   </nav>
 
-  <!-- Dashboard -->
-  <main class="dashboard">
+  <!-- Page -->
+  <main class="page">
     <div class="container">
-      <div class="request-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-          <h1>Request Early Pay</h1>
-          <p>Get paid now instead of waiting</p>
+      <!-- Header -->
+      <div class="page-header">
+        <h1>Request Payment</h1>
+        <p>Get paid for a completed load</p>
+      </div>
+
+      <!-- Form -->
+      <div class="form-card" id="formCard">
+        <div class="error-msg" id="formError"></div>
+
+        <!-- Broker Select -->
+        <div class="form-group">
+          <label class="form-label">Select Broker</label>
+          <select class="form-select" id="brokerSelect">
+            <option value="">Choose a broker...</option>
+          </select>
+          <p class="form-hint" id="noBrokersHint" style="display: none;">
+            No connected brokers. <a href="brokers.html" style="color: var(--green-dark);">Connect a broker</a> first.
+          </p>
         </div>
 
-        <form id="requestForm">
-          <!-- Select Broker -->
-          <div class="card">
-            <div class="card-body">
-              <div class="form-group">
-                <label class="form-label" for="broker">Select Broker</label>
-                <select id="broker" class="form-input" required>
-                  <option value="">Choose a broker...</option>
-                  <option value="1" data-amount="3000">FastLoad Logistics - $3,000 owed</option>
-                  <option value="2" data-amount="1500">Highway Stars Inc - $1,500 owed</option>
-                </select>
-              </div>
+        <!-- Load Reference -->
+        <div class="form-group">
+          <label class="form-label">Load Reference</label>
+          <input type="text" class="form-input" id="loadRef" placeholder="e.g. LOAD-4521 or PRO #12345">
+          <p class="form-hint">Your broker's load or PRO number</p>
+        </div>
 
-              <!-- Amount Input -->
-              <div class="form-group">
-                <label class="form-label" for="amount">Amount to Request</label>
-                <div class="amount-input-wrapper">
-                  <span class="currency-symbol">$</span>
-                  <input type="number" id="amount" class="amount-input" placeholder="0" min="100" max="3000" required>
-                </div>
-                <div class="amount-available">Available: <span id="availableAmount">$3,000</span></div>
-              </div>
-            </div>
+        <!-- Total Owed -->
+        <div class="form-group">
+          <label class="form-label">Total Amount Owed</label>
+          <div class="amount-input-wrap">
+            <span class="amount-prefix">$</span>
+            <input type="number" class="amount-input" id="totalOwed" placeholder="0" min="1" step="0.01">
           </div>
+          <p class="form-hint">The full invoice amount for this load</p>
+        </div>
 
-          <!-- Credit Banner -->
-          <div class="credit-banner">
-            <div class="credit-banner-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div class="credit-banner-text">
-              <strong>$100 credit remaining</strong>
-              <span>Your fee is 3% instead of 4%</span>
-            </div>
+        <!-- Amount Requested -->
+        <div class="form-group">
+          <label class="form-label">Amount to Request Now</label>
+          <div class="amount-input-wrap">
+            <span class="amount-prefix">$</span>
+            <input type="number" class="amount-input" id="amountRequested" placeholder="0" min="1" step="0.01">
           </div>
+          <p class="form-hint">You can request part or all of the amount</p>
+        </div>
 
-          <!-- Fee Breakdown -->
-          <div class="fee-breakdown">
-            <div class="fee-row">
-              <span class="fee-label">Amount requested</span>
-              <span class="fee-value" id="feeAmount">$1,000</span>
-            </div>
-            <div class="fee-row">
-              <span class="fee-label">Broker fee (3%)</span>
-              <span class="fee-value" id="feeBroker">-$30</span>
-            </div>
-            <div class="fee-row">
-              <span class="fee-label">Platform fee (1%)</span>
-              <span class="fee-value" id="feePlatform">-$10</span>
-            </div>
-            <div class="fee-row">
-              <span class="fee-label">Credit applied</span>
-              <span class="fee-value fee-credit" id="feeCredit">+$10</span>
-            </div>
-            <div class="fee-row total">
-              <span class="fee-label">You receive</span>
-              <span class="fee-value" id="feeTotal">$970</span>
-            </div>
+        <!-- Speed -->
+        <div class="form-group">
+          <label class="form-label">Payment Speed</label>
+          <div class="speed-options">
+            <label class="speed-option selected" id="speedStandard">
+              <input type="radio" name="speed" value="standard" checked>
+              <h4>Standard</h4>
+              <p>1-2 business days</p>
+              <span class="price free">FREE</span>
+            </label>
+            <label class="speed-option" id="speedInstant">
+              <input type="radio" name="speed" value="instant">
+              <h4>Instant</h4>
+              <p>Within 30 minutes</p>
+              <span class="price">$5.00</span>
+            </label>
           </div>
+        </div>
 
-          <button type="submit" class="btn btn-primary btn-large btn-block">Submit Request</button>
-        </form>
+        <!-- Breakdown -->
+        <div class="breakdown" id="breakdown" style="display: none;">
+          <div class="breakdown-row">
+            <span>Amount requested</span>
+            <span class="value" id="breakdownAmount">$0</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Platform fee</span>
+            <span class="value" id="breakdownFee">$0</span>
+          </div>
+          <div class="breakdown-row total">
+            <span>You receive</span>
+            <span class="value" id="breakdownTotal">$0</span>
+          </div>
+        </div>
 
+        <button class="btn btn-primary" id="submitBtn" style="margin-top: 24px;">Request Payment</button>
+      </div>
+
+      <!-- Success State -->
+      <div class="form-card success-state" id="successState">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2>Request Sent!</h2>
+        <p id="successMessage">Your broker will review and approve your request.</p>
+        <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+        <button class="btn btn-link" id="newRequestBtn">Make Another Request</button>
       </div>
     </div>
   </main>
@@ -617,7 +424,6 @@
     </div>
   </div>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase.js"></script>
   <script src="../js/auth.js"></script>
@@ -625,11 +431,7 @@
   <script>
     let currentProfile = null;
     let currentTrucker = null;
-    let creditRemaining = 100;
-    let brokersData = [];
-    let invoicesData = [];
-    let selectedBrokerId = null;
-    let selectedInvoiceId = null;
+    let connectedBrokers = [];
 
     async function initPage() {
       const profile = await requireAuth('trucker');
@@ -637,130 +439,174 @@
 
       currentProfile = profile;
       currentTrucker = profile.trucker;
-      creditRemaining = currentTrucker?.bonus_credit_remaining || 0;
 
-      updateUserInfo();
-      await loadData();
-    }
+      await loadBrokers();
+      setupForm();
 
-    function updateUserInfo() {
-      const initials = currentProfile.full_name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
-      document.querySelector('.nav-user-avatar').textContent = initials;
-      document.querySelector('.credit-banner-text strong').textContent = formatCurrency(creditRemaining) + ' credit remaining';
-    }
-
-    async function loadData() {
-      if (!currentTrucker) return;
-
-      brokersData = await getTruckerBrokers(currentTrucker.id);
-      invoicesData = await getTruckerInvoices(currentTrucker.id);
-
-      populateBrokerSelect();
-
-      // Check URL for pre-selected broker
+      // Check for preselected broker from URL
       const params = new URLSearchParams(window.location.search);
       const brokerId = params.get('broker');
       if (brokerId) {
-        document.getElementById('broker').value = brokerId;
-        onBrokerChange();
+        document.getElementById('brokerSelect').value = brokerId;
       }
     }
 
-    function populateBrokerSelect() {
-      const select = document.getElementById('broker');
-      select.innerHTML = '<option value="">Choose a broker...</option>';
+    async function loadBrokers() {
+      if (!currentTrucker) return;
 
-      brokersData.forEach(rel => {
-        const broker = rel.broker;
-        const brokerInvoices = invoicesData.filter(inv => inv.broker_id === broker.id);
-        const amountOwed = brokerInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
+      const { data: relationships } = await supabase
+        .from('trucker_broker_relationships')
+        .select(`*, broker:brokers(id, company_name, search_code)`)
+        .eq('trucker_id', currentTrucker.id)
+        .eq('status', 'active');
 
-        if (amountOwed > 0) {
-          const option = document.createElement('option');
-          option.value = broker.id;
-          option.dataset.amount = amountOwed;
-          option.textContent = `${broker.company_name} - ${formatCurrency(amountOwed)} owed`;
-          select.appendChild(option);
-        }
+      connectedBrokers = (relationships || []).map(r => r.broker);
+
+      const select = document.getElementById('brokerSelect');
+      const hint = document.getElementById('noBrokersHint');
+
+      if (connectedBrokers.length === 0) {
+        hint.style.display = 'block';
+        select.disabled = true;
+        document.getElementById('submitBtn').disabled = true;
+        return;
+      }
+
+      select.innerHTML = '<option value="">Choose a broker...</option>' +
+        connectedBrokers.map(b =>
+          `<option value="${b.id}">${b.company_name}</option>`
+        ).join('');
+    }
+
+    function setupForm() {
+      const speedOptions = document.querySelectorAll('.speed-option');
+      const amountInput = document.getElementById('amountRequested');
+      const breakdown = document.getElementById('breakdown');
+
+      // Speed selection
+      speedOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          speedOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          opt.querySelector('input').checked = true;
+          updateBreakdown();
+        });
       });
+
+      // Amount change
+      amountInput.addEventListener('input', updateBreakdown);
     }
 
-    function onBrokerChange() {
-      const select = document.getElementById('broker');
-      const selected = select.options[select.selectedIndex];
-      const amount = parseFloat(selected.dataset.amount) || 0;
+    function updateBreakdown() {
+      const amount = parseFloat(document.getElementById('amountRequested').value) || 0;
+      const speed = document.querySelector('input[name="speed"]:checked').value;
+      const breakdown = document.getElementById('breakdown');
 
-      selectedBrokerId = select.value;
-      document.getElementById('availableAmount').textContent = formatCurrency(amount);
-      document.getElementById('amount').max = amount;
-      document.getElementById('amount').value = '';
-      updateFeeBreakdown();
+      if (amount > 0) {
+        const fee = speed === 'instant' ? 5.00 : 0;
+        const youReceive = amount - fee;
+
+        document.getElementById('breakdownAmount').textContent = formatCurrency(amount);
+        document.getElementById('breakdownFee').textContent = fee > 0 ? formatCurrency(fee) : 'FREE';
+        document.getElementById('breakdownTotal').textContent = formatCurrency(youReceive);
+        breakdown.style.display = 'block';
+      } else {
+        breakdown.style.display = 'none';
+      }
     }
 
-    function updateFeeBreakdown() {
-      const amount = parseFloat(document.getElementById('amount').value) || 0;
-      const fees = calculateEarlyPay(amount, creditRemaining);
+    // Submit form
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const brokerId = document.getElementById('brokerSelect').value;
+      const loadRef = document.getElementById('loadRef').value.trim();
+      const totalOwed = parseFloat(document.getElementById('totalOwed').value) || 0;
+      const amountRequested = parseFloat(document.getElementById('amountRequested').value) || 0;
+      const speed = document.querySelector('input[name="speed"]:checked').value;
+      const btn = document.getElementById('submitBtn');
+      const errorEl = document.getElementById('formError');
 
-      document.getElementById('feeAmount').textContent = formatCurrency(fees.amount);
-      document.getElementById('feeBroker').textContent = '-' + formatCurrency(fees.brokerFee);
-      document.getElementById('feePlatform').textContent = '-' + formatCurrency(fees.platformFee);
-      document.getElementById('feeCredit').textContent = '+' + formatCurrency(fees.creditApplied);
-      document.getElementById('feeTotal').textContent = formatCurrency(fees.amountToTrucker);
-    }
+      errorEl.classList.remove('show');
 
-    // Update fees on amount change
-    document.getElementById('amount').addEventListener('input', updateFeeBreakdown);
-
-    // Update available amount on broker change
-    document.getElementById('broker').addEventListener('change', onBrokerChange);
-
-    // Form submit
-    document.getElementById('requestForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const brokerId = document.getElementById('broker').value;
-      const amount = parseFloat(document.getElementById('amount').value);
-      const btn = e.target.querySelector('button[type="submit"]');
-
+      // Validate
       if (!brokerId) {
-        alert('Please select a broker');
+        errorEl.textContent = 'Please select a broker';
+        errorEl.classList.add('show');
         return;
       }
 
-      if (!amount || amount < 100) {
-        alert('Please enter an amount of at least $100');
+      if (!loadRef) {
+        errorEl.textContent = 'Please enter a load reference';
+        errorEl.classList.add('show');
         return;
       }
 
-      // Find an invoice for this broker
-      const brokerInvoices = invoicesData.filter(inv => inv.broker_id === brokerId && parseFloat(inv.amount_remaining) > 0);
-      if (brokerInvoices.length === 0) {
-        alert('No invoices available from this broker');
+      if (totalOwed <= 0) {
+        errorEl.textContent = 'Please enter the total amount owed';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (amountRequested <= 0) {
+        errorEl.textContent = 'Please enter an amount to request';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (amountRequested > totalOwed) {
+        errorEl.textContent = 'Request amount cannot exceed total owed';
+        errorEl.classList.add('show');
         return;
       }
 
       btn.disabled = true;
       btn.textContent = 'Submitting...';
 
-      const invoiceId = brokerInvoices[0].id;
-      const result = await createEarlyPayRequest(currentTrucker.id, brokerId, invoiceId, amount, creditRemaining);
+      const result = await createPaymentRequest(
+        currentTrucker.id,
+        brokerId,
+        loadRef,
+        totalOwed,
+        amountRequested,
+        speed
+      );
 
-      if (result.success) {
-        alert('Request submitted! Your broker will review it shortly.');
-        window.location.href = 'dashboard.html';
-      } else {
-        alert('Error: ' + result.error);
-        btn.disabled = false;
-        btn.textContent = 'Submit Request';
+      btn.disabled = false;
+      btn.textContent = 'Request Payment';
+
+      if (!result.success) {
+        errorEl.textContent = result.error;
+        errorEl.classList.add('show');
+        return;
       }
+
+      // Show success
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successState').classList.add('show');
+
+      const broker = connectedBrokers.find(b => b.id === brokerId);
+      document.getElementById('successMessage').textContent =
+        `We've notified ${broker?.company_name || 'your broker'}. They'll review and approve your request.`;
     });
 
-    // Wire logout
-    document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+    // New request button
+    document.getElementById('newRequestBtn').addEventListener('click', () => {
+      document.getElementById('formCard').style.display = 'block';
+      document.getElementById('successState').classList.remove('show');
+      document.getElementById('brokerSelect').value = '';
+      document.getElementById('loadRef').value = '';
+      document.getElementById('totalOwed').value = '';
+      document.getElementById('amountRequested').value = '';
+      document.getElementById('breakdown').style.display = 'none';
+      document.querySelectorAll('.speed-option').forEach((o, i) => {
+        o.classList.toggle('selected', i === 0);
+        o.querySelector('input').checked = i === 0;
+      });
+    });
 
-    // Initialize
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
     initPage();
   </script>
-
 </body>
 </html>

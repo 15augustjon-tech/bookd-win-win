@@ -153,17 +153,6 @@
       box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
     }
 
-    .btn-secondary {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .btn-secondary:hover {
-      background: #222;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-
     .btn-outline {
       background: transparent;
       border: 2px solid var(--gray-200);
@@ -172,11 +161,6 @@
 
     .btn-outline:hover {
       border-color: var(--black);
-    }
-
-    .btn-large {
-      padding: 16px 32px;
-      font-size: 16px;
     }
 
     /* Dashboard Layout */
@@ -198,53 +182,10 @@
       color: var(--gray-600);
     }
 
-    /* Credit Card */
-    .credit-card {
-      background: linear-gradient(135deg, var(--black) 0%, #1a1a1a 100%);
-      color: var(--white);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .credit-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(0, 210, 106, 0.2) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .credit-card-label {
-      font-size: 13px;
-      color: var(--gray-400);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .credit-card-amount {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--green);
-      margin-bottom: 8px;
-    }
-
-    .credit-card-subtitle {
-      font-size: 14px;
-      color: var(--gray-400);
-    }
-
     /* Stats Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 32px;
     }
@@ -266,6 +207,14 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 24px;
       font-weight: 700;
+    }
+
+    .stat-card-value.warning {
+      color: #B45309;
+    }
+
+    .stat-card-value.success {
+      color: var(--green-dark);
     }
 
     /* Cards */
@@ -324,28 +273,27 @@
       font-size: 14px;
     }
 
+    .broker-avatar.active {
+      background: var(--green);
+    }
+
     .broker-name {
       font-weight: 600;
     }
 
-    .broker-mc {
+    .broker-status {
       font-size: 13px;
       color: var(--gray-600);
     }
 
-    .broker-amount {
-      text-align: right;
+    .broker-actions {
+      display: flex;
+      gap: 8px;
     }
 
-    .broker-amount-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .broker-amount-label {
-      font-size: 12px;
-      color: var(--gray-600);
+    .broker-actions .btn {
+      padding: 8px 16px;
+      font-size: 13px;
     }
 
     /* Request Item */
@@ -392,47 +340,36 @@
     }
 
     .badge-approved {
-      background: #D1FAE5;
-      color: #065F46;
+      background: #DBEAFE;
+      color: #1D4ED8;
     }
 
-    .badge-funded {
+    .badge-completed {
       background: rgba(0, 210, 106, 0.15);
       color: var(--green-dark);
+    }
+
+    .badge-rejected {
+      background: #FEE2E2;
+      color: #DC2626;
     }
 
     /* Empty State */
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-    }
-
-    .empty-state-icon {
-      width: 64px;
-      height: 64px;
-      background: var(--gray-100);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-    }
-
-    .empty-state-icon svg {
-      width: 32px;
-      height: 32px;
-      color: var(--gray-400);
+      color: var(--gray-600);
     }
 
     .empty-state h3 {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 8px;
+      color: var(--black);
     }
 
     .empty-state p {
       font-size: 14px;
-      color: var(--gray-600);
       margin-bottom: 16px;
     }
 
@@ -507,7 +444,7 @@
       }
 
       .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .mobile-nav {
@@ -516,10 +453,6 @@
 
       body {
         padding-bottom: 80px;
-      }
-
-      .credit-card-amount {
-        font-size: 36px;
       }
     }
 
@@ -539,6 +472,10 @@
       .dashboard-header h1 {
         font-size: 24px;
       }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -554,7 +491,7 @@
         <a href="request.html">Request Pay</a>
         <a href="history.html">History</a>
         <a href="settings.html">Settings</a>
-        <a href="../login.html" class="nav-logout">Log out</a>
+        <a href="#" class="nav-logout">Log out</a>
       </div>
       <div class="nav-user">
         <div class="nav-user-avatar">JS</div>
@@ -567,65 +504,41 @@
     <div class="container">
       <!-- Header -->
       <div class="dashboard-header">
-        <h1>Welcome back, John</h1>
-        <p>Here's what's happening with your early pay</p>
-      </div>
-
-      <!-- Credit Card -->
-      <div class="credit-card">
-        <div class="credit-card-label">Your Credit Balance</div>
-        <div class="credit-card-amount">$100</div>
-        <div class="credit-card-subtitle">First $10,000 in early pay at only 3% fee</div>
+        <h1 id="welcomeMessage">Welcome back</h1>
+        <p>Here's your payment activity</p>
       </div>
 
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-card-label">Total Owed</div>
-          <div class="stat-card-value">$4,500</div>
+          <div class="stat-card-label">Connected Brokers</div>
+          <div class="stat-card-value" id="statBrokers">0</div>
         </div>
         <div class="stat-card">
           <div class="stat-card-label">Pending Requests</div>
-          <div class="stat-card-value">1</div>
+          <div class="stat-card-value warning" id="statPending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Completed Payments</div>
+          <div class="stat-card-value success" id="statCompleted">0</div>
         </div>
         <div class="stat-card">
           <div class="stat-card-label">Total Received</div>
-          <div class="stat-card-value">$2,910</div>
+          <div class="stat-card-value success" id="statReceived">$0</div>
         </div>
       </div>
 
       <!-- Connected Brokers -->
       <div class="card">
         <div class="card-header">
-          <h2>Connected Brokers</h2>
-          <a href="brokers.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">Invite Broker</a>
+          <h2>Your Brokers</h2>
+          <a href="brokers.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">Find Broker</a>
         </div>
-        <div class="card-body" id="brokers-list">
-          <div class="broker-item">
-            <div class="broker-info">
-              <div class="broker-avatar">FL</div>
-              <div>
-                <div class="broker-name">FastLoad Logistics</div>
-                <div class="broker-mc">MC-123456</div>
-              </div>
-            </div>
-            <div class="broker-amount">
-              <div class="broker-amount-value">$3,000</div>
-              <div class="broker-amount-label">owed to you</div>
-            </div>
-          </div>
-          <div class="broker-item">
-            <div class="broker-info">
-              <div class="broker-avatar">HS</div>
-              <div>
-                <div class="broker-name">Highway Stars Inc</div>
-                <div class="broker-mc">MC-789012</div>
-              </div>
-            </div>
-            <div class="broker-amount">
-              <div class="broker-amount-value">$1,500</div>
-              <div class="broker-amount-label">owed to you</div>
-            </div>
+        <div class="card-body" id="brokersList">
+          <div class="empty-state">
+            <h3>No brokers connected</h3>
+            <p>Search for a broker to start requesting payments</p>
+            <a href="brokers.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Find Broker</a>
           </div>
         </div>
       </div>
@@ -636,33 +549,18 @@
           <h2>Recent Requests</h2>
           <a href="history.html" style="font-size: 14px; color: var(--green-dark); font-weight: 500;">View all</a>
         </div>
-        <div class="card-body" id="requests-list">
-          <div class="request-item">
-            <div class="request-info">
-              <h4>$1,000 from FastLoad Logistics</h4>
-              <p>Requested Dec 24, 2025</p>
-            </div>
-            <div class="request-status">
-              <span class="badge badge-pending">Pending</span>
-            </div>
-          </div>
-          <div class="request-item">
-            <div class="request-info">
-              <h4>$1,500 from Highway Stars Inc</h4>
-              <p>Funded Dec 20, 2025</p>
-            </div>
-            <div class="request-status">
-              <span class="badge badge-funded">Funded</span>
-              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600;">$1,455</span>
-            </div>
+        <div class="card-body" id="requestsList">
+          <div class="empty-state">
+            <h3>No requests yet</h3>
+            <p>Request payment from a connected broker</p>
           </div>
         </div>
       </div>
 
       <!-- Quick Action -->
       <a href="request.html" class="quick-action" style="display: block; text-decoration: none;">
-        <h3>Request Early Pay</h3>
-        <p>Get paid faster from any connected broker</p>
+        <h3>Request Payment</h3>
+        <p>Get paid from any connected broker</p>
       </a>
 
     </div>
@@ -708,133 +606,155 @@
     let currentProfile = null;
     let currentTrucker = null;
 
-    // Initialize dashboard
     async function initDashboard() {
-      // Check auth - redirect if not logged in
       const profile = await requireAuth('trucker');
       if (!profile) return;
 
       currentProfile = profile;
       currentTrucker = profile.trucker;
 
-      // Update UI with user data
       updateUserInfo();
       await loadDashboardData();
     }
 
     function updateUserInfo() {
-      const firstName = currentProfile.full_name.split(' ')[0] || 'there';
-      const initials = currentProfile.full_name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      const firstName = currentProfile.full_name?.split(' ')[0] || 'there';
+      const initials = currentProfile.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
 
-      // Update welcome message
-      document.querySelector('.dashboard-header h1').textContent = `Welcome back, ${firstName}`;
-
-      // Update avatar
+      document.getElementById('welcomeMessage').textContent = `Welcome back, ${firstName}`;
       document.querySelector('.nav-user-avatar').textContent = initials;
-
-      // Update credit balance
-      const creditAmount = currentTrucker?.bonus_credit_remaining || 0;
-      document.querySelector('.credit-card-amount').textContent = formatCurrency(creditAmount);
     }
 
     async function loadDashboardData() {
       if (!currentTrucker) return;
 
-      // Load brokers and their invoices
-      const brokers = await getTruckerBrokers(currentTrucker.id);
-      const requests = await getTruckerRequests(currentTrucker.id);
-      const invoices = await getTruckerInvoices(currentTrucker.id);
+      // Load connections
+      const connections = await getTruckerConnections(currentTrucker.id);
+      const activeConnections = connections.filter(c => c.status === 'active');
+      const pendingConnections = connections.filter(c => c.status === 'pending');
 
-      // Calculate stats
-      const totalOwed = invoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-      const pendingRequests = requests.filter(r => r.status === 'pending').length;
-      const totalReceived = requests
-        .filter(r => r.status === 'funded' || r.status === 'completed')
-        .reduce((sum, r) => sum + parseFloat(r.amount_to_trucker || 0), 0);
+      // Load payment requests
+      const requests = await getTruckerPaymentRequests(currentTrucker.id);
+      const pendingRequests = requests.filter(r => r.status === 'pending' || r.status === 'approved');
+      const completedRequests = requests.filter(r => r.status === 'completed');
+
+      // Calculate total received
+      const totalReceived = completedRequests.reduce((sum, r) => {
+        const amount = parseFloat(r.amount_requested) - parseFloat(r.platform_fee || 0);
+        return sum + amount;
+      }, 0);
 
       // Update stats
-      document.querySelectorAll('.stat-card-value')[0].textContent = formatCurrency(totalOwed);
-      document.querySelectorAll('.stat-card-value')[1].textContent = pendingRequests;
-      document.querySelectorAll('.stat-card-value')[2].textContent = formatCurrency(totalReceived);
+      document.getElementById('statBrokers').textContent = activeConnections.length;
+      document.getElementById('statPending').textContent = pendingRequests.length;
+      document.getElementById('statCompleted').textContent = completedRequests.length;
+      document.getElementById('statReceived').textContent = formatCurrency(totalReceived);
 
-      // Render brokers
-      renderBrokers(brokers, invoices);
-
-      // Render recent requests
-      renderRequests(requests.slice(0, 3));
+      renderBrokers(activeConnections, pendingConnections);
+      renderRequests(requests.slice(0, 5));
     }
 
-    function renderBrokers(brokers, invoices) {
-      const container = document.getElementById('brokers-list');
+    function renderBrokers(active, pending) {
+      const container = document.getElementById('brokersList');
 
-      if (brokers.length === 0) {
+      if (active.length === 0 && pending.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-state-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
             <h3>No brokers connected</h3>
-            <p>Invite a broker to start requesting early pay</p>
-            <a href="brokers.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Invite Broker</a>
+            <p>Search for a broker to start requesting payments</p>
+            <a href="brokers.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Find Broker</a>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = brokers.map(rel => {
-        const broker = rel.broker;
-        const brokerInvoices = invoices.filter(inv => inv.broker_id === broker.id);
-        const amountOwed = brokerInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-        const initials = broker.company_name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      let html = '';
 
-        return `
+      // Render pending connections first
+      pending.forEach(conn => {
+        const broker = conn.broker;
+        const name = broker?.company_name || 'Unknown';
+        const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+        html += `
           <div class="broker-item">
             <div class="broker-info">
               <div class="broker-avatar">${initials}</div>
               <div>
-                <div class="broker-name">${broker.company_name}</div>
-                <div class="broker-mc">${broker.mc_number || 'No MC'}</div>
+                <div class="broker-name">${name}</div>
+                <div class="broker-status">Connection pending</div>
               </div>
             </div>
-            <div class="broker-amount">
-              <div class="broker-amount-value">${formatCurrency(amountOwed)}</div>
-              <div class="broker-amount-label">owed to you</div>
+            <span class="badge badge-pending">Pending</span>
+          </div>
+        `;
+      });
+
+      // Render active connections
+      active.forEach(conn => {
+        const broker = conn.broker;
+        const name = broker?.company_name || 'Unknown';
+        const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+        html += `
+          <div class="broker-item">
+            <div class="broker-info">
+              <div class="broker-avatar active">${initials}</div>
+              <div>
+                <div class="broker-name">${name}</div>
+                <div class="broker-status">Connected</div>
+              </div>
+            </div>
+            <div class="broker-actions">
+              <a href="request.html?broker=${broker.id}" class="btn btn-primary">Request Pay</a>
             </div>
           </div>
         `;
-      }).join('');
+      });
+
+      container.innerHTML = html;
     }
 
     function renderRequests(requests) {
-      const container = document.getElementById('requests-list');
+      const container = document.getElementById('requestsList');
 
       if (requests.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
             <h3>No requests yet</h3>
-            <p>Request early pay from a connected broker</p>
+            <p>Request payment from a connected broker</p>
           </div>
         `;
         return;
       }
 
       container.innerHTML = requests.map(req => {
-        const brokerName = req.broker?.company_name || 'Unknown Broker';
-        const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const statusLabel = req.status === 'funded' ? 'Funded' : req.status === 'approved' ? 'Approved' : req.status === 'rejected' ? 'Rejected' : 'Pending';
-        const badgeClass = req.status === 'funded' ? 'badge-funded' : req.status === 'approved' ? 'badge-approved' : req.status === 'rejected' ? 'badge-pending' : 'badge-pending';
+        const broker = req.broker;
+        const brokerName = broker?.company_name || 'Unknown Broker';
+        const date = new Date(req.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        let statusLabel = 'Pending';
+        let badgeClass = 'badge-pending';
+
+        if (req.status === 'approved') {
+          statusLabel = 'Processing';
+          badgeClass = 'badge-approved';
+        } else if (req.status === 'completed') {
+          statusLabel = 'Completed';
+          badgeClass = 'badge-completed';
+        } else if (req.status === 'rejected') {
+          statusLabel = 'Rejected';
+          badgeClass = 'badge-rejected';
+        }
 
         return `
           <div class="request-item">
             <div class="request-info">
               <h4>${formatCurrency(req.amount_requested)} from ${brokerName}</h4>
-              <p>${req.status === 'funded' ? 'Funded' : 'Requested'} ${date}</p>
+              <p>Load ${req.load_reference} &bull; ${date}</p>
             </div>
             <div class="request-status">
               <span class="badge ${badgeClass}">${statusLabel}</span>
-              ${req.status === 'funded' ? `<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600;">${formatCurrency(req.amount_to_trucker)}</span>` : ''}
             </div>
           </div>
         `;
@@ -844,7 +764,6 @@
     // Wire logout
     document.querySelector('.nav-logout').addEventListener('click', handleLogout);
 
-    // Initialize
     initDashboard();
   </script>
 </body>

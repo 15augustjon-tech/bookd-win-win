@@ -324,6 +324,81 @@
       color: var(--green-dark);
     }
 
+    /* Payment Options */
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .payment-option:hover {
+      border-color: var(--gray-400);
+    }
+
+    .payment-option.selected {
+      border-color: var(--green);
+      background: rgba(0, 210, 106, 0.05);
+    }
+
+    .payment-option input[type="radio"] {
+      margin-top: 2px;
+      accent-color: var(--green);
+    }
+
+    .payment-option-content {
+      flex: 1;
+    }
+
+    .payment-option-content strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .payment-option-content span {
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    .payment-field {
+      margin-top: 16px;
+      display: none;
+    }
+
+    .payment-field.visible {
+      display: block;
+    }
+
+    .payment-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .payment-status.configured {
+      background: rgba(0, 210, 106, 0.1);
+      color: var(--green-dark);
+    }
+
+    .payment-status.not-configured {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
     /* Danger Zone */
     .danger-zone {
       border-color: var(--red);
@@ -433,7 +508,7 @@
         <a href="dashboard.html">Dashboard</a>
         <a href="brokers.html">Brokers</a>
         <a href="request.html">Request Pay</a>
-        <a href="history.html">History</a>
+        <a href="earnings.html">Earnings</a>
         <a href="settings.html" class="active">Settings</a>
         <a href="../login.html" class="nav-logout">Log out</a>
       </div>
@@ -527,6 +602,63 @@
               </div>
               <div class="credit-info-value">$100</div>
             </div>
+          </div>
+        </div>
+
+        <!-- Payment Method Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Payment Method</h2>
+            <span class="payment-status not-configured" id="paymentStatus">Not configured</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px; color: var(--gray-600);">
+              Choose how you want to receive early pay. Funds arrive instantly.
+            </p>
+
+            <div class="payment-options">
+              <label class="payment-option" id="paypalOption">
+                <input type="radio" name="paymentMethod" value="paypal">
+                <div class="payment-option-content">
+                  <strong>PayPal</strong>
+                  <span>Instant transfer to your PayPal balance</span>
+                </div>
+              </label>
+
+              <label class="payment-option" id="venmoOption">
+                <input type="radio" name="paymentMethod" value="venmo">
+                <div class="payment-option-content">
+                  <strong>Venmo</strong>
+                  <span>Instant transfer to your Venmo account</span>
+                </div>
+              </label>
+
+              <label class="payment-option" id="manualOption">
+                <input type="radio" name="paymentMethod" value="manual">
+                <div class="payment-option-content">
+                  <strong>Manual</strong>
+                  <span>Coordinate payment with your broker directly</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="payment-field" id="paypalField">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="paypalEmail">PayPal Email</label>
+                <input type="email" id="paypalEmail" class="form-input" placeholder="your@email.com">
+              </div>
+            </div>
+
+            <div class="payment-field" id="venmoField">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="venmoHandle">Venmo Username or Email</label>
+                <input type="text" id="venmoHandle" class="form-input" placeholder="@username or email">
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="savePaymentMethod" style="margin-top: 20px;">
+              Save Payment Method
+            </button>
           </div>
         </div>
 
@@ -721,6 +853,121 @@
     // Logout
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     document.querySelector('.nav-logout').addEventListener('click', handleLogout);
+
+    // Payment method handling
+    const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+    const paypalField = document.getElementById('paypalField');
+    const venmoField = document.getElementById('venmoField');
+    const paymentStatus = document.getElementById('paymentStatus');
+
+    function updatePaymentUI() {
+      const selected = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+
+      // Update selection styling
+      document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+      if (selected) {
+        document.querySelector(`input[value="${selected}"]`).closest('.payment-option').classList.add('selected');
+      }
+
+      // Show/hide fields
+      paypalField.classList.toggle('visible', selected === 'paypal');
+      venmoField.classList.toggle('visible', selected === 'venmo');
+    }
+
+    paymentOptions.forEach(option => {
+      option.addEventListener('change', updatePaymentUI);
+    });
+
+    function populatePaymentMethod() {
+      if (!currentTrucker) return;
+
+      const method = currentTrucker.payment_method || 'manual';
+      const paypalEmail = currentTrucker.paypal_email || '';
+      const venmoHandle = currentTrucker.venmo_handle || '';
+
+      // Select the radio button
+      const radio = document.querySelector(`input[name="paymentMethod"][value="${method}"]`);
+      if (radio) radio.checked = true;
+
+      // Fill in the fields
+      document.getElementById('paypalEmail').value = paypalEmail;
+      document.getElementById('venmoHandle').value = venmoHandle;
+
+      // Update UI
+      updatePaymentUI();
+
+      // Update status badge
+      if (method === 'paypal' && paypalEmail) {
+        paymentStatus.textContent = 'PayPal configured';
+        paymentStatus.className = 'payment-status configured';
+      } else if (method === 'venmo' && venmoHandle) {
+        paymentStatus.textContent = 'Venmo configured';
+        paymentStatus.className = 'payment-status configured';
+      } else if (method === 'manual') {
+        paymentStatus.textContent = 'Manual';
+        paymentStatus.className = 'payment-status not-configured';
+      } else {
+        paymentStatus.textContent = 'Not configured';
+        paymentStatus.className = 'payment-status not-configured';
+      }
+    }
+
+    // Save payment method
+    document.getElementById('savePaymentMethod').addEventListener('click', async () => {
+      const btn = document.getElementById('savePaymentMethod');
+      const method = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+
+      if (!method) {
+        alert('Please select a payment method');
+        return;
+      }
+
+      const paypalEmail = document.getElementById('paypalEmail').value.trim();
+      const venmoHandle = document.getElementById('venmoHandle').value.trim();
+
+      // Validate based on method
+      if (method === 'paypal' && !paypalEmail) {
+        alert('Please enter your PayPal email');
+        return;
+      }
+      if (method === 'venmo' && !venmoHandle) {
+        alert('Please enter your Venmo username or email');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const { error } = await supabase
+        .from('truckers')
+        .update({
+          payment_method: method,
+          paypal_email: method === 'paypal' ? paypalEmail : null,
+          venmo_handle: method === 'venmo' ? venmoHandle : null
+        })
+        .eq('id', currentTrucker.id);
+
+      if (error) {
+        alert('Error saving payment method: ' + error.message);
+      } else {
+        // Update local state
+        currentTrucker.payment_method = method;
+        currentTrucker.paypal_email = method === 'paypal' ? paypalEmail : null;
+        currentTrucker.venmo_handle = method === 'venmo' ? venmoHandle : null;
+        populatePaymentMethod();
+        alert('Payment method saved!');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Save Payment Method';
+    });
+
+    // Add to initPage
+    const originalInitPage = initPage;
+    initPage = async function() {
+      await originalInitPage();
+      populatePaymentMethod();
+    };
 
     initPage();
   </script>

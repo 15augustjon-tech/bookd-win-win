@@ -150,8 +150,11 @@
 
     .btn-primary:hover {
       background: var(--green-dark);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 210, 106, 0.4), 0 0 40px rgba(0, 210, 106, 0.2);
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 13px;
     }
 
     .btn-outline {
@@ -162,6 +165,15 @@
 
     .btn-outline:hover {
       border-color: var(--black);
+    }
+
+    .btn-danger {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .btn-danger:hover {
+      background: #FECACA;
     }
 
     /* Form Styles */
@@ -206,13 +218,7 @@
 
     /* Search */
     .search-bar {
-      display: flex;
-      gap: 12px;
       margin-bottom: 24px;
-    }
-
-    .search-bar .form-input {
-      flex: 1;
     }
 
     /* Stats Grid */
@@ -240,6 +246,10 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 24px;
       font-weight: 700;
+    }
+
+    .stat-card-value.warning {
+      color: #B45309;
     }
 
     /* Cards */
@@ -303,13 +313,17 @@
       font-size: 16px;
     }
 
+    .trucker-avatar.pending {
+      background: var(--gray-200);
+    }
+
     .trucker-name {
       font-weight: 600;
       font-size: 16px;
       margin-bottom: 2px;
     }
 
-    .trucker-mc {
+    .trucker-meta {
       font-size: 13px;
       color: var(--gray-600);
     }
@@ -339,67 +353,30 @@
       gap: 8px;
     }
 
-    .trucker-actions .btn {
-      padding: 8px 16px;
-      font-size: 13px;
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 100px;
     }
 
-    /* Add Invoice Modal Content */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
+    .badge-pending {
+      background: #FEF3C7;
+      color: #B45309;
     }
 
-    .modal-backdrop.active {
-      display: flex;
+    .badge-active {
+      background: rgba(0, 210, 106, 0.15);
+      color: var(--green-dark);
     }
 
-    .modal {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 480px;
-      margin: 24px;
-    }
-
-    .modal h2 {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-
-    .modal p {
+    /* Empty State */
+    .empty-state {
+      padding: 40px;
+      text-align: center;
       color: var(--gray-600);
-      margin-bottom: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .modal-actions .btn {
-      flex: 1;
     }
 
     /* Mobile Menu */
@@ -503,10 +480,6 @@
       .dashboard-header h1 {
         font-size: 24px;
       }
-
-      .search-bar {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
@@ -520,9 +493,8 @@
         <a href="dashboard.html">Dashboard</a>
         <a href="truckers.html" class="active">Truckers</a>
         <a href="requests.html">Requests</a>
-        <a href="earnings.html">Earnings</a>
         <a href="settings.html">Settings</a>
-        <a href="../login.html" class="nav-logout">Log out</a>
+        <a href="#" class="nav-logout">Log out</a>
       </div>
       <div class="nav-user">
         <div class="nav-user-avatar">FL</div>
@@ -537,179 +509,53 @@
       <div class="dashboard-header">
         <div>
           <h1>Your Truckers</h1>
-          <p>Manage truckers and invoices</p>
+          <p>Manage connections and view trucker activity</p>
         </div>
       </div>
 
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-card-label">Connected Truckers</div>
-          <div class="stat-card-value">8</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Total Owed</div>
-          <div class="stat-card-value">$24,500</div>
-        </div>
-        <div class="stat-card">
           <div class="stat-card-label">Pending Requests</div>
-          <div class="stat-card-value">3</div>
+          <div class="stat-card-value warning" id="pendingCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Connected Truckers</div>
+          <div class="stat-card-value" id="activeCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Connections</div>
+          <div class="stat-card-value" id="totalCount">0</div>
         </div>
       </div>
 
       <!-- Search -->
       <div class="search-bar">
-        <input type="text" class="form-input" placeholder="Search truckers...">
+        <input type="text" class="form-input" placeholder="Search truckers..." id="searchInput">
       </div>
 
-      <!-- Truckers List -->
+      <!-- Pending Connection Requests -->
+      <div class="card" id="pendingCard">
+        <div class="card-header">
+          <h2>Pending Connection Requests</h2>
+        </div>
+        <div class="card-body" id="pendingList">
+          <div class="empty-state">No pending requests</div>
+        </div>
+      </div>
+
+      <!-- Active Truckers -->
       <div class="card">
-        <div class="card-body" id="truckersList">
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">JS</div>
-              <div>
-                <div class="trucker-name">John Smith</div>
-                <div class="trucker-mc">MC-456789</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">$3,000</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">1</div>
-                <div class="trucker-stat-label">Pending</div>
-              </div>
-            </div>
-            <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('John Smith')">Add Load</button>
-            </div>
-          </div>
-
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">MJ</div>
-              <div>
-                <div class="trucker-name">Mike Johnson</div>
-                <div class="trucker-mc">MC-789012</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">$5,500</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">1</div>
-                <div class="trucker-stat-label">Pending</div>
-              </div>
-            </div>
-            <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('Mike Johnson')">Add Load</button>
-            </div>
-          </div>
-
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">SL</div>
-              <div>
-                <div class="trucker-name">Sarah Lee</div>
-                <div class="trucker-mc">MC-345678</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">$2,200</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">1</div>
-                <div class="trucker-stat-label">Pending</div>
-              </div>
-            </div>
-            <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('Sarah Lee')">Add Load</button>
-            </div>
-          </div>
-
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">RW</div>
-              <div>
-                <div class="trucker-name">Robert Williams</div>
-                <div class="trucker-mc">MC-901234</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">$4,800</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">0</div>
-                <div class="trucker-stat-label">Pending</div>
-              </div>
-            </div>
-            <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('Robert Williams')">Add Load</button>
-            </div>
-          </div>
-
-          <div class="trucker-item">
-            <div class="trucker-info">
-              <div class="trucker-avatar">EB</div>
-              <div>
-                <div class="trucker-name">Emily Brown</div>
-                <div class="trucker-mc">MC-567890</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">$3,200</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">0</div>
-                <div class="trucker-stat-label">Pending</div>
-              </div>
-            </div>
-            <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('Emily Brown')">Add Load</button>
-            </div>
-          </div>
+        <div class="card-header">
+          <h2>Connected Truckers</h2>
+        </div>
+        <div class="card-body" id="activeList">
+          <div class="empty-state">No connected truckers yet</div>
         </div>
       </div>
 
     </div>
   </main>
-
-  <!-- Add Invoice Modal -->
-  <div class="modal-backdrop" id="addInvoiceModal">
-    <div class="modal">
-      <h2>Add Load</h2>
-      <p>Add an amount owed to <span id="truckerNameModal">John Smith</span></p>
-      <form id="addInvoiceForm">
-        <div class="form-group">
-          <label class="form-label">Load Reference</label>
-          <input type="text" class="form-input" placeholder="e.g. LOAD-12345">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Amount</label>
-          <input type="number" class="form-input" placeholder="0.00" min="0" step="0.01">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Due Date</label>
-          <input type="date" class="form-input">
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-outline" onclick="closeAddInvoice()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Load</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Mobile Nav -->
   <div class="mobile-nav">
@@ -732,12 +578,6 @@
         </svg>
         Requests
       </a>
-      <a href="earnings.html" class="mobile-nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Earnings
-      </a>
       <a href="settings.html" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -756,10 +596,8 @@
   <script>
     let currentProfile = null;
     let currentBroker = null;
-    let truckersData = [];
-    let invoicesData = [];
-    let requestsData = [];
-    let selectedTruckerId = null;
+    let allConnections = [];
+    let paymentRequests = [];
 
     async function initPage() {
       const profile = await requireAuth('broker');
@@ -781,121 +619,169 @@
     async function loadData() {
       if (!currentBroker) return;
 
-      truckersData = await getBrokerTruckers(currentBroker.id);
-      invoicesData = await getBrokerInvoices(currentBroker.id);
-      requestsData = await getBrokerRequests(currentBroker.id);
+      // Load all connections (pending + active)
+      allConnections = await getBrokerPendingConnections(currentBroker.id);
+
+      // Load payment requests to show pending count per trucker
+      paymentRequests = await getBrokerPaymentRequests(currentBroker.id);
 
       // Calculate stats
-      const totalOwed = invoicesData.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-      const pendingRequests = requestsData.filter(r => r.status === 'pending').length;
+      const pending = allConnections.filter(c => c.status === 'pending');
+      const active = allConnections.filter(c => c.status === 'active');
 
-      const statValues = document.querySelectorAll('.stat-card-value');
-      statValues[0].textContent = truckersData.length;
-      statValues[1].textContent = formatCurrency(totalOwed);
-      statValues[2].textContent = pendingRequests;
+      document.getElementById('pendingCount').textContent = pending.length;
+      document.getElementById('activeCount').textContent = active.length;
+      document.getElementById('totalCount').textContent = allConnections.length;
 
-      renderTruckers();
+      // Show/hide pending card
+      document.getElementById('pendingCard').style.display = pending.length > 0 ? 'block' : 'none';
+
+      renderLists();
     }
 
-    function renderTruckers() {
-      const container = document.getElementById('truckersList');
-      const searchTerm = document.querySelector('.search-bar .form-input').value.toLowerCase();
+    function renderLists() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
-      let filtered = truckersData;
-      if (searchTerm) {
-        filtered = truckersData.filter(rel =>
-          rel.trucker?.profile?.full_name?.toLowerCase().includes(searchTerm) ||
-          rel.trucker?.mc_number?.toLowerCase().includes(searchTerm)
-        );
-      }
+      const pending = allConnections.filter(c => c.status === 'pending');
+      const active = allConnections.filter(c => c.status === 'active');
 
-      if (filtered.length === 0) {
-        container.innerHTML = '<p style="padding: 40px; color: var(--gray-600); text-align: center;">No truckers found</p>';
+      // Filter by search
+      const filteredPending = pending.filter(c => {
+        const name = c.trucker?.profiles?.full_name || c.trucker?.profile?.full_name || '';
+        return name.toLowerCase().includes(searchTerm);
+      });
+
+      const filteredActive = active.filter(c => {
+        const name = c.trucker?.profiles?.full_name || c.trucker?.profile?.full_name || '';
+        return name.toLowerCase().includes(searchTerm);
+      });
+
+      renderPendingList(filteredPending);
+      renderActiveList(filteredActive);
+    }
+
+    function renderPendingList(connections) {
+      const container = document.getElementById('pendingList');
+
+      if (connections.length === 0) {
+        container.innerHTML = '<div class="empty-state">No pending requests</div>';
         return;
       }
 
-      container.innerHTML = filtered.map(rel => {
-        const trucker = rel.trucker;
-        const truckerInvoices = invoicesData.filter(inv => inv.trucker_id === trucker.id);
-        const amountOwed = truckerInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount_remaining || 0), 0);
-        const pendingCount = requestsData.filter(r => r.trucker_id === trucker.id && r.status === 'pending').length;
-        const initials = trucker?.profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+      container.innerHTML = connections.map(conn => {
+        const trucker = conn.trucker;
+        const profile = trucker?.profiles || trucker?.profile;
+        const name = profile?.full_name || 'Unknown';
+        const phone = profile?.phone || '';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        const date = new Date(conn.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
         return `
-          <div class="trucker-item">
+          <div class="trucker-item" id="conn-${conn.id}">
             <div class="trucker-info">
-              <div class="trucker-avatar">${initials}</div>
+              <div class="trucker-avatar pending">${initials}</div>
               <div>
-                <div class="trucker-name">${trucker?.profile?.full_name || 'Unknown'}</div>
-                <div class="trucker-mc">${trucker?.mc_number || 'No MC'}</div>
-              </div>
-            </div>
-            <div class="trucker-stats">
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">${formatCurrency(amountOwed)}</div>
-                <div class="trucker-stat-label">Owed</div>
-              </div>
-              <div class="trucker-stat">
-                <div class="trucker-stat-value">${pendingCount}</div>
-                <div class="trucker-stat-label">Pending</div>
+                <div class="trucker-name">${name}</div>
+                <div class="trucker-meta">Requested ${date}</div>
               </div>
             </div>
             <div class="trucker-actions">
-              <button class="btn btn-outline" onclick="openAddInvoice('${trucker?.profile?.full_name}', '${trucker.id}')">Add Load</button>
+              <button class="btn btn-primary btn-sm" onclick="handleApprove('${conn.id}')">Approve</button>
+              <button class="btn btn-danger btn-sm" onclick="handleReject('${conn.id}')">Reject</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function openAddInvoice(truckerName, truckerId) {
-      selectedTruckerId = truckerId;
-      document.getElementById('truckerNameModal').textContent = truckerName;
-      document.getElementById('addInvoiceModal').classList.add('active');
-      document.getElementById('addInvoiceForm').reset();
-    }
+    function renderActiveList(connections) {
+      const container = document.getElementById('activeList');
 
-    function closeAddInvoice() {
-      document.getElementById('addInvoiceModal').classList.remove('active');
-      selectedTruckerId = null;
-    }
-
-    // Search
-    document.querySelector('.search-bar .form-input').addEventListener('input', renderTruckers);
-
-    // Close modal on backdrop click
-    document.getElementById('addInvoiceModal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) {
-        closeAddInvoice();
+      if (connections.length === 0) {
+        container.innerHTML = '<div class="empty-state">No connected truckers yet</div>';
+        return;
       }
-    });
 
-    // Form submit
-    document.getElementById('addInvoiceForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!selectedTruckerId) return;
+      container.innerHTML = connections.map(conn => {
+        const trucker = conn.trucker;
+        const profile = trucker?.profiles || trucker?.profile;
+        const name = profile?.full_name || 'Unknown';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+        const date = new Date(conn.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-      const loadRef = e.target.querySelector('input[type="text"]').value;
-      const amount = parseFloat(e.target.querySelector('input[type="number"]').value);
-      const dueDate = e.target.querySelector('input[type="date"]').value;
-      const btn = e.target.querySelector('button[type="submit"]');
+        // Count pending payment requests for this trucker
+        const truckerPendingRequests = paymentRequests.filter(r =>
+          r.trucker_id === trucker.id && r.status === 'pending'
+        ).length;
 
+        // Count completed payments
+        const truckerCompletedPayments = paymentRequests.filter(r =>
+          r.trucker_id === trucker.id && r.status === 'completed'
+        ).length;
+
+        return `
+          <div class="trucker-item">
+            <div class="trucker-info">
+              <div class="trucker-avatar">${initials}</div>
+              <div>
+                <div class="trucker-name">${name}</div>
+                <div class="trucker-meta">Connected since ${date}</div>
+              </div>
+            </div>
+            <div class="trucker-stats">
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">${truckerPendingRequests}</div>
+                <div class="trucker-stat-label">Pending</div>
+              </div>
+              <div class="trucker-stat">
+                <div class="trucker-stat-value">${truckerCompletedPayments}</div>
+                <div class="trucker-stat-label">Completed</div>
+              </div>
+            </div>
+            ${truckerPendingRequests > 0 ? `
+              <div class="trucker-actions">
+                <a href="requests.html" class="btn btn-primary btn-sm">View Requests</a>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function handleApprove(connectionId) {
+      const btn = event.target;
       btn.disabled = true;
-      btn.textContent = 'Adding...';
+      btn.textContent = '...';
 
-      const result = await createInvoice(currentBroker.id, selectedTruckerId, loadRef, amount, dueDate);
-
+      const result = await approveConnection(connectionId, currentBroker.id);
       if (result.success) {
-        alert('Load added successfully!');
-        closeAddInvoice();
         await loadData();
       } else {
         alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Approve';
       }
+    }
 
-      btn.disabled = false;
-      btn.textContent = 'Add Load';
-    });
+    async function handleReject(connectionId) {
+      if (!confirm('Reject this connection request?')) return;
+
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      const result = await rejectConnection(connectionId, currentBroker.id);
+      if (result.success) {
+        await loadData();
+      } else {
+        alert('Error: ' + result.error);
+        btn.disabled = false;
+        btn.textContent = 'Reject';
+      }
+    }
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', renderLists);
 
     // Wire logout
     document.querySelector('.nav-logout').addEventListener('click', handleLogout);
