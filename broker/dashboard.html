@@ -563,7 +563,7 @@
         </div>
         <div id="upgradeSection" style="text-align: right;">
           <a href="../brokers.html#pricing" style="display: inline-block; padding: 12px 24px; background: var(--green); color: var(--black); font-weight: 600; border-radius: 8px; font-size: 14px;">Upgrade to Pro</a>
-          <div style="font-size: 12px; color: var(--gray-400); margin-top: 8px;">Keep 100% of 3% fee</div>
+          <div style="font-size: 12px; color: var(--gray-400); margin-top: 8px;">Keep 100% of 4% fee</div>
         </div>
       </div>
 
@@ -703,7 +703,7 @@
       // Hide upgrade section for paid tiers
       const upgradeSection = document.getElementById('upgradeSection');
       if (tier === 'pro') {
-        upgradeSection.innerHTML = '<div style="font-size: 14px; color: var(--green);">Pro Member</div><div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">You keep 100% of 3%</div>';
+        upgradeSection.innerHTML = '<div style="font-size: 14px; color: var(--green);">Pro Member</div><div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">You keep 100% of 4%</div>';
       } else if (tier === 'enterprise') {
         upgradeSection.innerHTML = '<div style="font-size: 14px; color: #FFD700;">Enterprise</div><div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">Unlimited everything</div>';
       }

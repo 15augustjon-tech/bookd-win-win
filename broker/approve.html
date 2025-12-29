@@ -635,8 +635,8 @@
 
         <!-- Your Earnings -->
         <div class="earnings-highlight">
-          <div class="earnings-highlight-label">Your Earnings (3%)</div>
-          <div class="earnings-highlight-value">$60</div>
+          <div class="earnings-highlight-label">Your Earnings (4%)</div>
+          <div class="earnings-highlight-value">$80</div>
         </div>
 
         <!-- Fee Breakdown -->
@@ -651,8 +651,8 @@
               <span class="fee-value" id="feeAmountRequested">$2,000</span>
             </div>
             <div class="fee-row">
-              <span class="fee-label">Early pay fee (3%)</span>
-              <span class="fee-value" id="feeTotalFee" style="color: var(--green-dark);">+$60</span>
+              <span class="fee-label">Early pay fee (4%)</span>
+              <span class="fee-value" id="feeTotalFee" style="color: var(--green-dark);">+$80</span>
             </div>
             <div class="fee-row" style="color: var(--gray-400);">
               <span class="fee-label" id="feeKeepLabel">You keep</span>
@@ -869,14 +869,14 @@
       tierBadge.style.color = tierColors[brokerTier]?.color || tierColors.free.color;
 
       // Calculate tier-based earnings
-      const totalFee = req.amount_requested * 0.03;
+      const totalFee = req.amount_requested * 0.04;
       let brokerKeeps, keepPercent;
       if (brokerTier === 'pro' || brokerTier === 'enterprise') {
-        brokerKeeps = totalFee; // 100% of 3%
+        brokerKeeps = totalFee; // 100% of 4%
         keepPercent = '100%';
       } else {
-        brokerKeeps = req.amount_requested * 0.02; // 2% of amount
-        keepPercent = '67%';
+        brokerKeeps = req.amount_requested * 0.03; // 3% of amount
+        keepPercent = '75%';
       }
 
       document.getElementById('feeAmountRequested').textContent = formatCurrency(req.amount_requested);

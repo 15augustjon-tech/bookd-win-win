@@ -2767,10 +2767,10 @@
       </div>
       <div class="deal-content" style="max-width: 600px; margin: 0 auto; text-align: center;">
         <p class="animate-on-scroll deal-headline" style="font-size: 22px; color: var(--black); font-weight: 600; margin-bottom: 32px;">
-          Get 97% today. Or wait 30 days for 100%.
+          Get 96% today. Or wait 30 days for 100%.
         </p>
         <p class="animate-on-scroll deal-text" style="font-size: 17px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.8;">
-          Your broker uses Bookd to pay you. Request early pay and get 97% same-day. Or wait for the full amount on the regular schedule.
+          Your broker uses Bookd to pay you. Request early pay and get 96% same-day. Or wait for the full amount on the regular schedule.
         </p>
         <p class="animate-on-scroll deal-text" style="font-size: 17px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.8;">
           No hidden fees. No setup costs. No minimum volume. No contracts.
@@ -2828,7 +2828,7 @@
         </div>
         <div class="faq-item animate-on-scroll">
           <h3>Do I pay any fees?</h3>
-          <p>No platform fees, no subscription, no transaction fees. For early pay, you get 97% today instead of 100% in 30 days. That's it.</p>
+          <p>No platform fees, no subscription, no transaction fees. For early pay, you get 96% today instead of 100% in 30 days. That's it.</p>
         </div>
         <div class="faq-item animate-on-scroll">
           <h3>How does the referral program work?</h3>
@@ -2951,7 +2951,7 @@
       counterObserver.observe(counter);
     });
 
-    // Calculator - Volume slider (3% fixed fee)
+    // Calculator - Volume slider (4% fixed fee)
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeDisplay = document.getElementById('volumeDisplay');
     const monthlyEarnings = document.getElementById('monthlyEarnings');
@@ -2963,8 +2963,8 @@
       // Display volume with commas
       volumeDisplay.textContent = volume.toLocaleString();
 
-      // Monthly earnings: volume × 3% (broker's cut)
-      const monthly = Math.round(volume * 0.03);
+      // Monthly earnings: volume × 4% (broker's cut)
+      const monthly = Math.round(volume * 0.04);
       monthlyEarnings.textContent = monthly.toLocaleString();
 
       // Yearly earnings

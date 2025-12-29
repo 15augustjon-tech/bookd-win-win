@@ -351,7 +351,7 @@
               <span class="price free">NO FEES</span>
             </label>
           </div>
-          <p style="font-size: 13px; color: #a3a3a3; margin-top: 8px;">You get 97% of what you request. Same-day, always.</p>
+          <p style="font-size: 13px; color: #a3a3a3; margin-top: 8px;">You get 96% of what you request. Same-day, always.</p>
         </div>
 
         <!-- Breakdown -->
@@ -362,7 +362,7 @@
           </div>
           <div class="breakdown-row">
             <span>You get</span>
-            <span class="value" id="breakdownPercent" style="color: #00D26A;">97%</span>
+            <span class="value" id="breakdownPercent" style="color: #00D26A;">96%</span>
           </div>
           <div class="breakdown-row total">
             <span>In your bank today</span>
@@ -497,8 +497,8 @@
       const breakdown = document.getElementById('breakdown');
 
       if (amount > 0) {
-        // Trucker gets 97% (3% goes to broker/Bookd)
-        const youReceive = Math.round(amount * 0.97 * 100) / 100;
+        // Trucker gets 96% (4% goes to broker/Bookd)
+        const youReceive = Math.round(amount * 0.96 * 100) / 100;
 
         document.getElementById('breakdownAmount').textContent = formatCurrency(amount);
         document.getElementById('breakdownTotal').textContent = formatCurrency(youReceive);

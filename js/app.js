@@ -1,22 +1,22 @@
 // App Logic for Bookd
 // Requires supabase.js and auth.js to be loaded first
 
-// Fee calculation - 3% total, tier-based split
-// Pro: Broker keeps 3%, Bookd gets $0
-// Free: Broker keeps 2%, Bookd gets 1%
+// Fee calculation - 4% total, tier-based split
+// Pro: Broker keeps 4%, Bookd gets $0
+// Free: Broker keeps 3%, Bookd gets 1%
 function calculateEarlyPay(amount, creditRemaining = 0, tier = 'free') {
-  const TOTAL_FEE_RATE = 0.03; // 3% total fee - trucker gets 97%
+  const TOTAL_FEE_RATE = 0.04; // 4% total fee - trucker gets 96%
   const totalFee = amount * TOTAL_FEE_RATE;
 
   // Tier-based split
   let brokerFee, platformFee;
   if (tier === 'pro' || tier === 'enterprise') {
-    // Pro/Enterprise: broker keeps 100% of 3%
+    // Pro/Enterprise: broker keeps 100% of 4%
     brokerFee = totalFee;
     platformFee = 0;
   } else {
-    // Free: broker keeps 2%, Bookd takes 1%
-    brokerFee = amount * 0.02;
+    // Free: broker keeps 3%, Bookd takes 1%
+    brokerFee = amount * 0.03;
     platformFee = amount * 0.01;
   }
 
@@ -24,7 +24,7 @@ function calculateEarlyPay(amount, creditRemaining = 0, tier = 'free') {
   const creditApplied = Math.min(platformFee, creditRemaining);
   platformFee = platformFee - creditApplied;
 
-  const amountToTrucker = amount - totalFee; // Trucker always gets 97%
+  const amountToTrucker = amount - totalFee; // Trucker always gets 96%
 
   return {
     amount,
@@ -445,9 +445,9 @@ function calculateEarningRate(proBrokerCount) {
 // Calculate earnings for Free tier (Bookd's 1% cut)
 // Note: This is for internal tracking, trucker never pays fees
 function calculateFreeTierRevenue(transactionAmount) {
-  const TOTAL_FEE_RATE = 0.03; // 3% total fee
+  const TOTAL_FEE_RATE = 0.04; // 4% total fee
   const BOOKD_SHARE = 0.01;    // Free tier: Bookd takes 1%
-  const BROKER_SHARE = 0.02;   // Free tier: Broker keeps 2%
+  const BROKER_SHARE = 0.03;   // Free tier: Broker keeps 3%
 
   const totalFee = transactionAmount * TOTAL_FEE_RATE;
   const bookdRevenue = transactionAmount * BOOKD_SHARE;
@@ -737,10 +737,10 @@ async function rejectConnection(relationshipId, brokerId, reason = null) {
 // V2: PAYMENT REQUEST SYSTEM
 // ============================================
 
-// Create a v2 payment request (same-day ACH only, 3% early pay fee)
+// Create a v2 payment request (same-day ACH only, 4% early pay fee)
 async function createPaymentRequest(truckerId, brokerId, loadReference, totalOwed, amountRequested, isEarlyPay = true) {
-  // Early pay: trucker gets 97% (3% fee), Normal pay: trucker gets 100%
-  const feeRate = isEarlyPay ? 0.03 : 0;
+  // Early pay: trucker gets 96% (4% fee), Normal pay: trucker gets 100%
+  const feeRate = isEarlyPay ? 0.04 : 0;
   const fee = amountRequested * feeRate;
   const amountToTrucker = amountRequested - fee;
 
@@ -878,9 +878,9 @@ async function completePaymentRequest(requestId, moovTransferId = null) {
 
 // Tier limits
 const TIER_LIMITS = {
-  free: { transactions: 50, overageRate: 1.00, earlyPayKeep: 0.02 },
-  pro: { transactions: 200, overageRate: 0.50, earlyPayKeep: 0.03 },
-  enterprise: { transactions: Infinity, overageRate: 0, earlyPayKeep: 0.03 }
+  free: { transactions: 50, overageRate: 1.00, earlyPayKeep: 0.03 },
+  pro: { transactions: 200, overageRate: 0.50, earlyPayKeep: 0.04 },
+  enterprise: { transactions: Infinity, overageRate: 0, earlyPayKeep: 0.04 }
 };
 
 // Get broker's monthly transaction count
@@ -926,7 +926,7 @@ async function checkBrokerLimit(brokerId, tier = 'free') {
 
 // Calculate broker's earnings from a transaction
 function calculateBrokerEarnings(amount, tier = 'free') {
-  const keepRate = TIER_LIMITS[tier]?.earlyPayKeep || 0.02;
+  const keepRate = TIER_LIMITS[tier]?.earlyPayKeep || 0.03;
   const earnings = amount * keepRate;
 
   return {
