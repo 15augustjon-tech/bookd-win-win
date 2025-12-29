@@ -629,41 +629,42 @@
 
         <!-- Amount Display -->
         <div class="amount-display">
-          <div class="amount-display-label">Amount Requested</div>
-          <div class="amount-display-value">$1,000</div>
+          <div class="amount-display-label">Amount Requested <span style="font-size: 14px; color: var(--gray-400); font-weight: 400;">(40% of owed)</span></div>
+          <div class="amount-display-value">$2,000</div>
         </div>
 
         <!-- Your Earnings -->
         <div class="earnings-highlight">
           <div class="earnings-highlight-label">Your Earnings (3%)</div>
-          <div class="earnings-highlight-value">$30</div>
+          <div class="earnings-highlight-value">$60</div>
         </div>
 
         <!-- Fee Breakdown -->
         <div class="card">
           <div class="card-header">
             <h2>Fee Breakdown</h2>
+            <span id="tierBadge" style="font-size: 12px; color: var(--green-dark); font-weight: 600; background: rgba(0, 210, 106, 0.1); padding: 4px 10px; border-radius: 12px;">PRO</span>
           </div>
           <div class="card-body">
             <div class="fee-row">
               <span class="fee-label">Amount requested</span>
-              <span class="fee-value">$1,000</span>
+              <span class="fee-value" id="feeAmountRequested">$2,000</span>
             </div>
             <div class="fee-row">
-              <span class="fee-label">Your fee (3%)</span>
-              <span class="fee-value" style="color: var(--green-dark);">+$30</span>
+              <span class="fee-label">Early pay fee (3%)</span>
+              <span class="fee-value" id="feeTotalFee" style="color: var(--green-dark);">+$60</span>
             </div>
-            <div class="fee-row">
-              <span class="fee-label">Platform fee (1%)</span>
-              <span class="fee-value">$10</span>
-            </div>
-            <div class="fee-row">
-              <span class="fee-label">Credit applied</span>
-              <span class="fee-value">-$10</span>
+            <div class="fee-row" style="color: var(--gray-400);">
+              <span class="fee-label" id="feeKeepLabel">You keep</span>
+              <span class="fee-value" id="feeYouKeep" style="color: var(--green-dark);">$60 <span style="font-size: 11px;">(100%)</span></span>
             </div>
             <div class="fee-row" style="border-top: 2px solid var(--gray-200); margin-top: 8px; padding-top: 16px;">
               <span class="fee-label" style="font-weight: 600; color: var(--black);">Trucker receives</span>
-              <span class="fee-value" style="font-size: 18px;">$970</span>
+              <span class="fee-value" id="feeTruckerReceives" style="font-size: 18px;">$1,940</span>
+            </div>
+            <div class="fee-row" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--gray-200);">
+              <span class="fee-label" style="font-size: 12px; color: var(--gray-400);">Transactions this month</span>
+              <span class="fee-value" id="txCount" style="font-size: 12px; color: var(--gray-500);">0 / 200</span>
             </div>
           </div>
         </div>
@@ -676,11 +677,11 @@
           <div class="card-body">
             <div class="request-detail">
               <span class="request-detail-label">Total amount owed</span>
-              <span class="request-detail-value">$3,000</span>
+              <span class="request-detail-value">$5,000</span>
             </div>
             <div class="request-detail">
-              <span class="request-detail-label">Amount after this request</span>
-              <span class="request-detail-value">$2,000</span>
+              <span class="request-detail-label">Remaining after this</span>
+              <span class="request-detail-value">$3,000</span>
             </div>
             <div class="request-detail">
               <span class="request-detail-label">Due date</span>
@@ -854,13 +855,39 @@
       document.querySelector('.amount-display-value').textContent = formatCurrency(req.amount_requested);
       document.querySelector('.earnings-highlight-value').textContent = formatCurrency(req.broker_fee);
 
-      // Update fee breakdown
-      const feeValues = document.querySelectorAll('.fee-value');
-      feeValues[0].textContent = formatCurrency(req.amount_requested);
-      feeValues[1].textContent = '+' + formatCurrency(req.broker_fee);
-      feeValues[2].textContent = formatCurrency(req.platform_fee + req.credit_applied);
-      feeValues[3].textContent = '-' + formatCurrency(req.credit_applied);
-      feeValues[4].textContent = formatCurrency(req.amount_to_trucker);
+      // Get broker tier and update fee breakdown
+      const brokerTier = currentBroker?.tier || 'free';
+      const tierBadge = document.getElementById('tierBadge');
+      const tierColors = {
+        'free': { bg: 'rgba(150, 150, 150, 0.1)', color: '#666' },
+        'pro': { bg: 'rgba(0, 210, 106, 0.1)', color: 'var(--green-dark)' },
+        'enterprise': { bg: 'rgba(255, 215, 0, 0.15)', color: '#B8860B' }
+      };
+
+      tierBadge.textContent = brokerTier.toUpperCase();
+      tierBadge.style.background = tierColors[brokerTier]?.bg || tierColors.free.bg;
+      tierBadge.style.color = tierColors[brokerTier]?.color || tierColors.free.color;
+
+      // Calculate tier-based earnings
+      const totalFee = req.amount_requested * 0.03;
+      let brokerKeeps, keepPercent;
+      if (brokerTier === 'pro' || brokerTier === 'enterprise') {
+        brokerKeeps = totalFee; // 100% of 3%
+        keepPercent = '100%';
+      } else {
+        brokerKeeps = req.amount_requested * 0.02; // 2% of amount
+        keepPercent = '67%';
+      }
+
+      document.getElementById('feeAmountRequested').textContent = formatCurrency(req.amount_requested);
+      document.getElementById('feeTotalFee').textContent = '+' + formatCurrency(totalFee);
+      document.getElementById('feeYouKeep').innerHTML = formatCurrency(brokerKeeps) + ' <span style="font-size: 11px;">(' + keepPercent + ')</span>';
+      document.getElementById('feeTruckerReceives').textContent = formatCurrency(req.amount_to_trucker);
+
+      // Update transaction count
+      const txLimits = { 'free': 50, 'pro': 200, 'enterprise': '∞' };
+      const txLimit = txLimits[brokerTier] || 50;
+      document.getElementById('txCount').textContent = (currentBroker?.monthly_tx_count || 0) + ' / ' + txLimit;
 
       // Update request details
       const invoice = req.invoice;

@@ -542,6 +542,31 @@
         <button class="copy-btn" onclick="copySearchCode()">Copy Code</button>
       </div>
 
+      <!-- Tier & Usage Card -->
+      <div id="tierCard" style="background: linear-gradient(135deg, var(--black) 0%, #1a1a2e 100%); border-radius: 16px; padding: 24px; margin-bottom: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: center;">
+        <div>
+          <div style="font-size: 12px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Your Plan</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="tierName" style="font-size: 28px; font-weight: 700; color: var(--white);">Free</span>
+            <span id="tierBadgeDash" style="font-size: 11px; padding: 4px 10px; border-radius: 12px; background: rgba(150,150,150,0.2); color: var(--gray-400);">$0/mo</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 12px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Transactions This Month</div>
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span id="txUsed" style="font-size: 28px; font-weight: 700; color: var(--green);">0</span>
+            <span id="txLimit" style="font-size: 16px; color: var(--gray-400);">/ 50</span>
+          </div>
+          <div id="txProgress" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 8px; overflow: hidden;">
+            <div id="txProgressBar" style="height: 100%; width: 0%; background: var(--green); border-radius: 3px; transition: width 0.3s;"></div>
+          </div>
+        </div>
+        <div id="upgradeSection" style="text-align: right;">
+          <a href="../brokers.html#pricing" style="display: inline-block; padding: 12px 24px; background: var(--green); color: var(--black); font-weight: 600; border-radius: 8px; font-size: 14px;">Upgrade to Pro</a>
+          <div style="font-size: 12px; color: var(--gray-400); margin-top: 8px;">Keep 100% of 3% fee</div>
+        </div>
+      </div>
+
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
@@ -645,6 +670,43 @@
       document.getElementById('welcomeMessage').textContent = `Welcome back, ${companyName.split(' ')[0]}`;
       document.querySelector('.nav-user-avatar').textContent = initials;
       document.getElementById('searchCode').textContent = currentBroker?.search_code || '---';
+
+      // Update tier card
+      updateTierCard();
+    }
+
+    function updateTierCard() {
+      const tier = currentBroker?.tier || 'free';
+      const tierConfig = {
+        'free': { name: 'Free', price: '$0/mo', limit: 50, color: 'var(--gray-400)', badgeBg: 'rgba(150,150,150,0.2)' },
+        'pro': { name: 'Pro', price: '$100/mo', limit: 200, color: 'var(--green)', badgeBg: 'rgba(0,210,106,0.2)' },
+        'enterprise': { name: 'Enterprise', price: '$500/mo', limit: Infinity, color: '#FFD700', badgeBg: 'rgba(255,215,0,0.2)' }
+      };
+      const config = tierConfig[tier] || tierConfig.free;
+      const txUsed = currentBroker?.monthly_tx_count || 0;
+
+      document.getElementById('tierName').textContent = config.name;
+      document.getElementById('tierName').style.color = config.color === 'var(--gray-400)' ? 'var(--white)' : config.color;
+      document.getElementById('tierBadgeDash').textContent = config.price;
+      document.getElementById('tierBadgeDash').style.background = config.badgeBg;
+      document.getElementById('tierBadgeDash').style.color = config.color;
+
+      document.getElementById('txUsed').textContent = txUsed;
+      document.getElementById('txLimit').textContent = config.limit === Infinity ? '/ ∞' : '/ ' + config.limit;
+
+      const progressPercent = config.limit === Infinity ? 0 : Math.min(100, (txUsed / config.limit) * 100);
+      document.getElementById('txProgressBar').style.width = progressPercent + '%';
+      if (progressPercent > 80) {
+        document.getElementById('txProgressBar').style.background = '#FF6B6B';
+      }
+
+      // Hide upgrade section for paid tiers
+      const upgradeSection = document.getElementById('upgradeSection');
+      if (tier === 'pro') {
+        upgradeSection.innerHTML = '<div style="font-size: 14px; color: var(--green);">Pro Member</div><div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">You keep 100% of 3%</div>';
+      } else if (tier === 'enterprise') {
+        upgradeSection.innerHTML = '<div style="font-size: 14px; color: #FFD700;">Enterprise</div><div style="font-size: 12px; color: var(--gray-400); margin-top: 4px;">Unlimited everything</div>';
+      }
     }
 
     async function loadData() {

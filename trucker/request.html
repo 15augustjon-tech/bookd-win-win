@@ -345,18 +345,13 @@
           <label class="form-label">Payment Speed</label>
           <div class="speed-options">
             <label class="speed-option selected" id="speedStandard">
-              <input type="radio" name="speed" value="standard" checked>
-              <h4>Standard</h4>
-              <p>1-2 business days</p>
-              <span class="price free">FREE</span>
-            </label>
-            <label class="speed-option" id="speedInstant">
-              <input type="radio" name="speed" value="instant">
-              <h4>Instant</h4>
-              <p>Within 30 minutes</p>
-              <span class="price">$5.00</span>
+              <input type="radio" name="speed" value="sameday" checked>
+              <h4>Same-Day</h4>
+              <p>Money in your bank today</p>
+              <span class="price free">NO FEES</span>
             </label>
           </div>
+          <p style="font-size: 13px; color: #a3a3a3; margin-top: 8px;">You get 97% of what you request. Same-day, always.</p>
         </div>
 
         <!-- Breakdown -->
@@ -366,11 +361,11 @@
             <span class="value" id="breakdownAmount">$0</span>
           </div>
           <div class="breakdown-row">
-            <span>Platform fee</span>
-            <span class="value" id="breakdownFee">$0</span>
+            <span>You get</span>
+            <span class="value" id="breakdownPercent" style="color: #00D26A;">97%</span>
           </div>
           <div class="breakdown-row total">
-            <span>You receive</span>
+            <span>In your bank today</span>
             <span class="value" id="breakdownTotal">$0</span>
           </div>
         </div>
@@ -499,15 +494,13 @@
 
     function updateBreakdown() {
       const amount = parseFloat(document.getElementById('amountRequested').value) || 0;
-      const speed = document.querySelector('input[name="speed"]:checked').value;
       const breakdown = document.getElementById('breakdown');
 
       if (amount > 0) {
-        const fee = speed === 'instant' ? 5.00 : 0;
-        const youReceive = amount - fee;
+        // Trucker gets 97% (3% goes to broker/Bookd)
+        const youReceive = Math.round(amount * 0.97 * 100) / 100;
 
         document.getElementById('breakdownAmount').textContent = formatCurrency(amount);
-        document.getElementById('breakdownFee').textContent = fee > 0 ? formatCurrency(fee) : 'FREE';
         document.getElementById('breakdownTotal').textContent = formatCurrency(youReceive);
         breakdown.style.display = 'block';
       } else {

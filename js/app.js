@@ -1,20 +1,30 @@
 // App Logic for Bookd
 // Requires supabase.js and auth.js to be loaded first
 
-// Fee calculation
-function calculateEarlyPay(amount, creditRemaining) {
-  const BROKER_FEE = 0.03;  // 3%
-  const PLATFORM_FEE = 0.01; // 1%
+// Fee calculation - 3% total, tier-based split
+// Pro: Broker keeps 3%, Bookd gets $0
+// Free: Broker keeps 2%, Bookd gets 1%
+function calculateEarlyPay(amount, creditRemaining = 0, tier = 'free') {
+  const TOTAL_FEE_RATE = 0.03; // 3% total fee - trucker gets 97%
+  const totalFee = amount * TOTAL_FEE_RATE;
 
-  const brokerFee = amount * BROKER_FEE;
-  let platformFee = amount * PLATFORM_FEE;
+  // Tier-based split
+  let brokerFee, platformFee;
+  if (tier === 'pro' || tier === 'enterprise') {
+    // Pro/Enterprise: broker keeps 100% of 3%
+    brokerFee = totalFee;
+    platformFee = 0;
+  } else {
+    // Free: broker keeps 2%, Bookd takes 1%
+    brokerFee = amount * 0.02;
+    platformFee = amount * 0.01;
+  }
 
-  // Apply credit to platform fee only
+  // Credit system (for referrals, etc.) - applies to platform fee only
   const creditApplied = Math.min(platformFee, creditRemaining);
   platformFee = platformFee - creditApplied;
 
-  const totalFee = brokerFee + platformFee;
-  const amountToTrucker = amount - totalFee;
+  const amountToTrucker = amount - totalFee; // Trucker always gets 97%
 
   return {
     amount,
@@ -23,7 +33,8 @@ function calculateEarlyPay(amount, creditRemaining) {
     creditApplied: Math.round(creditApplied * 100) / 100,
     totalFee: Math.round(totalFee * 100) / 100,
     amountToTrucker: Math.round(amountToTrucker * 100) / 100,
-    creditRemaining: Math.round((creditRemaining - creditApplied) * 100) / 100
+    creditRemaining: Math.round((creditRemaining - creditApplied) * 100) / 100,
+    tier
   };
 }
 
@@ -431,24 +442,22 @@ function calculateEarningRate(proBrokerCount) {
   return proBrokerCount >= 10 ? 0.70 : 0.40;
 }
 
-// Calculate trucker earning for a Free broker transaction
-function calculateFreeBrokerEarning(transactionAmount, monthlyEarnedFromBroker = 0) {
-  const BROKER_FEE_RATE = 0.05; // 5% of early pay
-  const TRUCKER_SHARE = 0.10;   // 10% of the 5%
-  const MONTHLY_CAP = 100;      // $100/month per broker
+// Calculate earnings for Free tier (Bookd's 1% cut)
+// Note: This is for internal tracking, trucker never pays fees
+function calculateFreeTierRevenue(transactionAmount) {
+  const TOTAL_FEE_RATE = 0.03; // 3% total fee
+  const BOOKD_SHARE = 0.01;    // Free tier: Bookd takes 1%
+  const BROKER_SHARE = 0.02;   // Free tier: Broker keeps 2%
 
-  const brokerFee = transactionAmount * BROKER_FEE_RATE;
-  let truckerCut = brokerFee * TRUCKER_SHARE;
-
-  // Apply monthly cap
-  if (monthlyEarnedFromBroker + truckerCut > MONTHLY_CAP) {
-    truckerCut = Math.max(0, MONTHLY_CAP - monthlyEarnedFromBroker);
-  }
+  const totalFee = transactionAmount * TOTAL_FEE_RATE;
+  const bookdRevenue = transactionAmount * BOOKD_SHARE;
+  const brokerRevenue = transactionAmount * BROKER_SHARE;
 
   return {
-    grossFee: Math.round(brokerFee * 100) / 100,
-    truckerShare: Math.round(truckerCut * 100) / 100,
-    capped: monthlyEarnedFromBroker + truckerCut >= MONTHLY_CAP
+    totalFee: Math.round(totalFee * 100) / 100,
+    bookdRevenue: Math.round(bookdRevenue * 100) / 100,
+    brokerRevenue: Math.round(brokerRevenue * 100) / 100,
+    truckerReceives: Math.round((transactionAmount - totalFee) * 100) / 100
   };
 }
 
@@ -728,10 +737,12 @@ async function rejectConnection(relationshipId, brokerId, reason = null) {
 // V2: PAYMENT REQUEST SYSTEM
 // ============================================
 
-// Create a v2 payment request
-async function createPaymentRequest(truckerId, brokerId, loadReference, totalOwed, amountRequested, speed = 'standard') {
-  // Calculate platform fee based on speed
-  const platformFee = speed === 'instant' ? 5.00 : 0.00;
+// Create a v2 payment request (same-day ACH only, 3% early pay fee)
+async function createPaymentRequest(truckerId, brokerId, loadReference, totalOwed, amountRequested, isEarlyPay = true) {
+  // Early pay: trucker gets 97% (3% fee), Normal pay: trucker gets 100%
+  const feeRate = isEarlyPay ? 0.03 : 0;
+  const fee = amountRequested * feeRate;
+  const amountToTrucker = amountRequested - fee;
 
   const { data, error } = await supabase
     .from('payment_requests')
@@ -741,8 +752,11 @@ async function createPaymentRequest(truckerId, brokerId, loadReference, totalOwe
       load_reference: loadReference,
       total_owed: totalOwed,
       amount_requested: amountRequested,
-      speed: speed,
-      platform_fee: platformFee
+      speed: 'sameday', // Only option now
+      platform_fee: 0,  // No platform fee to trucker
+      early_pay_fee: fee,
+      amount_to_trucker: amountToTrucker,
+      is_early_pay: isEarlyPay
     })
     .select()
     .single();
@@ -856,4 +870,82 @@ async function completePaymentRequest(requestId, moovTransferId = null) {
   }
 
   return { success: true, request: data };
+}
+
+// ============================================
+// BROKER TIER & TRANSACTION TRACKING
+// ============================================
+
+// Tier limits
+const TIER_LIMITS = {
+  free: { transactions: 50, overageRate: 1.00, earlyPayKeep: 0.02 },
+  pro: { transactions: 200, overageRate: 0.50, earlyPayKeep: 0.03 },
+  enterprise: { transactions: Infinity, overageRate: 0, earlyPayKeep: 0.03 }
+};
+
+// Get broker's monthly transaction count
+async function getBrokerMonthlyTransactions(brokerId) {
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const { data, error } = await supabase
+    .from('payment_requests')
+    .select('id')
+    .eq('broker_id', brokerId)
+    .eq('status', 'completed')
+    .gte('completed_at', startOfMonth.toISOString());
+
+  if (error) {
+    console.error('Error fetching transaction count:', error);
+    return 0;
+  }
+
+  return (data || []).length;
+}
+
+// Check if broker is over their tier limit
+async function checkBrokerLimit(brokerId, tier = 'free') {
+  const count = await getBrokerMonthlyTransactions(brokerId);
+  const limit = TIER_LIMITS[tier]?.transactions || 50;
+  const overageRate = TIER_LIMITS[tier]?.overageRate || 1.00;
+
+  const isOverLimit = count >= limit;
+  const overageCount = Math.max(0, count - limit);
+  const overageCharge = overageCount * overageRate;
+
+  return {
+    currentCount: count,
+    limit,
+    isOverLimit,
+    overageCount,
+    overageCharge: Math.round(overageCharge * 100) / 100,
+    remaining: Math.max(0, limit - count)
+  };
+}
+
+// Calculate broker's earnings from a transaction
+function calculateBrokerEarnings(amount, tier = 'free') {
+  const keepRate = TIER_LIMITS[tier]?.earlyPayKeep || 0.02;
+  const earnings = amount * keepRate;
+
+  return {
+    amount,
+    tier,
+    keepRate,
+    earnings: Math.round(earnings * 100) / 100
+  };
+}
+
+// Get broker tier info for display
+function getBrokerTierInfo(tier = 'free') {
+  const info = TIER_LIMITS[tier] || TIER_LIMITS.free;
+
+  return {
+    tier,
+    transactionLimit: info.transactions === Infinity ? 'Unlimited' : info.transactions,
+    overageRate: info.overageRate,
+    earlyPayKeepPercent: Math.round(info.earlyPayKeep * 100),
+    displayName: tier.charAt(0).toUpperCase() + tier.slice(1)
+  };
 }
